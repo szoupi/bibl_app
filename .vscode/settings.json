@@ -1,0 +1,9 @@
+{
+    "python.pythonPath": "/usr/bin/python",
+    "favorites.resources": [
+        "bible/models.py",
+        "bible/urls.py",
+        "bible/views.py",
+        "bible/forms.py"
+    ]
+}

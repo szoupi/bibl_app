@@ -1,0 +1,36 @@
+{% extends "bible/base.html" %}
+
+{% block body %}
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+   
+    {% if next %} 
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+        {% else %}
+            <p>Please login to see this page.</p>
+        {% endif %} 
+    {% endif %}
+
+
+
+    <div class="ui text container">
+        <h2>LOG IN</h2>
+        <form class="ui form" action="{% url 'bible:login' %}" method="post" >
+            {% csrf_token %} 
+            {{ form }}
+            <br>
+            <br>
+            {% comment %} <button class="ui button" type="submit">Log in</button> {% endcomment %}
+            <input class="ui button" type="submit" value="login" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+        {% comment %} TODO FIX FOLLOWING BUG {% endcomment %}
+         {% comment %} https://code.i-harness.com/en/q/135de11 {% endcomment %}
+         <p>
+            <a href="{% url 'bible:password_reset' %}">Lost password?</a>
+        </p> 
+    </div>
+
+{% endblock body %}

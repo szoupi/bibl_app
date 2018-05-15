@@ -1,0 +1,12 @@
+{% comment %} 
+    auto generate the fields from the view BookCreate
+    the BookCreate view returns a dictionary 
+    with labels and fields
+    It is used for books, chapter etc forms
+{% endcomment %}
+{% for field in form %}
+    <div class="field">
+        <label>{{ field.label_tag }}</label>
+        {{ field }}
+    </div>
+{% endfor %}

@@ -1,0 +1,36 @@
+{% extends "bible/base.html" %}
+
+{% block leftColumn %}
+{% comment %} <div class="ui one cards">
+    <div class="card">
+        <div class="image">
+            <img src="{{ book.image.url }}">
+        </div>
+        <div class="content">
+            <div class="header">{{ book.title }}</div>
+            <div class="meta">
+                <a>{{ book.writer }}</a>
+            </div>
+        </div>
+    </div>
+</div> {% endcomment %}
+{% endblock leftColumn %}
+
+{% block body %}
+    {% if error_message %}
+        <p>
+            <strong>{{ error_message }}</strong>
+        </p>
+    {% endif %}
+
+    <div class="ui text container">
+        <form class="ui form" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                {{ form }}
+            <br>
+            <br>
+            <button class="ui button" type="submit">Add Chapter</button>
+        </form>
+    </div>
+
+{% endblock body %}

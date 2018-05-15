@@ -1,0 +1,75 @@
+{% extends "bible/base.html" %}
+{% block title %}
+    Chapter {{chapter.number}} details
+{% endblock title %}
+
+{% block leftColumn %}
+<H1>CHAPTER</H1>
+    <div class="ui one cards">
+        <div class="card">
+            <div class="content">
+                <div class="header">CHAPTER {{chapter.number}}</div>
+                <div class="meta">
+                    <div>{{ chapter.title }}</div>
+                </div>
+            </div>
+            <div class="extra content">
+                <i class="book icon"></i>
+                {{chapter.book}}
+            </div>
+            <!-- BUTTON -->
+            {% if user.is_authenticated %}
+                <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
+                {% comment %} <a class="item" href=""> {% endcomment %}
+                    <div class="ui bottom attached button">
+                        <i class="add icon"></i>
+                        Add Verse
+                    </div>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock leftColumn %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <br>» Book: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+    <br>» Chapter: {{ chapter.number }}
+{% endblock %}
+ 
+{% block body %}
+<div class="ui text container">
+    <H1>VERSES</H1>
+    {% if chapter.verse_set.all %}
+        <div class="ui one cards">
+            {% for verse in chapter.verse_set.all %}
+            <div class="card">
+                <div class="content">
+                    <div class="header">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'bible:verse-update' book.id chapter.id verse.id  %}" 
+                                class="ui compact icon right floated button">
+                                <i class="edit icon"></i>
+                            </a>
+                            <a href="{% url 'bible:verse-delete' book.id chapter.id verse.id  %}" 
+                                class="ui compact icon right floated button">
+                                <i class="trash icon"></i>
+                            </a>
+                        {% endif %}
+                        {{ verse.number }}
+                    </div>
+                    <a class="description" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
+                        <p>{{ verse.original_text }}</p>
+                        <p><em>{{ verse.greek_translation }}</em></p>
+                    </a>
+                </div>
+        
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+            <h2>No Verses to display</h2>
+    {% endif %}
+{% endblock body %}

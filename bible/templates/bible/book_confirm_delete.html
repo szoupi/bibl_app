@@ -1,0 +1,12 @@
+{% extends "bible/base.html" %} {% block title %} Delete Book {% endblock title %}
+
+ {% block body %} 
+<h1>Delete book</h1>
+
+<p>Are you sure you want to delete the book: <strong>{{ book.title }}</strong>?</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input class="ui button red" type="submit" action="" value="Yes, delete the book." />
+</form>
+{% endblock body %}

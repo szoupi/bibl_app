@@ -1,0 +1,65 @@
+{% extends "bible/base.html" %}
+{% block body %} 
+
+    {% if all_books %} {# all_books is returned from the view #}
+        {% comment %} 
+            the default django variable object_list 
+            could be used instead of all_books 
+            but it is overriden in the views.py
+            IndexView :) 
+        {% endcomment %}
+
+
+
+        <div class="ui four  doubling link cards">
+            {% for book in all_books %}
+        
+            <div class="card">
+                <a class="image" href="{% url 'bible:book-detail' book.id %}">
+                    <img src="{{ book.image.url }}">
+                </a>
+                <a class="item" href="{% url 'bible:book-detail' book.id %}">
+        
+                    <div class="content">
+                        <div class="header">{{ book.title }}</div>
+                        <div class="meta">
+                            <a>{{ book.writer }}</a>
+                        </div>
+                    </div>
+                     {% if user.is_authenticated %}
+                        <div class="extra content">
+                            <a href="{% url 'bible:book-update' book.id  %}" class="ui compact icon  button">
+                                <i class="edit icon"></i>
+                            </a>
+                            <a href="{% url 'bible:book-delete' book.id  %}" class="ui compact icon right floated button">
+                                <i class="trash icon"></i>
+                            </a>
+                        </div>
+
+
+
+                    {% endif %}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %} 
+        no books to display
+    {% endif %} 
+    
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            // sw should be one level above
+            navigator.serviceWorker.register('/bible/sw.js')
+                .then(function (registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope)
+                    },
+                    function (err) {
+                        console.log('ServiceWorker registration failed: ', err)
+                    })
+        })
+    }
+</script>
+
+{% endblock body %} 

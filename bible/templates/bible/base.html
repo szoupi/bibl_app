@@ -4,11 +4,20 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}Bible{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"> {% comment %} load the path to static files and then the files to be loaded {% endcomment %} {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css"
-    /> {% comment %} custom style alwasy after the cdn/css framework, so as not be overiden {% endcomment %} {% comment %}
-    <link rel="stylesheet" type="text/css" href="{% static 'bible/style.css' %}" /> {% endcomment %}
+    <title>
+        {% block title %}
+            Bible
+        {% endblock title %}
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    {% comment %} 
+        load the path to static files and then the files to be loaded 
+    {% endcomment %} 
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"/>
+    {% load staticfiles %}
+    {% comment %} custom style always after the cdn/css framework, so as not be overiden {% endcomment %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
 
 
 
@@ -49,8 +58,9 @@
     <div class="ui grid stackable container">
 
         <div class="four wide column">
-            {% block leftColumn %}{% endblock leftColumn %} {% block breadcrumbs %}
-            <a href="{% url 'bible:index' %}">Bible</a>
+            {% block leftColumn %}{% endblock leftColumn %} 
+            {% block breadcrumbs %}
+            {% comment %} <a href="{% url 'bible:index' %}">Bible</a> {% endcomment %}
             {% endblock breadcrumbs %}
         </div>
 

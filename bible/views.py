@@ -115,6 +115,7 @@ def create_chapter(request, book_id):
 # bible/book/id/chapter/id/verse/add
 
 @login_required
+@permission_required('bible.add_verse')
 def create_verse(request, book_id, chapter_id):
     book = get_object_or_404(Book, pk=book_id)
     chapter = get_object_or_404(Chapter, pk=chapter_id)
@@ -146,6 +147,7 @@ def create_verse(request, book_id, chapter_id):
 # bible/verse/id/annotation/add
 
 @login_required
+@permission_required('bible.add_annotation')
 def create_annotation(request, book_id, chapter_id, verse_id):
     book = get_object_or_404(Book, pk=book_id)
     chapter = get_object_or_404(Chapter, pk=chapter_id)
@@ -203,12 +205,16 @@ def annotation_detail_view(request, annotation_id):
 
 #####################################################
 # UPDATE VIEWS
-class BookUpdate(LoginRequiredMixin, UpdateView):
+
+
+class BookUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required='bible.change_book'
     model = Book
     fields = ['title', 'writer', 'image', 'abstract_trempelas', 'notes']
     template_name = 'bible/book_form.html'
 
 @login_required
+@permission_required('bible.change_chapter')
 def Chapter_Update(request, book_id, chapter_id):
     book = get_object_or_404(Book, pk=book_id)
     chapter = Chapter.objects.get(pk=chapter_id)
@@ -221,6 +227,7 @@ def Chapter_Update(request, book_id, chapter_id):
     return render(request, 'bible/chapter_form.html', {'form': form})
 
 @login_required
+@permission_required('bible.change_verse')
 def Verse_Update(request, book_id, chapter_id, verse_id):
     book = get_object_or_404(Book, pk=book_id)
     chapter = get_object_or_404(Chapter, pk=chapter_id)
@@ -236,6 +243,7 @@ def Verse_Update(request, book_id, chapter_id, verse_id):
 
 
 @login_required
+@permission_required('bible.change_annotation')
 def Annotation_Update(request, book_id, chapter_id, verse_id, annotation_id):
     book = get_object_or_404(Book, pk=book_id)
     chapter = get_object_or_404(Chapter, pk=chapter_id)
@@ -254,7 +262,8 @@ def Annotation_Update(request, book_id, chapter_id, verse_id, annotation_id):
 
 #####################################################
 # DELETE VIEWS
-class BookDelete(LoginRequiredMixin, DeleteView):
+class BookDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'bible.delete_book'
     model = Book
     success_url = reverse_lazy('bible:index')
     template_name = 'bible/book_confirm_delete.html'

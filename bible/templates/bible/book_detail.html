@@ -24,7 +24,7 @@
              {% if user.is_authenticated %}
                 <div data-id="{{ book.id }}" data-type="book" data-action="bookmark" title="Favorites">
                     <span class=" star">
-                        {% comment %} {% if user.is_authenticated %}
+                       {% if user.is_authenticated %}
                             {% if book.book_is_bookmarked  %}
                             it is bookmarked
                                 <i class="empty star icon"></i>
@@ -32,7 +32,7 @@
                                 not bookmarked
                                 <i class="star icon"></i>
                             {% endif %}
-                        {% endif %} {% endcomment %}
+                        {% endif %}
                     </span>
                     <span data-count="bookmark">{{ is_bookmarked }}</span>
                 </div>
@@ -48,7 +48,7 @@
 {% endblock leftColumn %}
 
 {% block breadcrumbs %}
-    {{ block.super }} <br>» Book: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+    {% comment %} {{ block.super }} <br>» Book: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> {% endcomment %}
 {% endblock %}
 
 

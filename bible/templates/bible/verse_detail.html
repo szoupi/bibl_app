@@ -30,20 +30,34 @@
     </div>
 
     {% if verse.annotation_set.all %}
-    <div class="ui bulleted list">
-         {% for annotation in verse.annotation_set.all %}
-            <a  href="#annotation{{ annotation.number }}"
-                class="item">{{ annotation.number }} - {{ annotation.phrase}}</a >
-        {% endfor %}    
-    </div>
+        <div class="ui card">
+            <div class="content">
+                <div class="header">ANNOTATIONS LIST</div>
+                <div class="ui bulleted list">
+                    {% for annotation in verse.annotation_set.all %}
+                    <a href="#annotation{{ annotation.number }}" class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock leftColumn %}
 
 {% block breadcrumbs %}
-    <br>» Book: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-    <br>» Chapter: <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">{{ chapter.number }}</a>
-    <br>» Verse:{{ verse.number }}
-
+<div class="ui card">
+    <div class="content">
+        <div class="header">NAVIGATION</div>
+        <div>
+            <p>Book:
+                <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+            </p>
+            <p>Chapter:
+                <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">{{ chapter.number }}</a>
+            </p>
+            <p>Verse:{{ verse.number }}</p>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 

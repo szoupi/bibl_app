@@ -4,7 +4,6 @@
 {% endblock title %}
 
 {% block leftColumn %}
-<H1>CHAPTER</H1>
     <div class="ui one cards">
         <div class="card">
             <div class="content">
@@ -34,9 +33,17 @@
 {% endblock leftColumn %}
 
 {% block breadcrumbs %}
-    {{ block.super }}
-    <br>» Book: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-    <br>» Chapter: {{ chapter.number }}
+    <div class="ui one cards">
+        <div class="card">
+            <div class="content">
+            <div class="header">NAVIGATION</div>
+                <p>Book:
+                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                </p>
+                <p>Chapter: {{ chapter.number }}</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
  
 {% block body %}

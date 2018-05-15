@@ -26,10 +26,10 @@
     <div class="ui text container">
         <form class="ui form" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-                {{ form }}
+                {{ form.as_p }}
             <br>
             <br>
-            <button class="ui button" type="submit">Add Chapter</button>
+            <button class="ui button primary" type="submit">Add Chapter</button>
         </form>
     </div>
 

@@ -33,10 +33,12 @@
 
         <div class="right menu">
             {% if user.is_authenticated %}
-            <a class="item" href="{% url 'bible:book-add' %}">
-                <i class="plus inverted icon"></i>
-                Add Book
-            </a>
+                {% if perms.bible.add_book %}
+                    <a class="item" href="{% url 'bible:book-add' %}">
+                        <i class="plus inverted icon"></i>
+                        Add Book
+                    </a>
+                {% endif %}
             {% endif %}
             <div class="ui dropdown simple item">
                 Account
@@ -74,7 +76,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
     <script src="/static/bible.js"></script>
-    <script src="/static/bookmark.js"></script>
+    <script src="/static/favorite.js"></script>
 
 </body>
 

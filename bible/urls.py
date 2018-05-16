@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from .import views
 from django.conf.urls import include
-from .models import BookmarkBook
+from .models import FavoriteBook
 
 app_name = 'bible'
 
@@ -129,11 +129,11 @@ urlpatterns = [
         views.Annotation_Delete, name='annotation-delete'),
 
 
-    # BOOKMARK  ###########################################################
+    # FAVORITE  ###########################################################
 
     # BOOK  /bible/book/id/favorite
-    url(r'^book/(?P<pk>[0-9]+)/bookmark/$',
-        views.BookmarkView.as_view(model=BookmarkBook), name='book-bookmark'),
+    url(r'^book/(?P<pk>[0-9]+)/favorite/$',
+        views.FavoriteView.as_view(model=FavoriteBook), name='book-favorite'),
 
 ]
 

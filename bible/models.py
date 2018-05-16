@@ -84,19 +84,19 @@ class Annotation(models.Model):
             'annotation_id': self.pk
         })
 
-# BOOKMARKS many to many
+# FAVORITES many to many
 
 
-class BookmarkBase(models.Model):
+class FavoriteBase(models.Model):
     class Meta:
         abstract = True
 
     user = models.ForeignKey(User, verbose_name="User")
 
 
-class BookmarkBook(BookmarkBase):
+class FavoriteBook(FavoriteBase):
 
     class Meta:
-        db_table = "bookmark_book"
+        db_table = "favorite_book"
 
     obj = models.ForeignKey(Book, verbose_name="Book")

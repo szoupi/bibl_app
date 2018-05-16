@@ -5,7 +5,6 @@
 
 
 {% block leftColumn %}
-    <h1>VERSE</h1>
     <div class="ui card">
         <div class="content">
             <div class="header">VERSE {{verse.number}}</div>
@@ -18,14 +17,16 @@
             {{verse.greek_translation}}
         </div>
 
-         {% if user.is_authenticated %}
-            <!-- BUTTON -->
-            <a class="item" href="{% url 'bible:annotation-create' book.id chapter.id verse.id %}">
-                <div class="ui bottom attached button">
-                    <i class="add icon"></i>
-                    Add Annotation
-                </div>
-            </a>
+        {% if user.is_authenticated %}
+            {% if perms.bible.add_annotation %} 
+                <!-- BUTTON -->
+                <a class="item" href="{% url 'bible:annotation-create' book.id chapter.id verse.id %}">
+                    <div class="ui bottom attached button">
+                        <i class="add icon"></i>
+                        Add Annotation
+                    </div>
+                </a>
+            {% endif %}    
         {% endif %}        
     </div>
 
@@ -33,7 +34,7 @@
         <div class="ui card">
             <div class="content">
                 <div class="header">ANNOTATIONS LIST</div>
-                <div class="ui bulleted list">
+                <div class="ui list">
                     {% for annotation in verse.annotation_set.all %}
                     <a href="#annotation{{ annotation.number }}" class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
                     {% endfor %}
@@ -70,15 +71,17 @@
                 <div class="card">
                     <div class="content">
                         <div id="annotation{{ annotation.number }}" class="header">
-                             {% if user.is_authenticated %}
-                                <a href="{% url 'bible:annotation-update' book.id chapter.id verse.id annotation.id  %}" 
-                                    class="ui compact icon right floated button">
-                                    <i class="edit icon"></i>
-                                </a>
-                                <a href="{% url 'bible:annotation-delete' book.id chapter.id verse.id annotation.id  %}" 
-                                    class="ui compact icon right floated button">
-                                    <i class="trash icon"></i>
-                                </a>
+                            {% if user.is_authenticated %}
+                                {% if perms.bible.change_annotation %} 
+                                    <a href="{% url 'bible:annotation-update' book.id chapter.id verse.id annotation.id  %}" 
+                                        class="ui compact icon right floated button">
+                                        <i class="edit icon"></i>
+                                    </a>
+                                    <a href="{% url 'bible:annotation-delete' book.id chapter.id verse.id annotation.id  %}" 
+                                        class="ui compact icon right floated button">
+                                        <i class="trash icon"></i>
+                                    </a>
+                                {% endif %} 
                             {% endif %}
                             {{ annotation.number }} - {{ annotation.phrase}}
                         </div>

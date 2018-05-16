@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import permission_required #for functions
 from django.contrib.auth.mixins import PermissionRequiredMixin #for class
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Book, Chapter, Verse, Annotation, BookmarkBook
+from .models import Book, Chapter, Verse, Annotation, FavoriteBook
 # Book uses generic view
 from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm, UserLoginForm
 import json
@@ -349,27 +349,27 @@ class UserRegistrationView(View):
             'form': form
         })
 
-# BOOKMARKS
-class BookmarkView(LoginRequiredMixin, View):
-    # This variable will set the bookmark model to be processed
+# FAVORITES
+class FavoriteView(LoginRequiredMixin, View):
+    # This variable will set the favorite model to be processed
     model = None
 
     def post(self, request, pk):
         # We need a user
         user = auth.get_user(request)
-        # Trying to get a bookmark from the table, or create a new one
-        bookmark, created = self.model.objects.get_or_create(
+        # Trying to get a favorite from the table, or create a new one
+        favorite, created = self.model.objects.get_or_create(
             user=user, obj_id=pk)
-        # If no new bookmark has been created,
-        # Then we believe that the request was to delete the bookmark
+        # If no new favorite has been created,
+        # Then we believe that the request was to delete the favorite
         if not created:
-            bookmark.delete()
+            favorite.delete()
 
 
         return HttpResponse(
             json.dumps({
                 "result": created,
-                "book_is_bookmarked": True,
+                "book_is_favoriteed": True,
                 "count": self.model.objects.filter(obj_id=pk).count()
             }),
             content_type="application/json"
@@ -377,10 +377,10 @@ class BookmarkView(LoginRequiredMixin, View):
 
 
 
-    # def get_bookmark_count(self, request, pk):
+    # def get_favorite_count(self, request, pk):
     #     user = auth.get_user(request)
-    #     bookmark = self.model.objects.get(user=user, obj_id=pk)
-    #     count = bookmark.count()
+    #     favorite = self.model.objects.get(user=user, obj_id=pk)
+    #     count = favorite.count()
     #     return count
 
 

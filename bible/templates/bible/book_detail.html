@@ -6,8 +6,6 @@
 
 {% block leftColumn %}
 
-
-<h1>BOOK</h1>
     <div class="ui one cards">
         <div class="card">
             <a href="{% url 'bible:index' %}" class="image">
@@ -21,27 +19,28 @@
             </div>
             
             <!-- BUTTON -->
-             {% if user.is_authenticated %}
-                <div data-id="{{ book.id }}" data-type="book" data-action="bookmark" title="Favorites">
+            {% if user.is_authenticated %}
+                <div data-id="{{ book.id }}" data-type="book" data-action="favorite" title="Favorites">
                     <span class=" star">
-                       {% if user.is_authenticated %}
-                            {% if book.book_is_bookmarked  %}
-                            it is bookmarked
-                                <i class="empty star icon"></i>
-                            {% else %}
-                                not bookmarked
-                                <i class="star icon"></i>
-                            {% endif %}
+                        {% if book.book_is_favorited  %}
+                            it is favorited
+                            <i class="empty star icon"></i>
+                        {% else %}
+                            not favorited
+                            <i class="star icon"></i>
                         {% endif %}
                     </span>
-                    <span data-count="bookmark">{{ is_bookmarked }}</span>
+                    <span data-count="favorite">{{ is_favorited }}</span>
                 </div>
-                <a class="item" href="{% url 'bible:chapter-create' book.id %}">
-                    <div class="ui bottom attached button">
-                        <i class="add icon"></i>
-                            Add Chapters
-                    </div>
-                </a>
+
+                {% if perms.bible.add_chapter %}
+                    <a class="item" href="{% url 'bible:chapter-create' book.id %}">
+                        <div class="ui bottom attached button">
+                            <i class="add icon"></i>
+                                Add Chapters
+                        </div>
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -63,15 +62,17 @@
                     <div class="content">
                         <div class="header">
                             {% if user.is_authenticated %}
-                                <a href="{% url 'bible:chapter-update' book.id chapter.id  %}" 
-                                    class="ui compact icon right floated button">
-                                    <i class="edit icon"></i>
-                                </a>
-                                <a onclick="fConfirm()" href="{% url 'bible:chapter-delete' book.id chapter.id %}"
-                                    class="ui compact icon right floated button">
-                                    <i class="trash icon"></i>
-                                </a>
-                             {% endif %}
+                                {% if perms.bible.change_chapter %}
+                                    <a href="{% url 'bible:chapter-update' book.id chapter.id  %}" 
+                                        class="ui compact icon right floated button">
+                                        <i class="edit icon"></i>
+                                    </a>
+                                    <a onclick="fConfirm()" href="{% url 'bible:chapter-delete' book.id chapter.id %}"
+                                        class="ui compact icon right floated button">
+                                        <i class="trash icon"></i>
+                                    </a>
+                                    {% endif %}
+                                {% endif %}
                             {{ chapter.number }}
                         </div>
                         <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">

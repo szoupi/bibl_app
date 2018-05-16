@@ -26,18 +26,18 @@
                             <a>{{ book.writer }}</a>
                         </div>
                     </div>
-                     {% if user.is_authenticated %}
+                     {% if user.is_authenticated  %}
+                        {% comment %} if the user has edit rights {% endcomment %}
+                        {% if perms.bible.change_book %} 
                         <div class="extra content">
                             <a href="{% url 'bible:book-update' book.id  %}" class="ui compact icon  button">
                                 <i class="edit icon"></i>
-                            </a>
-                            <a href="{% url 'bible:book-delete' book.id  %}" class="ui compact icon right floated button">
-                                <i class="trash icon"></i>
-                            </a>
-                        </div>
-
-
-
+                                </a>
+                                <a href="{% url 'bible:book-delete' book.id  %}" class="ui compact icon right floated button">
+                                    <i class="trash icon"></i>
+                                </a>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </a>
             </div>

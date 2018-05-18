@@ -20,18 +20,71 @@
             
             <!-- BUTTON -->
             {% if user.is_authenticated %}
-                <div data-id="{{ book.id }}" data-type="book" data-action="favorite" title="Favorites">
-                    <span class=" star">
-                        {% if book.book_is_favorited  %}
-                            it is favorited
-                            <i class="empty star icon"></i>
-                        {% else %}
-                            not favorited
-                            <i class="star icon"></i>
-                        {% endif %}
-                    </span>
-                    <span data-count="favorite">{{ is_favorited }}</span>
+                <div class="content">
+
+            <button class="ui button primary"
+                    id="favbtn{{ book.id }}"
+                    data-favorite="true"
+                    onclick="favoriteBook()"
+                >Favorite Book
+            </button>
+            <p></p>
+            <button class="ui button secondary">Unfavor Book</button>
+
+
+
                 </div>
+
+
+                {# DEBUG #}
+                <div class="content">
+                    <h2>DEBUG</h2>
+                    <ul>
+                        <li>username: {{ user.username }}</li>
+                        <li>user id: {{ user.id }}</li>
+                        <li>book id: {{ book.id }}</li>
+                    </ul>
+                </div>
+                
+                <script>
+
+                    function favoriteBook() {
+                        console.log('favorite button clicked')
+                        // note the trailing slash favorite/
+                        var url = "./" + {{ book.id }} + "/favorite/";
+                        
+                        // what to pass to db
+                        var json_data = {
+                            'user_id': {{user.id}},
+                            'obj_id': {{book.id}}
+                        }
+
+                        fetch(url, {
+                            method: "put",
+                            credentials: "same-origin",
+                            headers: {
+                                "X-CSRFToken": csrftoken,
+                                "Accept": "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(json_data)
+                        }).then(response => {
+                            console.log('json_data passed succesfully to db ')
+                            console.log('now passing json from FavoriteView  ')
+                            return response.json();
+                        }).then(data => {
+                            console.log("data fetched succesfully from the favorite view, eg: ", data);
+                            const favbtn = document.getElementById("favbtn{{ book.id }}")
+                            favbtn.textContent = 'UnFavorite Book'
+                            // TODO: CONDITIONAL LOGIC
+                        }).catch(error => {
+                            console.log("parsing failed", error);
+                        });
+                    }
+
+                    
+                </script>
+
 
                 {% if perms.bible.add_chapter %}
                     <a class="item" href="{% url 'bible:chapter-create' book.id %}">
@@ -89,6 +142,5 @@
             <h2>No Chapters to display</h2>
     {% endif %}
     </div>
-
     
 {% endblock body %}

@@ -132,6 +132,7 @@ urlpatterns = [
     # FAVORITE  ###########################################################
 
     # BOOK  /bible/book/id/favorite
+    # define the model because because the view is general
     url(r'^book/(?P<pk>[0-9]+)/favorite/$',
         views.FavoriteView.as_view(model=FavoriteBook), name='book-favorite'),
 

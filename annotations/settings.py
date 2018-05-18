@@ -73,6 +73,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'annotations.wsgi.application'
 
+# Django rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication'
+    ]
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases

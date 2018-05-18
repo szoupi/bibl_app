@@ -93,6 +93,9 @@ class FavoriteBase(models.Model):
 
     user = models.ForeignKey(User, verbose_name="User")
 
+    def __str__(self):
+        return self.user.username
+
 
 class FavoriteBook(FavoriteBase):
 
@@ -100,3 +103,27 @@ class FavoriteBook(FavoriteBase):
         db_table = "favorite_book"
 
     obj = models.ForeignKey(Book, verbose_name="Book")
+
+
+class FavoriteChapter(FavoriteBase):
+
+    class Meta:
+        db_table = "favorite_chapter"
+
+    obj = models.ForeignKey(Chapter, verbose_name="Chapter")
+
+
+class FavoriteVerse(FavoriteBase):
+
+    class Meta:
+        db_table = "favorite_verse"
+
+    obj = models.ForeignKey(Verse, verbose_name="Verse")
+
+
+class FavoriteAnnotation(FavoriteBase):
+
+    class Meta:
+        db_table = "favorite_annotation"
+
+    obj = models.ForeignKey(Annotation, verbose_name="Annotation")

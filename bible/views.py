@@ -13,7 +13,7 @@ from .models import Book, Chapter, Verse, Annotation, FavoriteBook
 # Book uses generic view
 from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm, UserLoginForm
 import json
-from django.http import HttpResponse
+from django.http import JsonResponse
 
 # TODO
 # IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -349,31 +349,43 @@ class UserRegistrationView(View):
             'form': form
         })
 
-# FAVORITES
+# FAVORITES one view for books, chapters etc
+
+
 class FavoriteView(LoginRequiredMixin, View):
     # This variable will set the favorite model to be processed
+    # model = FavoriteBook
+    # model is set on the url
     model = None
 
-    def post(self, request, pk):
+    def put(self, request, pk):
         # We need a user
         user = auth.get_user(request)
+
         # Trying to get a favorite from the table, or create a new one
+        # The first element is an instance of the model 
+        # you are trying to retrieve 
+        # and the second is a boolean flag to tell 
+        # if the instance was created or not. 
+        # True means the instance was created by the get_or_create method 
+        # and False means it was retrieved from the database.
         favorite, created = self.model.objects.get_or_create(
-            user=user, obj_id=pk)
+            user=user, 
+            obj_id=pk)
         # If no new favorite has been created,
         # Then we believe that the request was to delete the favorite
         if not created:
             favorite.delete()
 
-
-        return HttpResponse(
-            json.dumps({
+            # pass some data to be used 
+            # in the fetch promise
+            data = {
                 "result": created,
-                "book_is_favoriteed": True,
-                "count": self.model.objects.filter(obj_id=pk).count()
-            }),
-            content_type="application/json"
-        )
+                "book_is_favorited": True,
+            }
+
+            return JsonResponse(data)
+      
 
 
 

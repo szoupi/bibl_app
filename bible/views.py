@@ -42,9 +42,13 @@ class IndexView(generic.ListView):
 def book_detail_view(request, book_id):
     # use
     book = get_object_or_404(Book, pk=book_id)
+    user = request.user.id
+    # first does not produce error if row does not exists
+    favorite = FavoriteBook.objects.filter(obj_id=book_id, user=user).first()
     # the context {'book':book} contain the variables passed to template
     return render(request, 'bible/book_detail.html', {
         'book': book,
+        'favorite': favorite
     })
 
     # model = Book
@@ -379,13 +383,29 @@ class FavoriteView(LoginRequiredMixin, View):
 
             # pass some data to be used 
             # in the fetch promise
-            data = {
-                "result": created,
-                "book_is_favorited": True,
-            }
+            # not necessary needed 
+            # data = {
+            #     "result": created,
+            #     "object_is_favorited": True,
+            # }
+            data={}
 
             return JsonResponse(data)
-      
+
+    def get(self, request, pk):
+        user = auth.get_user(request)
+        favorite = self.model.objects.get(user=user, obj_id=pk)
+        if favorite.DoesNotExist:
+            return JsonResponse({
+                'success': 0
+            })
+        else:
+            return JsonResponse({
+                'success': 1
+            })
+
+class Isfavorite(LoginRequiredMixin, View):
+    model = None
 
 
 

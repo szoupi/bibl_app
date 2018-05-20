@@ -1,106 +1,151 @@
 {% extends "bible/base.html" %}
 {% block title %}
-    Book details
+Book details
 {% endblock title %}
 
 
 {% block leftColumn %}
 
-    <div class="ui one cards">
-        <div class="card">
-            <a href="{% url 'bible:index' %}" class="image">
-                <img src="{{ book.image.url }}">
-            </a>
-            <div class="content">
-                <div class="header">{{ book.title }}</div>
-                <div class="meta">
-                    <div>{{ book.writer }}</div>
-                </div>
+<div class="ui one cards">
+    <div class="card">
+        <a href="{% url 'bible:index' %}" class="image">
+            <img src="{{ book.image.url }}">
+        </a>
+        <div class="content">
+            <div class="header">{{ book.title }}</div>
+            <div class="meta">
+                <div>{{ book.writer }}</div>
             </div>
-            
-            <!-- BUTTON -->
-            {% if user.is_authenticated %}
-                <div class="content">
-
-            <button class="ui button primary"
-                    id="favbtn{{ book.id }}"
-                    data-favorite="true"
-                    onclick="favoriteBook()"
-                >Favorite Book
-            </button>
-            <p></p>
-            <button class="ui button secondary">Unfavor Book</button>
-
-
-
-                </div>
-
-
-                {# DEBUG #}
-                <div class="content">
-                    <h2>DEBUG</h2>
-                    <ul>
-                        <li>username: {{ user.username }}</li>
-                        <li>user id: {{ user.id }}</li>
-                        <li>book id: {{ book.id }}</li>
-                    </ul>
-                </div>
-                
-                <script>
-
-                    function favoriteBook() {
-                        console.log('favorite button clicked')
-                        // note the trailing slash favorite/
-                        var url = "./" + {{ book.id }} + "/favorite/";
-                        
-                        // what to pass to db
-                        var json_data = {
-                            'user_id': {{user.id}},
-                            'obj_id': {{book.id}}
-                        }
-
-                        fetch(url, {
-                            method: "put",
-                            credentials: "same-origin",
-                            headers: {
-                                "X-CSRFToken": csrftoken,
-                                "Accept": "application/json",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(json_data)
-                        }).then(response => {
-                            console.log('json_data passed succesfully to db ')
-                            console.log('now passing json from FavoriteView  ')
-                            return response.json();
-                        }).then(data => {
-                            console.log("data fetched succesfully from the favorite view, eg: ", data);
-                            const favbtn = document.getElementById("favbtn{{ book.id }}")
-                            favbtn.textContent = 'UnFavorite Book'
-                            // TODO: CONDITIONAL LOGIC
-                        }).catch(error => {
-                            console.log("parsing failed", error);
-                        });
-                    }
-
-                    
-                </script>
-
-
-                {% if perms.bible.add_chapter %}
-                    <a class="item" href="{% url 'bible:chapter-create' book.id %}">
-                        <div class="ui bottom attached button">
-                            <i class="add icon"></i>
-                                Add Chapters
-                        </div>
-                    </a>
-                {% endif %}
-            {% endif %}
         </div>
+
+        <!-- BUTTON -->
+        {% if user.is_authenticated %}
+        <div class="content">
+            <i class="star outline icon" 
+                id="favoriteStar{{ book.id }}"
+                 onclick="favoriteBook()"
+                 ></i>
+        </div>
+
+
+        {# DEBUG #}
+        {% if user.is_superuser %}
+        <div class="content">
+            <h2>DEBUG</h2>
+            <ul>
+                <li>username: {{ user.username }}</li>
+                <li>user id: {{ user.id }}</li>
+                <li>book id: {{ book.id }}</li>
+                <li>favorite book: {{ favorite.obj_id }}</li>
+                <li>favorite user: {{ favorite.user_id }}</li>
+            </ul>
+        </div>
+        {% endif %}
+
+        <script>
+
+            const favbtn = document.getElementById("favbtn{{ book.id }}")
+            const favstar = document.getElementById("favoriteStar{{ book.id }}") 
+
+            function favoriteBook() {
+                console.log('favorite button clicked')
+                // note the trailing slash favorite/
+                const url = "./" + {{ book.id }} + "/favorite/";
+                
+                // what to pass to db
+                let json_data = {
+                    'user_id': {{user.id}},
+                    'obj_id': {{book.id}}
+                }
+
+                let fetch_data = {
+                    method: "put",
+                    credentials: "same-origin",
+                    headers: {
+                        "X-CSRFToken": csrftoken,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(json_data)
+                }
+
+                fetch(url, fetch_data)
+                .then(response =>   response.json())
+                .catch(error => {
+                    console.log("favorite does not exist, create a new one", error);
+                });
+                
+                // toggle outside fetch because
+                // put creates error if db row does not exist
+                // so paint is not executed
+                // if placed in next then(), as we should...
+                favstar.classList.toggle("outline")
+            }
+            
+            function toggleFavorite(){
+                favstar.classList.toggle("outline")
+            }
+            
+            // update the favorite star
+            document.addEventListener("DOMContentLoaded", function (event) {
+                if ("{{ favorite.id}}") {
+                   toggleFavorite()
+                }
+            });
+
+            // ONLY TO BE USED ASYNC, IF NEEDED
+            function isFavorite(){
+                console.log('isFavorite triggered')
+                // note the trailing slash favorite/
+                const url = "./" + {{ book.id }} + "/favorite/";
+                
+                // what to pass to db
+                let json_data = {
+                    'user_id': {{user.id}},
+                    'obj_id': {{book.id}}
+                }
+
+                let fetch_data = {
+                    method: "get", //  GET
+                    credentials: "same-origin",
+                    headers: {
+                        "X-CSRFToken": csrftoken,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                }
+
+                fetch(url, fetch_data)
+                .then(response =>  {
+                
+                    return response.json()
+                }).then(data=>{
+                    console.log("favorite exists");
+                    toggleFavorite() 
+                }).catch(error => {
+                    console.log("favorite does not exist", error);
+                    toggleFavorite()
+                });
+            }
+        </script>
+
+
+        {% if perms.bible.add_chapter %}
+        <a class="item" href="{% url 'bible:chapter-create' book.id %}">
+            <div class="ui bottom attached button">
+                <i class="add icon"></i>
+                Add Chapters
+            </div>
+        </a>
+        {% endif %}
+        {% endif %}
     </div>
+</div>
 {% endblock leftColumn %}
 
 {% block breadcrumbs %}
-    {% comment %} {{ block.super }} <br>» Book: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> {% endcomment %}
+{% comment %} {{ block.super }} <br>» Book: <a href="{{ book.get_absolute_url
+    }}">{{ book.title }}</a> {% endcomment %}
 {% endblock %}
 
 
@@ -109,38 +154,40 @@
 <div class="ui text container">
     <h2>CHAPTERS</h2>
     {% if book.chapter_set.all %}
-        <div class="ui one cards">
-            {% for chapter in book.chapter_set.all %}
-            <div class="card">                
-                    <div class="content">
-                        <div class="header">
-                            {% if user.is_authenticated %}
-                                {% if perms.bible.change_chapter %}
-                                    <a href="{% url 'bible:chapter-update' book.id chapter.id  %}" 
-                                        class="ui compact icon right floated button">
-                                        <i class="edit icon"></i>
-                                    </a>
-                                    <a onclick="fConfirm()" href="{% url 'bible:chapter-delete' book.id chapter.id %}"
-                                        class="ui compact icon right floated button">
-                                        <i class="trash icon"></i>
-                                    </a>
-                                    {% endif %}
-                                {% endif %}
-                            {{ chapter.number }}
-                        </div>
-                        <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">
-                            <div class="description">
-                                {{ chapter.title }}
-                            </div>
-                        </a>
-                    </div>
-                
+    <div class="ui one cards">
+        {% for chapter in book.chapter_set.all %}
+        <div class="card">
+            <div class="content">
+                <div class="header">
+                    {% if user.is_authenticated %}
+                    {% if perms.bible.change_chapter %}
+                    <a href="{% url 'bible:chapter-update' book.id chapter.id
+                        %}"
+                        class="ui compact icon right floated button">
+                        <i class="edit icon"></i>
+                    </a>
+                    <a onclick="fConfirm()" href="{% url 'bible:chapter-delete'
+                        book.id chapter.id %}"
+                        class="ui compact icon right floated button">
+                        <i class="trash icon"></i>
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                    {{ chapter.number }}
                 </div>
-                {% endfor %}
+                <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">
+                    <div class="description">
+                        {{ chapter.title }}
+                    </div>
+                </a>
             </div>
-    {% else %}
-            <h2>No Chapters to display</h2>
-    {% endif %}
+
+        </div>
+        {% endfor %}
     </div>
-    
-{% endblock body %}
+    {% else %}
+    <h2>No Chapters to display</h2>
+    {% endif %}
+</div>
+
+{% endblock body %}}

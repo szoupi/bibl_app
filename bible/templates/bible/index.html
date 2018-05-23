@@ -1,25 +1,25 @@
 {% extends "bible/base.html" %}
 {% block body %} 
 
-    {% if all_books %} {# all_books is returned from the view #}
-        <!--
-            the default django variable object_list 
-            could be used instead of all_books 
-            but it is overriden in the views.py
-            IndexView :) 
-        -->
+{% if all_books %} {# all_books is returned from the view #}
+    <!--
+        the default django variable object_list 
+        could be used instead of all_books 
+        but it is overriden in the views.py
+        IndexView :) 
+    -->
 
 
-        <div class="ui four  doubling link cards">
+    <div class="ui four  doubling link cards">
 
-            {% for book in all_books %}
-        
+        {% for book in all_books %}
+
             <div class="card">
                 <a class="image" href="{% url 'bible:book-detail' book.id %}">
                     <img src="{{ book.image.url }}">
                 </a>
                 <a class="item" href="{% url 'bible:book-detail' book.id %}">
-        
+
                     <div class="content">
 
                         <div class="header">{{ book.title }}</div>
@@ -28,104 +28,95 @@
                         </div>
                     </div>
 
-<div id="debug{{ book.id }}"></div>
+                    <div id="debug{{ book.id }}"></div>
 
-                    {% if user.is_authenticated  %}
-                        <div class="extra content">
-                            <!-- FAVORITE STAR -->
-                            <i class="star outline  icon" 
+                        {% if user.is_authenticated  %}
+                            <div class="extra content">
+                                <!-- FAVORITE STAR -->
+                                <i class="star outline  icon" 
                                 id="favoriteStar{{ book.id }}"
-                                 onclick="favoriteBook()"
-                            ></i> 
-                            <!-- FAVORITE CHECK -->
-                            <!--loop through bookFavorite records -->
-                            <!--if fav raw exists, make star black -->
-                            {% for fav in favorite_books %}
-                                {% if fav.user_id == user.id and fav.obj_id == book.id %}
-                                <script>
-                                    document.getElementById('debug{{ book.id }}').innerHTML = "   <p> It is favorite! <br>Fav user_id: {{ fav.user_id }}: obj_id {{ fav.obj_id }}</p>"
-                                    document.getElementById("favoriteStar{{ book.id }}").classList.remove("outline");
-                                </script>
-                                {% endif %} 
-                            {% endfor %}
-    
-                             <!--...and if the user has edit rights -->
-                            {% if perms.bible.change_book %} 
-                                <a href="{% url 'bible:book-update' book.id  %}" 
-                                    class="ui compact icon  button">
-                                    <i class="edit icon"></i>
-                                </a>
-                                <a href="{% url 'bible:book-delete' book.id  %}" 
-                                    class="ui compact icon right floated button">
-                                    <i class="trash icon"></i>
-                                </a>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </a>
+                                ></i>
+                                
+                                <!-- FAVORITE CHECK -->
+                                <!--loop through bookFavorite records -->
+                                <!--if fav raw exists, make star black -->
+                                {% for fav in favorite_books %}
+                                    {% if fav.user_id == user.id and fav.obj_id == book.id %}
+                                    <script>
+                                        document.getElementById('debug{{ book.id }}').innerHTML = "   <p> It is favorite! <br>Fav user_id: {{ fav.user_id }}: obj_id {{ fav.obj_id }}</p>"
+                                        document.getElementById("favoriteStar{{ book.id }}").classList.remove("outline");
+                                    </script>
+                                    {% endif %} 
+                                {% endfor %}
 
-                
-                
+                                <script>
+                                    TODO: BUG  pressing star, row is not created
+                                    document.getElementById("favoriteStar{{ book.id }}").addEventListener('click', function(){
+
+                                        // note the trailing slash favorite/
+
+                                        fetch("./{{ book.id }}/favorite/", {
+                                                method: "put",
+                                                credentials: "same-origin",
+                                                headers: {
+                                                    "X-CSRFToken": csrftoken,
+                                                    "Accept": "application/json",
+                                                    "Content-Type": "application/json"
+                                                },
+                                                body: JSON.stringify({
+                                                    "user_id" : {{ user.id }},
+                                                    "obj_id" : {{ book.id }}
+                                                })
+                                            })
+                                            .then(response => response.json())
+                                            .catch(error => {
+                                                console.log("favorite does not exist, create a new one", error);
+                                            });
+
+                                        // toggle outside fetch because
+                                        // put creates error if db row does not exist
+                                        // so paint is not executed
+                                        // if placed in next then(), as we should...
+                                        document.getElementById("favoriteStar{{ book.id }}").classList.toggle("outline")
+                                    })
+
+                                </script>
+
+
+                                <!--...and if the user has edit rights -->
+                                {% if perms.bible.change_book %} 
+                                    <a href="{% url 'bible:book-update' book.id  %}" 
+                                        class="ui compact icon  button">
+                                        <i class="edit icon"></i>
+                                    </a>
+                                    <a href="{% url 'bible:book-delete' book.id  %}" 
+                                        class="ui compact icon right floated button">
+                                        <i class="trash icon"></i>
+                                    </a>
+                               {% endif %}
+                            </div>
+                        {% endif %}
+                        </a>
+
+
+
                 {# DEBUG #}
                 {% if user.is_superuser %}
-                <div class="content">
-                    <h2>DEBUG</h2>
-                    <ul>
-                        <li>username: {{ user.username }}</li>
-                        <li>user id: {{ user.id }}</li>
-                        <li>book id: {{ book.id }}</li>
-                    </ul>
-                </div>
+                    <div class="content">
+                        <h2>DEBUG</h2>
+                        <ul>
+                            <li>username: {{ user.username }}</li>
+                            <li>user id: {{ user.id }}</li>
+                            <li>book id: {{ book.id }}</li>
+                        </ul>
+                    </div>
                 {% endif %}
             </div>
-            {% endfor %}
-        </div>
-    {% else %} 
-        no books to display
-    {% endif %} 
-    
-
-  
-<script>
-
-function favoriteBook() {
-    console.log('favorite button clicked')
-    // note the trailing slash favorite/
-    const url = "./" + {{ book.id }} + "/favorite/";
-    
-    // what to pass to db
-    let json_data = {
-        'user_id': {{user.id}},
-        'obj_id': {{book.id}},
-    }
-
-    let fetch_data = {
-        method: "put",
-        credentials: "same-origin",
-        headers: {
-            "X-CSRFToken": csrftoken,
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(json_data)
-    }
-
-    fetch(url, fetch_data)
-    .then(response =>   response.json())
-    .catch(error => {
-        console.log("favorite does not exist, create a new one", error);
-    });
-    
-    // toggle outside fetch because
-    // put creates error if db row does not exist
-    // so paint is not executed
-    // if placed in next then(), as we should...
-    favstar.classList.toggle("outline")
-}
-    
-</script>
-
-  
+        {% endfor %}
+    </div>
+{% else %} 
+    no books to display
+{% endif %} 
 
 
 {% endblock body %} 

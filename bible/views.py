@@ -39,7 +39,8 @@ class IndexView(generic.ListView):
         # Add in a QuerySet of all the books
         context['favorite_books'] = FavoriteBook.objects.all()
         # TODO: test next line to pass field as variable for js 
-        # context['book.id'] = 'book_id'
+        context['book.id'] = 'book_id'
+        context['user.id'] = 'user_id'
         return context
 
 
@@ -416,8 +417,8 @@ class FavoriteView(LoginRequiredMixin, View):
                 'success': 1
             })
 
-class Isfavorite(LoginRequiredMixin, View):
-    model = None
+# class Isfavorite(LoginRequiredMixin, View):
+#     model = None
 
 
 

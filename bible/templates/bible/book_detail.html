@@ -44,13 +44,12 @@ Book details
 
         <script>
 
-            const favbtn = document.getElementById("favbtn{{ book.id }}")
             const favstar = document.getElementById("favoriteStar{{ book.id }}") 
 
             function favoriteBook() {
                 console.log('favorite button clicked')
                 // note the trailing slash favorite/
-                const url = "./" + {{ book.id }} + "/favorite/";
+                const url = "./{{ book.id }}/favorite/";
                 
                 // what to pass to db
                 let json_data = {

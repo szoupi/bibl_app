@@ -22,6 +22,8 @@ from django.http import JsonResponse
 class IndexView(generic.ListView):
     model = Book
     template_name = 'bible/index.html'
+    
+
     # queryset = Book.object.filter(title__icontains='mysearch')[:5] # Get 5 books containing the title mysearch
 
     # return all book objects from the db
@@ -30,6 +32,16 @@ class IndexView(generic.ListView):
     # but we can override it with 
     #context_object_name = 'my_variable'
     context_object_name = 'all_books'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(IndexView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['favorite_books'] = FavoriteBook.objects.all()
+        # TODO: test next line to pass field as variable for js 
+        # context['book.id'] = 'book.id'
+        return context
+
 
     def get_queryset(self):
         return Book.objects.all()

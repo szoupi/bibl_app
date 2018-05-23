@@ -39,7 +39,7 @@ class IndexView(generic.ListView):
         # Add in a QuerySet of all the books
         context['favorite_books'] = FavoriteBook.objects.all()
         # TODO: test next line to pass field as variable for js 
-        # context['book.id'] = 'book.id'
+        # context['book.id'] = 'book_id'
         return context
 
 

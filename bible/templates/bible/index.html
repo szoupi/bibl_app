@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-
+<div id="debug{{ book.id }}"></div>
 
                     {% if user.is_authenticated  %}
                         <div class="extra content">
@@ -43,7 +43,7 @@
                             {% for fav in favorite_books %}
                                 {% if fav.user_id == user.id and fav.obj_id == book.id %}
                                 <script>
-                                    // document.getElementById('debug{{ book.id }}').innerHTML = "   <p> It is favorite! <br>Fav user_id: {{ fav.user_id }}: obj_id {{ fav.obj_id }}</p>"
+                                    document.getElementById('debug{{ book.id }}').innerHTML = "   <p> It is favorite! <br>Fav user_id: {{ fav.user_id }}: obj_id {{ fav.obj_id }}</p>"
                                     document.getElementById("favoriteStar{{ book.id }}").classList.remove("outline");
                                 </script>
                                 {% endif %} 

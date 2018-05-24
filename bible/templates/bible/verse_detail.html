@@ -150,6 +150,59 @@
                     <div class="content">
                         <div id="annotation{{ annotation.number }}" class="header">
                             {% if user.is_authenticated %}
+
+                                <!-- ==================FAVORITE CHAPTER STAR=================== -->
+                                <i class="star outline icon ui compact  right floated " 
+                                    id="favAnnotationStar{{ annotation.id }}"
+                                ></i>
+                                
+                                <!-- FAVORITE CHECK -->
+                                <!--loop through chapterFavorite records -->
+                                <!--if fav raw exists, make star black -->
+                                {% for fav in favorite_annotations %}
+                                    {% if fav.user_id == user.id and fav.obj_id == annotation.id %}
+                                        <script>
+                                            document.getElementById("favAnnotationStar{{ annotation.id }}").classList.remove("outline");
+                                        </script>
+                                    {% endif %} 
+                                {% endfor %}
+
+                                <script>
+                                    // when document load display the status of stars
+                                    document.getElementById("favAnnotationStar{{ annotation.id }}").addEventListener('click', function(){
+
+                                        // note the trailing slash favorite/
+                                        fetch("/annotation/{{ annotation.id }}/favorite/", {
+                                                method: "put",
+                                                credentials: "same-origin",
+                                                headers: {
+                                                    "X-CSRFToken": csrftoken,
+                                                    "Accept": "application/json",
+                                                    "Content-Type": "application/json"
+                                                },
+                                                body: JSON.stringify({
+                                                    "user_id" : {{ user.id }},
+                                                    "obj_id" : {{ annotation.id }}
+                                                })
+                                            })
+                                            .then(response => response.json())
+                                            .catch(error => {
+                                                console.log("favorite does not exist, create a new one", error);
+                                            });
+
+                                        // toggle outside fetch because
+                                        // put creates error if db row does not exist
+                                        // so paint is not executed
+                                        // if placed in next then(), as we should...
+                                        document.getElementById("favAnnotationStar{{ annotation.id }}").classList.toggle("outline")
+                                    })
+
+                                </script>
+                                <!-- ==================FAVORITE END=================== -->
+                                
+                                <!--...and if the user has edit rights -->
+
+
                                 {% if perms.bible.change_annotation %} 
                                     <a href="{% url 'bible:annotation-update' book.id chapter.id verse.id annotation.id  %}" 
                                         class="ui compact icon right floated button">

@@ -203,13 +203,13 @@ def chapter_detail_view(request, book_id, chapter_id):
     user = request.user.id
     favorite = FavoriteChapter.objects.filter(
         obj_id=chapter_id, user=user).first()
-    favorite_chapters = FavoriteChapter.objects.all()
+    favorite_verses = FavoriteVerse.objects.all()
     # assert False
     return render(request, 'bible/chapter_detail.html', {
         'book': book,
         'chapter': chapter,
         'favorite': favorite,
-        'favorite_chapters': favorite_chapters
+        'favorite_verses': favorite_verses
     })
 
 
@@ -219,11 +219,14 @@ def verse_detail_view(request, book_id, chapter_id, verse_id):
     verse = get_object_or_404(Verse, pk=verse_id)
     user = request.user.id
     favorite = FavoriteVerse.objects.filter(obj_id=verse_id, user=user).first()
+    favorite_annotations = FavoriteAnnotation.objects.all()
+
     return render(request, 'bible/verse_detail.html', {
         'book': book,
         'chapter': chapter,
         'verse': verse,
-        'favorite': favorite
+        'favorite': favorite,
+        'favorite_annotations': favorite_annotations
     })
 
 
@@ -232,6 +235,7 @@ def annotation_detail_view(request, annotation_id):
     user = request.user.id
     favorite = FavoriteVerse.objects.filter(
         obj_id=annotation_id, user=user).first()
+
     return render(request, 'bible/annotation_detail.html', {
         'annotation': annotation,
         'favorite': favorite

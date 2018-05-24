@@ -136,6 +136,57 @@
                 <div class="content">
                     <div class="header">
                         {% if user.is_authenticated %}
+
+                            <!-- ==================FAVORITE CHAPTER STAR=================== -->
+                            <i class="star outline icon ui compact right floated " 
+                                id="favVerseStar{{ verse.id }}"
+                            ></i>
+                            
+                            <!-- FAVORITE CHECK -->
+                            <!--loop through chapterFavorite records -->
+                            <!--if fav raw exists, make star black -->
+                            {% for fav in favorite_verses %}
+                                {% if fav.user_id == user.id and fav.obj_id == verse.id %}
+                                    <script>
+                                        document.getElementById("favVerseStar{{ verse.id }}").classList.remove("outline");
+                                    </script>
+                                {% endif %} 
+                            {% endfor %}
+
+                            <script>
+                                // when document load display the status of stars
+                                document.getElementById("favVerseStar{{ verse.id }}").addEventListener('click', function(){
+
+                                    // note the trailing slash favorite/
+                                    fetch("/verse/{{ verse.id }}/favorite/", {
+                                            method: "put",
+                                            credentials: "same-origin",
+                                            headers: {
+                                                "X-CSRFToken": csrftoken,
+                                                "Accept": "application/json",
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify({
+                                                "user_id" : {{ user.id }},
+                                                "obj_id" : {{ verse.id }}
+                                            })
+                                        })
+                                        .then(response => response.json())
+                                        .catch(error => {
+                                            console.log("favorite does not exist, create a new one", error);
+                                        });
+
+                                    // toggle outside fetch because
+                                    // put creates error if db row does not exist
+                                    // so paint is not executed
+                                    // if placed in next then(), as we should...
+                                    document.getElementById("favVerseStar{{ verse.id }}").classList.toggle("outline")
+                                })
+
+                            </script>
+                            <!-- ==================FAVORITE END=================== -->
+
+
                             {% if perms.bible.change_verse %}
                                 <a href="{% url 'bible:verse-update' book.id chapter.id verse.id  %}" 
                                     class="ui compact icon right floated button">

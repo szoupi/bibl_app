@@ -10,7 +10,7 @@
     -->
 
 
-    <div class="ui four  doubling link cards">
+    <div class="ui four doubling link cards">
 
         {% for book in all_books %}
 
@@ -28,11 +28,14 @@
                         </div>
                     </div>
 
-                    <div id="debug{{ book.id }}"></div>
+                    {# DEBUG #}
+                    {% if user.is_superuser %}
+                        <div id="debug{{ book.id }}"></div>
+                    {% endif %}
 
                         {% if user.is_authenticated  %}
                             <div class="extra content">
-                                <!-- FAVORITE STAR -->
+                                <!-- ==================FAVORITE STAR=================== -->
                                 <i class="star outline  icon" 
                                 id="favoriteStar{{ book.id }}"
                                 ></i>
@@ -42,20 +45,22 @@
                                 <!--if fav raw exists, make star black -->
                                 {% for fav in favorite_books %}
                                     {% if fav.user_id == user.id and fav.obj_id == book.id %}
-                                    <script>
-                                        document.getElementById('debug{{ book.id }}').innerHTML = "   <p> It is favorite! <br>Fav user_id: {{ fav.user_id }}: obj_id {{ fav.obj_id }}</p>"
-                                        document.getElementById("favoriteStar{{ book.id }}").classList.remove("outline");
-                                    </script>
+                                        {% if user.is_superuser %}
+                                            <script>
+                                                document.getElementById('debug{{ book.id }}').innerHTML = "   <p> It is favorite! <br>Fav user_id: {{ fav.user_id }}: obj_id {{ fav.obj_id }}</p>"
+                                            </script>
+                                        {% endif %}
+                                        <script>
+                                            document.getElementById("favoriteStar{{ book.id }}").classList.remove("outline");
+                                        </script>
                                     {% endif %} 
                                 {% endfor %}
 
                                 <script>
-                                    // TODO: BUG  pressing star, row is not created
                                     document.getElementById("favoriteStar{{ book.id }}").addEventListener('click', function(){
 
                                         // note the trailing slash favorite/
-
-                                        fetch("./{{ book.id }}/favorite/", {
+                                        fetch("/book/{{ book.id }}/favorite/", {
                                                 method: "put",
                                                 credentials: "same-origin",
                                                 headers: {
@@ -81,6 +86,7 @@
                                     })
 
                                 </script>
+                                <!-- ==================FAVORITE END=================== -->
 
 
                                 <!--...and if the user has edit rights -->

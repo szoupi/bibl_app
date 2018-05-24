@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import permission_required #for functions
 from django.contrib.auth.mixins import PermissionRequiredMixin #for class
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Book, Chapter, Verse, Annotation, FavoriteBook
+from .models import Book, Chapter, Verse, Annotation, FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation
 # Book uses generic view
 from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm, UserLoginForm
 import json
@@ -39,8 +39,8 @@ class IndexView(generic.ListView):
         # Add in a QuerySet of all the books
         context['favorite_books'] = FavoriteBook.objects.all()
         # TODO: test next line to pass field as variable for js 
-        context['book.id'] = 'book_id'
-        context['user.id'] = 'user_id'
+        # context['book.id'] = 'book_id'
+        # context['user.id'] = 'user_id'
         return context
 
 
@@ -58,10 +58,13 @@ def book_detail_view(request, book_id):
     user = request.user.id
     # first does not produce error if row does not exists
     favorite = FavoriteBook.objects.filter(obj_id=book_id, user=user).first()
+    favorite_chapters = FavoriteChapter.objects.all()
+
     # the context {'book':book} contain the variables passed to template
     return render(request, 'bible/book_detail.html', {
         'book': book,
-        'favorite': favorite
+        'favorite': favorite,
+        'favorite_chapters': favorite_chapters
     })
 
     # model = Book
@@ -197,10 +200,16 @@ def create_annotation(request, book_id, chapter_id, verse_id):
 def chapter_detail_view(request, book_id, chapter_id):
     book = Book.objects.get(pk=book_id)
     chapter = get_object_or_404(Chapter, pk=chapter_id)
+    user = request.user.id
+    favorite = FavoriteChapter.objects.filter(
+        obj_id=chapter_id, user=user).first()
+    favorite_chapters = FavoriteChapter.objects.all()
     # assert False
     return render(request, 'bible/chapter_detail.html', {
         'book': book,
-        'chapter': chapter
+        'chapter': chapter,
+        'favorite': favorite,
+        'favorite_chapters': favorite_chapters
     })
 
 
@@ -208,16 +217,24 @@ def verse_detail_view(request, book_id, chapter_id, verse_id):
     book = Book.objects.get(pk=book_id)
     chapter = Chapter.objects.get(pk=chapter_id)
     verse = get_object_or_404(Verse, pk=verse_id)
+    user = request.user.id
+    favorite = FavoriteVerse.objects.filter(obj_id=verse_id, user=user).first()
     return render(request, 'bible/verse_detail.html', {
         'book': book,
         'chapter': chapter,
-        'verse': verse
+        'verse': verse,
+        'favorite': favorite
     })
+
 
 def annotation_detail_view(request, annotation_id):
     annotation = get_object_or_404(Annotation, pk=annotation_id)
+    user = request.user.id
+    favorite = FavoriteVerse.objects.filter(
+        obj_id=annotation_id, user=user).first()
     return render(request, 'bible/annotation_detail.html', {
-        'annotation': annotation
+        'annotation': annotation,
+        'favorite': favorite
     })
 
 #####################################################
@@ -416,6 +433,31 @@ class FavoriteView(LoginRequiredMixin, View):
             return JsonResponse({
                 'success': 1
             })
+
+
+class DisplayFavoritesView(LoginRequiredMixin, View):
+    # one model must be set TODO: really? test it
+    model = FavoriteBook
+
+    context_object_name = 'fav_books'
+    template_name = 'bible/favorites.html'
+
+    # pass multiple models to template
+    def get_context_data(self, **kwargs):
+        context = super(DisplayFavoritesView, self).get_context_data(**kwargs)
+        context['fav_books_list'] = FavoriteBook.objects.all()
+        context['fav_chapters_list'] = FavoriteChapter.objects.all()
+        context['fav_verse_list'] = FavoriteVerse.objects.all()
+        context['fav_annotations_list'] = FavoriteAnnotation.objects.all()
+        return context
+
+    def get(self, request):
+        user = auth.get_user(request)
+
+        return render(request, 'bible/favorites.html', {
+
+        })
+
 
 # class Isfavorite(LoginRequiredMixin, View):
 #     model = None

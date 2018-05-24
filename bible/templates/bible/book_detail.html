@@ -49,7 +49,7 @@ Book details
             function favoriteBook() {
                 console.log('favorite button clicked')
                 // note the trailing slash favorite/
-                const url = "./{{ book.id }}/favorite/";
+                const url = "/book/{{ book.id }}/favorite/";
                 
                 // what to pass to db
                 let json_data = {
@@ -93,6 +93,7 @@ Book details
             });
 
             // ONLY TO BE USED ASYNC, IF NEEDED
+            /*
             function isFavorite(){
                 console.log('isFavorite triggered')
                 // note the trailing slash favorite/
@@ -126,6 +127,7 @@ Book details
                     toggleFavorite()
                 });
             }
+            */
         </script>
 
 
@@ -159,18 +161,69 @@ Book details
             <div class="content">
                 <div class="header">
                     {% if user.is_authenticated %}
-                    {% if perms.bible.change_chapter %}
-                    <a href="{% url 'bible:chapter-update' book.id chapter.id
-                        %}"
-                        class="ui compact icon right floated button">
-                        <i class="edit icon"></i>
-                    </a>
-                    <a onclick="fConfirm()" href="{% url 'bible:chapter-delete'
-                        book.id chapter.id %}"
-                        class="ui compact icon right floated button">
-                        <i class="trash icon"></i>
-                    </a>
-                    {% endif %}
+
+                        <!-- ==================FAVORITE CHAPTER STAR=================== -->
+                        <i class="star outline icon ui compact  right floated " 
+                            id="favChapterStar{{ chapter.id }}"
+                        ></i>
+                        
+                        <!-- FAVORITE CHECK -->
+                        <!--loop through chapterFavorite records -->
+                        <!--if fav raw exists, make star black -->
+                        {% for fav in favorite_chapters %}
+                            {% if fav.user_id == user.id and fav.obj_id == chapter.id %}
+                                <script>
+                                    document.getElementById("favChapterStar{{ chapter.id }}").classList.remove("outline");
+                                </script>
+                            {% endif %} 
+                        {% endfor %}
+
+                        <script>
+                            // when document load display the status of stars
+                            document.getElementById("favChapterStar{{ chapter.id }}").addEventListener('click', function(){
+
+                                // note the trailing slash favorite/
+                                fetch("/chapter/{{ chapter.id }}/favorite/", {
+                                        method: "put",
+                                        credentials: "same-origin",
+                                        headers: {
+                                            "X-CSRFToken": csrftoken,
+                                            "Accept": "application/json",
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify({
+                                            "user_id" : {{ user.id }},
+                                            "obj_id" : {{ chapter.id }}
+                                        })
+                                    })
+                                    .then(response => response.json())
+                                    .catch(error => {
+                                        console.log("favorite does not exist, create a new one", error);
+                                    });
+
+                                // toggle outside fetch because
+                                // put creates error if db row does not exist
+                                // so paint is not executed
+                                // if placed in next then(), as we should...
+                                document.getElementById("favChapterStar{{ chapter.id }}").classList.toggle("outline")
+                            })
+
+                        </script>
+                        <!-- ==================FAVORITE END=================== -->
+                        
+                        <!--...and if the user has edit rights -->
+                        {% if perms.bible.change_chapter %}
+                            <a href="{% url 'bible:chapter-update' book.id chapter.id
+                                %}"
+                                class="ui compact icon right floated button">
+                                <i class="edit icon"></i>
+                            </a>
+                            <a onclick="fConfirm()" href="{% url 'bible:chapter-delete'
+                                book.id chapter.id %}"
+                                class="ui compact icon right floated button">
+                                <i class="trash icon"></i>
+                            </a> 
+                        {% endif %}
                     {% endif %}
                     {{ chapter.number }}
                 </div>

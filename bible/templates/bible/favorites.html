@@ -1,0 +1,43 @@
+{% extends "bible/base.html" %} {% block title %} Book details {% endblock title %} {% block leftColumn %}
+
+<div class="ui one cards">
+    <div class="card">
+        <a href="{% url 'bible:index' %}" class="image">
+            <img src="{{ book.image.url }}">
+        </a>
+        <div class="content">
+            <div class="header">TITLE</div>
+            <div class="meta">
+                <div>META</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock leftColumn %} {% block body %} {% comment %} FAVORITES {% endcomment %}
+<div class="ui text container">
+    <h2>MY FAVORITES</h2>
+    {% if fav_books %}
+    <div class="ui one cards">
+        {% for favbook in fav_books %}
+        <div class="card">
+            <div class="content">
+                <div class="header">
+                    {% if user.is_authenticated %}
+                    <p>favorite book id: {{ favbook.id }}</p>
+
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2>No Favorites ??? to display</h2>
+    {% endif %}
+</div>
+
+{% endblock body %}}

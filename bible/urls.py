@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from .import views
 from django.conf.urls import include
-from .models import FavoriteBook
+from .models import FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation
 
 app_name = 'bible'
 
@@ -132,9 +132,31 @@ urlpatterns = [
     # FAVORITE  ###########################################################
 
     # BOOK  /bible/book/id/favorite
-    # define the model because because the view is general
+    # define the model because the view is general
     url(r'^book/(?P<pk>[0-9]+)/favorite/$',
         views.FavoriteView.as_view(model=FavoriteBook), name='book-favorite'),
+
+    # CHAPTER  /bible/chapter/id/favorite
+    # define the model because the view is general
+    url(r'^chapter/(?P<pk>[0-9]+)/favorite/$',
+        views.FavoriteView.as_view(model=FavoriteChapter), name='chapter-favorite'),
+
+    # VERSE  /bible/verse/id/favorite
+    # define the model because the view is general
+    url(r'^verse/(?P<pk>[0-9]+)/favorite/$',
+        views.FavoriteView.as_view(model=FavoriteVerse), name='verse-favorite'),
+
+    # ANNOTATION  /bible/annotation/id/favorite
+    # define the model because the view is general
+    url(r'^annotation/(?P<pk>[0-9]+)/favorite/$',
+        views.FavoriteView.as_view(model=FavoriteAnnotation), name='annotation-favorite'),
+
+    # USER FAVORITES  /bible/favorites
+    # define the model because  the view is general
+    # TODO: TEST IF MODEL CAN BE OMITTED IN THIS CASE
+    url(r'^favorites/$',
+        views.DisplayFavoritesView.as_view(), name='favorites'),
+
 
 ]
 

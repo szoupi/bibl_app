@@ -30,6 +30,12 @@
             <i class="book inverted icon"></i>
             Books
         </a>
+            {% if user.is_authenticated %}
+                <a class="item" href="{% url 'bible:favorites' %}">
+                    <i class="star inverted icon"></i>
+                    Favorites
+                </a>
+            {% endif %}
 
         <div class="right menu">
             {% if user.is_authenticated %}

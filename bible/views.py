@@ -22,7 +22,6 @@ from django.http import JsonResponse
 class IndexView(generic.ListView):
     model = Book
     template_name = 'bible/index.html'
-    
 
     # queryset = Book.object.filter(title__icontains='mysearch')[:5] # Get 5 books containing the title mysearch
 
@@ -44,10 +43,29 @@ class IndexView(generic.ListView):
         return context
 
 
+    # def get_queryset(self):
+    #     return Item.objects.filter(user=self.request.user)
+
     def get_queryset(self):
         return Book.objects.all()
         # limit objects to 2
         # return Book.objects.all()[:2]
+
+    # TODO: test for filtering favorites
+    # def get(self, request):
+    #     user = auth.get_user(request)
+    #     fav_books_list = FavoriteBook.objects.filter(user=request.user)
+    #     fav_chapters_list = FavoriteChapter.objects.filter(user=request.user)
+    #     fav_verse_list = FavoriteVerse.objects.filter(user=request.user)
+    #     fav_annotations_list = FavoriteAnnotation.objects.filter(
+    #         user=request.user)
+
+    #     return render(request, 'bible/favorites.html', {
+    #         'fav_books_list': fav_books_list,
+    #         'fav_chapters_list': fav_chapters_list,
+    #         'fav_verse_list': fav_verse_list,
+    #         'fav_annotations_list': fav_annotations_list
+    #     })
 
 
 
@@ -441,7 +459,7 @@ class FavoriteView(LoginRequiredMixin, View):
 
 class DisplayFavoritesView(LoginRequiredMixin, View):
     # one model must be set TODO: really? test it
-    model = FavoriteBook
+    # model = FavoriteBook
 
     context_object_name = 'fav_books'
     template_name = 'bible/favorites.html'
@@ -449,17 +467,20 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
     # pass multiple models to template
     def get_context_data(self, **kwargs):
         context = super(DisplayFavoritesView, self).get_context_data(**kwargs)
-        context['fav_books_list'] = FavoriteBook.objects.all()
-        context['fav_chapters_list'] = FavoriteChapter.objects.all()
-        context['fav_verse_list'] = FavoriteVerse.objects.all()
-        context['fav_annotations_list'] = FavoriteAnnotation.objects.all()
         return context
 
     def get(self, request):
         user = auth.get_user(request)
+        fav_books_list = FavoriteBook.objects.filter(user=request.user)
+        fav_chapters_list = FavoriteChapter.objects.filter(user=request.user)
+        fav_verses_list = FavoriteVerse.objects.filter(user=request.user)
+        fav_annotations_list = FavoriteAnnotation.objects.filter(user=request.user)
 
         return render(request, 'bible/favorites.html', {
-
+            'fav_books_list': fav_books_list,
+            'fav_chapters_list': fav_chapters_list,
+            'fav_verses_list': fav_verses_list,
+            'fav_annotations_list': fav_annotations_list
         })
 
 

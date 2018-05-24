@@ -15,29 +15,90 @@
 </div>
 {% endblock leftColumn %} {% block body %} {% comment %} FAVORITES {% endcomment %}
 <div class="ui text container">
-    <h2>MY FAVORITES</h2>
-    {% if fav_books %}
-    <div class="ui one cards">
-        {% for favbook in fav_books %}
-        <div class="card">
-            <div class="content">
-                <div class="header">
-                    {% if user.is_authenticated %}
-                    <p>favorite book id: {{ favbook.id }}</p>
-
-
-                    {% endif %}
-
+    {# ========= BOOKS ========== #}
+    {% if fav_books_list %}
+        <h2>MY FAVORITES BOOKS</h2>
+        <div class="ui one cards">
+            {% for fav in fav_books_list %}
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            {% if user.is_authenticated and user.id == fav.user_id %}
+                                <p>favorite book id: {{ fav.id }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     {% else %}
-    <h2>No Favorites ??? to display</h2>
+        <h2>No Favorites Books to display</h2>
     {% endif %}
+
+    {# ========= CHAPTERS ========== #}
+    {% if fav_books_list %}
+        <h2>MY FAVORITES CHAPTERS</h2>
+        <div class="ui one cards">
+            {% for fav in fav_chapters_list %}
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            {% if user.is_authenticated and user.id == fav.user_id %}
+                                <p>favorite chapter id: {{ fav.id }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>No Favorites Chapters to display</h2>
+    {% endif %}
+
+    {# ========= VERSES ========== #}
+    {% if fav_verses_list %}
+        <h2>MY FAVORITES VERSES</h2>
+        <div class="ui one cards">
+            {% for fav in fav_verses_list %}
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            {% if user.is_authenticated and user.id == fav.user_id %}
+                                <p>favorite verse id: {{ fav.id }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>No Favorites Verses to display</h2>
+    {% endif %}
+
+    {# ========= ANNOTATIONS ========== #}
+    {% if fav_annotations_list %}
+        <h2>MY FAVORITES ANNOTATIONS</h2>
+        <div class="ui one cards">
+            {% for fav in fav_annotations_list %}
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            {% if user.is_authenticated and user.id == fav.user_id %}
+                                <p>favorite annotation id: {{ fav.id }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>No Favorites Annotations to display</h2>
+    {% endif %}
+
+
+
+
+
 </div>
 
 {% endblock body %}}

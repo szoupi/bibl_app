@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from .import views
+from django.views.generic import TemplateView 
 from django.conf.urls import include
 from .models import FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation
 
@@ -12,6 +13,9 @@ urlpatterns = [
     #/bible/ 
     url(r'^$', views.IndexView.as_view(), name='index'),
 
+    # put  service-worker.js in the root of templates directory
+    url(r'^sw.js', (TemplateView.as_view(template_name="sw.js",
+                                         content_type='application/javascript', )), name='sw.js'),
     # AUTHENTICATE django defaults names and paths
     # accounts/login/ 
     # accounts/logout/

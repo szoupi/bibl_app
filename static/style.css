@@ -1,0 +1,15 @@
+body {
+    background-color: rgb(237, 237, 237);
+}
+
+.header {
+    margin-bottom: 0.5rem;
+}
+
+form span {
+    font-style: italic;
+}
+
+form label {
+    font-weight: bold;
+}

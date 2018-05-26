@@ -472,12 +472,22 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
     def get(self, request):
         user = auth.get_user(request)
         fav_books_list = FavoriteBook.objects.filter(user=request.user)
+        fav_books = Book.objects.filter()
+        # filter fav_books on subquery fav_books_list
+        fav_books.query.__dict__ = fav_books_list.query.__dict__
+
         fav_chapters_list = FavoriteChapter.objects.filter(user=request.user)
+        chapters = Chapter.objects.filter()
+        chapters.query.__dict__ = fav_chapters_list.query.__dict__
+
+
         fav_verses_list = FavoriteVerse.objects.filter(user=request.user)
         fav_annotations_list = FavoriteAnnotation.objects.filter(user=request.user)
 
         return render(request, 'bible/favorites.html', {
-            'fav_books_list': fav_books_list,
+            'fav_books': fav_books,
+            'chapters': chapters,
+            # 'fav_books_list': fav_books_list,
             'fav_chapters_list': fav_chapters_list,
             'fav_verses_list': fav_verses_list,
             'fav_annotations_list': fav_annotations_list

@@ -13,18 +13,25 @@
         </div>
     </div>
 </div>
-{% endblock leftColumn %} {% block body %} {% comment %} FAVORITES {% endcomment %}
+{% endblock leftColumn %} 
+
+{% block body %} 
+{# FAVORITES ======================================= #}
+{# see DisplayFavoritesView #}
 <div class="ui text container">
-    {# ========= BOOKS ========== #}
-    {% if fav_books_list %}
+    {# ========= BOOKS ========== #} 
+    {% if fav_books %}
         <h2>MY FAVORITES BOOKS</h2>
-        <div class="ui one cards">
-            {% for fav in fav_books_list %}
+        <div class="ui four doubling link cards">
+            {%for book in fav_books%}
                 <div class="card">
                     <div class="content">
                         <div class="header">
-                            {% if user.is_authenticated and user.id == fav.user_id %}
-                                <p>favorite book id: {{ fav.id }}</p>
+                            {% if user.is_authenticated  %}
+                                <!-- book.id variable in url comes from loop var not the model 
+                                    book.obj gives the title ;) , book.obj_id gives the id
+                                -->
+                                <a href="{% url 'bible:book-detail' book.obj_id %}">{{book.obj}}</a>
                             {% endif %}
                         </div>
                     </div>
@@ -35,16 +42,19 @@
         <h2>No Favorites Books to display</h2>
     {% endif %}
 
+ 
     {# ========= CHAPTERS ========== #}
-    {% if fav_books_list %}
+    {% if chapters %}
         <h2>MY FAVORITES CHAPTERS</h2>
-        <div class="ui one cards">
-            {% for fav in fav_chapters_list %}
+        <div class="ui four doubling link cards">
+            {%for chapter in chapters%}
                 <div class="card">
                     <div class="content">
                         <div class="header">
-                            {% if user.is_authenticated and user.id == fav.user_id %}
-                                <p>favorite chapter id: {{ fav.id }}</p>
+                            {% if user.is_authenticated  %}
+                                <p>chapter id: {{chapter.obj_id}}</p>
+                                <p>book id : {{chapter.book}}</p>
+                                <p>chapter title: {{chapter.obj}}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -52,22 +62,22 @@
             {% endfor %}
         </div>
     {% else %}
-        <h2>No Favorites Chapters to display</h2>
+        <h2>No Favorites Books to display</h2>
     {% endif %}
 
     {# ========= VERSES ========== #}
     {% if fav_verses_list %}
         <h2>MY FAVORITES VERSES</h2>
-        <div class="ui one cards">
+        <div class="ui four doubling link cards">
             {% for fav in fav_verses_list %}
                 <div class="card">
-                    <div class="content">
-                        <div class="header">
-                            {% if user.is_authenticated and user.id == fav.user_id %}
-                                <p>favorite verse id: {{ fav.id }}</p>
-                            {% endif %}
+                        <div class="content">
+                            <div class="header">
+                                {% if user.is_authenticated and user.id == fav.user_id %}
+                                    <p>favorite verse id: {{ fav.id }}</p>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -78,16 +88,16 @@
     {# ========= ANNOTATIONS ========== #}
     {% if fav_annotations_list %}
         <h2>MY FAVORITES ANNOTATIONS</h2>
-        <div class="ui one cards">
+        <div class="ui four doubling link cards">
             {% for fav in fav_annotations_list %}
                 <div class="card">
-                    <div class="content">
-                        <div class="header">
-                            {% if user.is_authenticated and user.id == fav.user_id %}
-                                <p>favorite annotation id: {{ fav.id }}</p>
-                            {% endif %}
+                        <div class="content">
+                            <div class="header">
+                                {% if user.is_authenticated and user.id == fav.user_id %}
+                                    <p>favorite annotation id: {{ fav.id }}</p>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
                 </div>
             {% endfor %}
         </div>

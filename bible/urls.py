@@ -58,13 +58,13 @@ urlpatterns = [
     url(r'^book-create/$', views.BookCreate.as_view(), name='book-add'),
 
     # CHAPTER ADD
-    # bible/book/id/chapter/add
+    # bible/book/id/chapter/create-chapter
     # no id is needed, it is auto generated
     url(r'^book/(?P<book_id>[0-9]+)/create-chapter/$',
         views.create_chapter, name='chapter-create'),
 
     # VERSE ADD
-    # bible/book/chapter/id/verse/add
+    # bible/book/chapter/id/verse/create-verse
     # no verse id is needed, it is auto generated
     # no book_id is needed, because verse is child of a unique chapter (id)
     # and not a combination of book and chapter
@@ -72,7 +72,7 @@ urlpatterns = [
         views.create_verse, name='verse-create'),
 
     # ANNOTATION ADD
-    # bible/verse/id/annotation/add
+    # bible/verse/id/annotation/create-annotation
     # no annotation id is needed, it is auto generated
     url(r'^book/(?P<book_id>[0-9]+)/chapter/(?P<chapter_id>[0-9]+)/verse/(?P<verse_id>[0-9]+)/create-annotation/$',
         views.create_annotation, name='annotation-create'),
@@ -89,14 +89,14 @@ urlpatterns = [
         views.chapter_detail_view, name='chapter-detail'),
 
     # VERSE DETAIL 
-    # bible/chapter/verse_id
+    # bible/book_id/chapter/chapter_id/verse/verse_id
     url(r'^book/(?P<book_id>[0-9]+)/chapter/(?P<chapter_id>[0-9]+)/verse/(?P<verse_id>[0-9]+)$',
         views.verse_detail_view, name='verse-detail'),
     
-    # ANNOTATION DETAIL VIEW : There is no need for such view
+    # ANNOTATION DETAIL VIEW : needed for favorites page link??
     # bible/chapter/annotation_id
-    # url(r'^annotation/(?P<annotation_id>[0-9]+)$',
-    #     views.annotation_detail_view, name='annotation-detail'),
+    url(r'^annotation/(?P<annotation_id>[0-9]+)$',
+        views.annotation_detail_view, name='annotation-detail'),
 
     # UPDATE, DELETE VIEW ###########################################################
     

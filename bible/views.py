@@ -15,6 +15,7 @@ from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm,
 import json
 from django.http import JsonResponse
 
+
 # TODO
 # IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
@@ -476,20 +477,21 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
         # filter fav_books on subquery fav_books_list
         fav_books.query.__dict__ = fav_books_list.query.__dict__
 
-        fav_chapters_list = FavoriteChapter.objects.filter(user=request.user)
-        chapters = Chapter.objects.filter()
-        chapters.query.__dict__ = fav_chapters_list.query.__dict__
+        # Query: From chapters select those that appear on favorite chapter and belong to current user
+        # (To refer to a reverse relationship, just use the lowercase name of the model)
+        favorite_chapters = Chapter.objects.filter(favoritechapter__user=request.user)
 
-
-        fav_verses_list = FavoriteVerse.objects.filter(user=request.user)
+        favorite_verses = Verse.objects.filter(favoriteverse__user=request.user)
         fav_annotations_list = FavoriteAnnotation.objects.filter(user=request.user)
+
+        from django.db import connection
+        import re
+
 
         return render(request, 'bible/favorites.html', {
             'fav_books': fav_books,
-            'chapters': chapters,
-            # 'fav_books_list': fav_books_list,
-            'fav_chapters_list': fav_chapters_list,
-            'fav_verses_list': fav_verses_list,
+            'favorite_chapters': favorite_chapters,
+            'favorite_verses': favorite_verses,
             'fav_annotations_list': fav_annotations_list
         })
 

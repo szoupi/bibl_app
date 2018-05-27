@@ -1,4 +1,7 @@
-{% extends "bible/base.html" %} {% block title %} Book details {% endblock title %} {% block leftColumn %}
+{% extends "bible/base.html" %} 
+{% block title %} Book details {% endblock title %} 
+
+{% block leftColumn %}
 
 <div class="ui one cards">
     <div class="card">
@@ -6,9 +9,9 @@
             <img src="{{ book.image.url }}">
         </a>
         <div class="content">
-            <div class="header">TITLE</div>
+<div class="header">Hellow {{ user.get_username }}!</div>
             <div class="meta">
-                <div>META</div>
+                <div>This page displays your favorites!</div>
             </div>
         </div>
     </div>
@@ -22,7 +25,7 @@
     {# ========= BOOKS ========== #} 
     {% if fav_books %}
         <h2>MY FAVORITES BOOKS</h2>
-        <div class="ui four doubling link cards">
+        <div class="ui two doubling link cards">
             {%for book in fav_books%}
                 <div class="card">
                     <div class="content">
@@ -44,17 +47,15 @@
 
  
     {# ========= CHAPTERS ========== #}
-    {% if chapters %}
+    {% if favorite_chapters %}
         <h2>MY FAVORITES CHAPTERS</h2>
-        <div class="ui four doubling link cards">
-            {%for chapter in chapters%}
+        <div class="ui two doubling link cards">
+            {%for chapter in favorite_chapters%}
                 <div class="card">
                     <div class="content">
                         <div class="header">
                             {% if user.is_authenticated  %}
-                                <p>chapter id: {{chapter.obj_id}}</p>
-                                <p>book id : {{chapter.book}}</p>
-                                <p>chapter title: {{chapter.obj}}</p>
+                                <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">{{chapter.book}} Chapter: {{chapter.number}} - {{chapter.title}}</a>
                             {% endif %}
                         </div>
                     </div>
@@ -62,19 +63,19 @@
             {% endfor %}
         </div>
     {% else %}
-        <h2>No Favorites Books to display</h2>
+        <h2>No Favorites Chapters to display</h2>
     {% endif %}
 
     {# ========= VERSES ========== #}
-    {% if fav_verses_list %}
+    {% if favorite_verses %}
         <h2>MY FAVORITES VERSES</h2>
-        <div class="ui four doubling link cards">
-            {% for fav in fav_verses_list %}
+        <div class="ui two doubling link cards">
+            {% for fav in favorite_verses %}
                 <div class="card">
                         <div class="content">
                             <div class="header">
-                                {% if user.is_authenticated and user.id == fav.user_id %}
-                                    <p>favorite verse id: {{ fav.id }}</p>
+                                {% if user.is_authenticated %}
+                                 <!-- TODO: 3 id are required -->
                                 {% endif %}
                             </div>
                         </div>
@@ -88,7 +89,7 @@
     {# ========= ANNOTATIONS ========== #}
     {% if fav_annotations_list %}
         <h2>MY FAVORITES ANNOTATIONS</h2>
-        <div class="ui four doubling link cards">
+        <div class="ui two doubling link cards">
             {% for fav in fav_annotations_list %}
                 <div class="card">
                         <div class="content">

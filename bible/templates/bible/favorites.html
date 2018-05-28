@@ -55,7 +55,9 @@
                     <div class="content">
                         <div class="header">
                             {% if user.is_authenticated  %}
-                                <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">{{chapter.book}} Chapter: {{chapter.number}} - {{chapter.title}}</a>
+                                <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">
+                                    {{chapter.book}} Chapter: {{chapter.number}} - {{chapter.title}}
+                                </a>
                             {% endif %}
                         </div>
                     </div>
@@ -68,14 +70,17 @@
 
     {# ========= VERSES ========== #}
     {% if favorite_verses %}
-        <h2>MY FAVORITES VERSES</h2>
+    <h2>MY FAVORITES VERSES</h2>
+
         <div class="ui two doubling link cards">
-            {% for fav in favorite_verses %}
+            {% for verse in favorite_verses %}
                 <div class="card">
                         <div class="content">
                             <div class="header">
                                 {% if user.is_authenticated %}
-                                 <!-- TODO: 3 id are required -->
+                                <a href="{% url 'bible:verse-detail' verse.chapter.book_id verse.chapter_id verse.id %}">
+                                    {{verse.chapter.book}} Verse: {{verse.number}} - {{verse.original_text}}
+                                </a>
                                 {% endif %}
                             </div>
                         </div>
@@ -87,24 +92,7 @@
     {% endif %}
 
     {# ========= ANNOTATIONS ========== #}
-    {% if fav_annotations_list %}
-        <h2>MY FAVORITES ANNOTATIONS</h2>
-        <div class="ui two doubling link cards">
-            {% for fav in fav_annotations_list %}
-                <div class="card">
-                        <div class="content">
-                            <div class="header">
-                                {% if user.is_authenticated and user.id == fav.user_id %}
-                                    <p>favorite annotation id: {{ fav.id }}</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <h2>No Favorites Annotations to display</h2>
-    {% endif %}
+
 
 
 

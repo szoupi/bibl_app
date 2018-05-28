@@ -481,18 +481,19 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
         # (To refer to a reverse relationship, just use the lowercase name of the model)
         favorite_chapters = Chapter.objects.filter(favoritechapter__user=request.user)
 
-        favorite_verses = Verse.objects.filter(favoriteverse__user=request.user)
+        # reverse lookup to get the book id 
+        # in template use {{verse.chapter.book}}
+        # https://docs.djangoproject.com/en/2.0/ref/models/querysets/#django.db.models.query.QuerySet.select_related
+        favorite_verses = Verse.objects.select_related(
+            'chapter__book').filter(favoriteverse__user=request.user)
         fav_annotations_list = FavoriteAnnotation.objects.filter(user=request.user)
-
-        from django.db import connection
-        import re
 
 
         return render(request, 'bible/favorites.html', {
             'fav_books': fav_books,
             'favorite_chapters': favorite_chapters,
             'favorite_verses': favorite_verses,
-            'fav_annotations_list': fav_annotations_list
+            # 'fav_annotations_list': fav_annotations_list
         })
 
 

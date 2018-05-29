@@ -213,13 +213,11 @@ Book details
                         
                         <!--...and if the user has edit rights -->
                         {% if perms.bible.change_chapter %}
-                            <a href="{% url 'bible:chapter-update' book.id chapter.id
-                                %}"
+                            <a href="{% url 'bible:chapter-update' book.id chapter.id %}"
                                 class="ui compact icon right floated button">
                                 <i class="edit icon"></i>
                             </a>
-                            <a onclick="fConfirm()" href="{% url 'bible:chapter-delete'
-                                book.id chapter.id %}"
+                            <a href="{% url 'bible:chapter-delete' book.id chapter.id %}"
                                 class="ui compact icon right floated button">
                                 <i class="trash icon"></i>
                             </a> 

@@ -472,13 +472,17 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
 
     def get(self, request):
         user = auth.get_user(request)
-        fav_books_list = FavoriteBook.objects.filter(user=request.user)
-        fav_books = Book.objects.filter()
-        # filter fav_books on subquery fav_books_list
-        fav_books.query.__dict__ = fav_books_list.query.__dict__
-
+        
         # Query: From chapters select those that appear on favorite chapter and belong to current user
         # (To refer to a reverse relationship, just use the lowercase name of the model)
+        favorite_books = Book.objects.filter(favoritebook__user=request.user)
+
+        # another method to filter join two queries
+        # fav_books_list = FavoriteBook.objects.filter(user=request.user)
+        # fav_books = Book.objects.filter()
+        # filter fav_books on subquery fav_books_list
+        # fav_books.query.__dict__ = fav_books_list.query.__dict__
+
         favorite_chapters = Chapter.objects.filter(favoritechapter__user=request.user)
 
         # reverse lookup to get the book id 
@@ -486,14 +490,15 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
         # https://docs.djangoproject.com/en/2.0/ref/models/querysets/#django.db.models.query.QuerySet.select_related
         favorite_verses = Verse.objects.select_related(
             'chapter__book').filter(favoriteverse__user=request.user)
-        fav_annotations_list = FavoriteAnnotation.objects.filter(user=request.user)
+        favorite_annotations = Annotation.objects.select_related(
+            'verse__chapter__book').filter(favoriteannotation__user=request.user)
 
 
         return render(request, 'bible/favorites.html', {
-            'fav_books': fav_books,
+            'favorite_books': favorite_books,
             'favorite_chapters': favorite_chapters,
             'favorite_verses': favorite_verses,
-            # 'fav_annotations_list': fav_annotations_list
+            'favorite_annotations': favorite_annotations
         })
 
 

@@ -93,10 +93,10 @@ urlpatterns = [
     url(r'^book/(?P<book_id>[0-9]+)/chapter/(?P<chapter_id>[0-9]+)/verse/(?P<verse_id>[0-9]+)$',
         views.verse_detail_view, name='verse-detail'),
     
-    # ANNOTATION DETAIL VIEW : needed for favorites page link??
+    # ANNOTATION DETAIL VIEW
     # bible/chapter/annotation_id
-    url(r'^annotation/(?P<annotation_id>[0-9]+)$',
-        views.annotation_detail_view, name='annotation-detail'),
+    # url(r'^annotation/(?P<annotation_id>[0-9]+)$',
+    #     views.annotation_detail_view, name='annotation-detail'),
 
     # UPDATE, DELETE VIEW ###########################################################
     

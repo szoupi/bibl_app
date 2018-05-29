@@ -9,9 +9,13 @@
             <img src="{{ book.image.url }}">
         </a>
         <div class="content">
-<div class="header">Hellow {{ user.get_username }}!</div>
+<div class="header">Hello {{ user.get_username }}!</div>
             <div class="meta">
-                <div>This page displays your favorites!</div>
+                <div>This page displays your favorites books, 
+                    chapters, verses and annotations! 
+                    You can mark/unmark them as favorites
+                    by clicking on the star.
+                </div>
             </div>
         </div>
     </div>
@@ -23,18 +27,15 @@
 {# see DisplayFavoritesView #}
 <div class="ui text container">
     {# ========= BOOKS ========== #} 
-    {% if fav_books %}
+    {% if favorite_books %}
         <h2>MY FAVORITES BOOKS</h2>
         <div class="ui two doubling link cards">
-            {%for book in fav_books%}
+            {%for book in favorite_books%}
                 <div class="card">
                     <div class="content">
                         <div class="header">
                             {% if user.is_authenticated  %}
-                                <!-- book.id variable in url comes from loop var not the model 
-                                    book.obj gives the title ;) , book.obj_id gives the id
-                                -->
-                                <a href="{% url 'bible:book-detail' book.obj_id %}">{{book.obj}}</a>
+                                <a href="{% url 'bible:book-detail' book.id %}">{{book.title}}</a>
                             {% endif %}
                         </div>
                     </div>
@@ -55,8 +56,12 @@
                     <div class="content">
                         <div class="header">
                             {% if user.is_authenticated  %}
-                                <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">
-                                    {{chapter.book}} Chapter: {{chapter.number}} - {{chapter.title}}
+                                <a href="{% url 'bible:chapter-detail' 
+                                                chapter.book_id 
+                                                chapter.id %}">
+                                    {{chapter.book}} 
+                                    Chapter: {{chapter.number}} 
+                                    - {{chapter.title}}
                                 </a>
                             {% endif %}
                         </div>
@@ -78,9 +83,14 @@
                         <div class="content">
                             <div class="header">
                                 {% if user.is_authenticated %}
-                                <a href="{% url 'bible:verse-detail' verse.chapter.book_id verse.chapter_id verse.id %}">
-                                    {{verse.chapter.book}} Verse: {{verse.number}} - {{verse.original_text}}
-                                </a>
+                                    <a href="{% url 'bible:verse-detail' 
+                                                    verse.chapter.book_id 
+                                                    verse.chapter_id 
+                                                    verse.id %}">
+                                        {{verse.chapter.book}} 
+                                        Verse: {{verse.number}} 
+                                        - {{verse.original_text}}
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>
@@ -91,7 +101,34 @@
         <h2>No Favorites Verses to display</h2>
     {% endif %}
 
-    {# ========= ANNOTATIONS ========== #}
+     {# ========= ANNOTATIONS ========== #}
+     {% if favorite_annotations %}
+     <h2>MY FAVORITES ANNOTATIONS</h2>
+     
+     <div class="ui two doubling link cards">
+         {% for annotation in favorite_annotations %}
+         <div class="card">
+             <div class="content">
+                 <div class="header">
+                    {% if user.is_authenticated %}
+                        {# there is no detail view, fall back to chapter detail view #}
+                        <a href="{% url 'bible:verse-detail' 
+                                        annotation.verse.chapter.book_id 
+                                        annotation.verse.chapter_id 
+                                        annotation.verse_id  %}">
+                            {{annotation.verse.chapter.book}} 
+                            Annotation: {{annotation.number}} 
+                            - {{annotation.phrase}}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+     <h2>No Favorites annotation to display</h2>
+    {% endif %}
 
 
 

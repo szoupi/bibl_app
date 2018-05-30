@@ -56,9 +56,7 @@
                     <div class="content">
                         <div class="header">
                             {% if user.is_authenticated  %}
-                                <a href="{% url 'bible:chapter-detail' 
-                                                chapter.book_id 
-                                                chapter.id %}">
+                                <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">
                                     {{chapter.book}} 
                                     Chapter: {{chapter.number}} 
                                     - {{chapter.title}}
@@ -83,10 +81,7 @@
                         <div class="content">
                             <div class="header">
                                 {% if user.is_authenticated %}
-                                    <a href="{% url 'bible:verse-detail' 
-                                                    verse.chapter.book_id 
-                                                    verse.chapter_id 
-                                                    verse.id %}">
+                                    <a href="{% url 'bible:verse-detail' verse.chapter.book_id verse.chapter_id verse.id %}">
                                         {{verse.chapter.book}} 
                                         Verse: {{verse.number}} 
                                         - {{verse.original_text}}
@@ -112,10 +107,7 @@
                  <div class="header">
                     {% if user.is_authenticated %}
                         {# there is no detail view, fall back to chapter detail view #}
-                        <a href="{% url 'bible:verse-detail' 
-                                        annotation.verse.chapter.book_id 
-                                        annotation.verse.chapter_id 
-                                        annotation.verse_id  %}">
+                        <a href="{% url 'bible:verse-detail'  annotation.verse.chapter.book_id  annotation.verse.chapter_id annotation.verse_id  %}">
                             {{annotation.verse.chapter.book}} 
                             Annotation: {{annotation.number}} 
                             - {{annotation.phrase}}

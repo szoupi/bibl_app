@@ -13,6 +13,9 @@ class Book(models.Model):
     abstract_trempelas = models.TextField()
     notes = models.TextField()
 
+    class Meta:
+        ordering = ['title']
+
     def get_absolute_url(self):
         # return the pk of the current object book
         # from the url
@@ -30,10 +33,13 @@ class Book(models.Model):
 
 class Chapter(models.Model):
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
-    number = models.CharField(max_length=10)
+    number = models.CharField(max_length=10, help_text='numbers in 2-digit format, eg 01, 02')
     title = models.CharField(max_length=255)
     abstract_trempelas = models.TextField(blank=True)
     notes = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['number']
 
     def get_absolute_url(self):
         # return the pk of the current chapter
@@ -50,11 +56,15 @@ class Chapter(models.Model):
 
 class Verse(models.Model):
     chapter = models.ForeignKey(Chapter, on_delete=models.PROTECT)
-    number = models.CharField(max_length=10)
+    number = models.CharField(
+        max_length=10, help_text='numbers in 2-digit format, eg 01, 02')
     original_text = models.TextField(
         max_length=1000, help_text='Ancient Greek script')
     greek_translation = models.TextField(
         'Translation', max_length=1000, help_text='Modern Greek translation')
+
+    class Meta:
+        ordering = ['number']
 
     def get_absolute_url(self):
         return reverse('bible:verse-detail', kwargs={
@@ -69,11 +79,14 @@ class Verse(models.Model):
 class Annotation(models.Model):
     verse = models.ForeignKey(Verse, on_delete=models.PROTECT)
     number = models.CharField(
-        max_length=5, help_text='Annotation number of the verse\'s word')
+        max_length=5, help_text='Annotation number of the verse\'s word, in 2-digit format, eg 01, 02')
     phrase = models.CharField(
         max_length=60, help_text='The words that are annotated')
     # TextField.max_length only for the form, not the db field
     annotation = models.TextField(max_length=5000)
+
+    class Meta:
+        ordering = ['number']
 
     def __unicode__(self):
         return self.phrase

@@ -148,6 +148,7 @@
             {% for annotation in verse.annotation_set.all %}
                 <div class="card">
                     <div class="content">
+                        <div class="ui bottom right attached label">Annotation</div>
                         <div id="annotation{{ annotation.number }}" class="header">
                             {% if user.is_authenticated %}
 

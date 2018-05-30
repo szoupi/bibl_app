@@ -158,6 +158,7 @@ Book details
     <div class="ui one cards">
         {% for chapter in book.chapter_set.all %}
         <div class="card">
+            <div class="ui bottom right attached label">Chapter</div>
             <div class="content">
                 <div class="header">
                     {% if user.is_authenticated %}

@@ -5,18 +5,12 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>
-        {% block title %}
-            Bible
-        {% endblock title %}
+        {% block title %} Bible {% endblock title %}
     </title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1"> 
-    {% comment %} 
-        load the path to static files and then the files to be loaded 
-    {% endcomment %} 
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"/>
-    {% load staticfiles %}
-    {% comment %} custom style always after the cdn/css framework, so as not be overiden {% endcomment %} 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> {% comment %} load the path to static files and then the files to be loaded {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" /> {% load staticfiles %} {% comment %} custom style always after the cdn/css framework, so as not be overiden {% endcomment
+    %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
 
 
@@ -30,22 +24,20 @@
             <i class="book inverted icon"></i>
             Books
         </a>
-            {% if user.is_authenticated %}
-                <a class="item" href="{% url 'bible:favorites' %}">
-                    <i class="star inverted icon"></i>
-                    Favorites
-                </a>
-            {% endif %}
+        {% if user.is_authenticated %}
+        <a class="item" href="{% url 'bible:favorites' %}">
+            <i class="star inverted icon"></i>
+            Favorites
+        </a>
+        {% endif %}
 
         <div class="right menu">
-            {% if user.is_authenticated %}
-                {% if perms.bible.add_book %}
-                    <a class="item" href="{% url 'bible:book-add' %}">
-                        <i class="plus inverted icon"></i>
-                        Add Book
-                    </a>
-                {% endif %}
-            {% endif %}
+            {% if user.is_authenticated %} {% if perms.bible.add_book %}
+            <a class="item" href="{% url 'bible:book-add' %}">
+                <i class="plus inverted icon"></i>
+                Add Book
+            </a>
+            {% endif %} {% endif %}
             <div class="ui dropdown simple item">
                 Account
                 <i class="dropdown icon"></i>
@@ -68,129 +60,124 @@
         <div class="four wide column">
             {% block leftColumn %}{% endblock leftColumn %} 
             {% block breadcrumbs %}
-            {% comment %} <a href="{% url 'bible:index' %}">Bible</a> {% endcomment %}
-            {% endblock breadcrumbs %}
-
+                {% comment %}
+                <a href="{% url 'bible:index' %}">Bible</a> 
+                {% endcomment %}
+            {% endblock breadcrumbs %} 
+             
             {% block quickAccess %}
             <h2>QUICK ACCESS</h2>
-            {# DEBUG #}
-            <div id="debug" class="content">
-                <h2>DEBUG</h2>
-            </div>
+                <form class="ui form">
+                    <div class="field">
+                        <!--<label>Book</label>-->
+                        <select id="select-book" class="ui search dropdown">
+                            <option value="">Book</option>
+                            <!-- populate async -->
+                            {% for book in data.id %}
+                            <option value="{{ book.id }}">
+                                {{ book.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-            <form class="ui form">
-                <div class="field">
-                    <!--<label>Book</label>-->
-                    <select id="select-book" class="ui search dropdown">
-                        <option value="">Book</option>
-                        <!-- populate async -->
-                        {% for book in data.id %}
-                        <option value="{{ book.id }}">
-                            {{ book.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="field">
-                    <!--<label>Chapter</label>-->
-                    <select id="select-chapter" class="ui search dropdown">
-                        <option value="">Chapter</option>
+                    <div class="field">
+                        <!--<label>Chapter</label>-->
+                        <select id="select-chapter" class="ui search dropdown">
+                            <option value="">Chapter</option>
 
 
-                    </select>
-                </div>
+                        </select>
+                    </div>
 
-                <div class="field">
-                    <!--<label>verse</label>-->
-                    <select id="select-verse" class="ui search dropdown">
-                        <option value="">Verse</option>
-                    </select>
-                </div>
+                    <div class="field">
+                        <!--<label>verse</label>-->
+                        <select id="select-verse" class="ui search dropdown">
+                            <option value="">Verse</option>
+                        </select>
+                    </div>
 
-                <button class="ui button" type="submit">Go!</button>
-            </form>
+                    <button class="ui button" type="submit">Go!</button>
+                </form>
+                <script>
+                    // TODO:
+                    /* add self executing function here
+                    faster to execute than an onload handler 
+                    because this waits only for the DOM to be ready, 
+                    not for all images to load
+                    */
+                    document.addEventListener("DOMContentLoaded", function (event) {
+                        // note the trailing slash favorite/
+                        window.fetch("/populate/all/", {
+                                method: "get",
+                                credentials: "same-origin",
+                                headers: {
+                                    "X-CSRFToken": window.csrftoken,
+                                    "Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // console.log("Data fetched succesfully", data)
+                                var select_book = document.getElementById('select-book')
+                                var select_chapter = document.getElementById('select-chapter')
+                                var select_verse = document.getElementById('select-verse')
 
-            <script>
-                // TODO:
-                /* add self executing function here
-                faster to execute than an onload handler 
-                because this waits only for the DOM to be ready, 
-                not for all images to load
-                */
-                document.addEventListener("DOMContentLoaded", function (event) {
-                    // note the trailing slash favorite/
-                    window.fetch("/populate/all/", {
-                        method: "get",
-                        credentials: "same-origin",
-                        headers: {
-                            "X-CSRFToken": window.csrftoken,
-                            "Accept": "application/json",
-                            "Content-Type": "application/json",
-                        },
+                                // convert fetched data string  to json (objects)
+                                var books = JSON.parse(data.fetchedBooks)
+                                var chapters = JSON.parse(data.fetchedChapters)
+                                var verses = JSON.parse(data.fetchedVerses)
+
+                                //console.log(books[0].fields.title)
+
+                                // populate Books
+                                for (i = 0; i < books.length; i++) {
+                                    const option = document.createElement('option');
+                                    // console.log(books[i].fields.title)
+                                    option.value = books[i].pk;
+                                    option.innerHTML = books[i].fields.title;
+                                    select_book.appendChild(option);
+                                }
+
+                                // populate Chapters
+                                for (i = 0; i < chapters.length; i++) {
+                                    const option = document.createElement('option');
+                                    option.value = chapters[i].pk;
+                                    //number - title
+                                    option.innerHTML = chapters[i].fields.number // + ' - ' + chapters[i].fields.title;
+                                    select_chapter.appendChild(option);
+                                }
+
+                                // populate Verses
+                                for (i = 0; i < verses.length; i++) {
+                                    const option = document.createElement('option');
+                                    option.value = verses[i].pk;
+                                    //number - title
+                                    option.innerHTML = verses[i].fields.number // + ' - ' + verses[i].fields.original_text;
+                                    select_verse.appendChild(option);
+                                }
+                            }).catch(error => console.log("books populated returned error", error));
                     })
-                    .then(response => response.json())
-                    .then(data =>  {
-                        // console.log("Data fetched succesfully", data)
-                        // var debug = document.getElementById('debug')
-                        var select_book = document.getElementById('select-book')
-                        var select_chapter = document.getElementById('select-chapter')
-                        var select_verse = document.getElementById('select-verse')
-
-                        // convert fetched data string  to json (objects)
-                        var books = JSON.parse(data.fetchedBooks)
-                        var chapters = JSON.parse(data.fetchedChapters)
-                        var verses = JSON.parse(data.fetchedVerses)
-
-                        //console.log(books[0].fields.title)
-        
-                        // populate Books
-                        for (i=0; i < books.length; i++){
-                            const option = document.createElement('option');
-                            // console.log(books[i].fields.title)
-                            option.value = books[i].pk;
-                            option.innerHTML = books[i].fields.title;
-                            select_book.appendChild(option);
-                        }
-                        
-                        // populate Chapters
-                        for (i = 0; i < chapters.length; i++) {
-                            const option = document.createElement('option');
-                            option.value = chapters[i].pk;
-                            //number - title
-                            option.innerHTML = chapters[i].fields.number // + ' - ' + chapters[i].fields.title;
-                            select_chapter.appendChild(option);
-                        }
-
-                        // populate Verses
-                        for (i = 0; i < verses.length; i++) {
-                            const option = document.createElement('option');
-                            option.value = verses[i].pk;
-                            //number - title
-                            option.innerHTML = verses[i].fields.number // + ' - ' + verses[i].fields.original_text;
-                            select_verse.appendChild(option);
-                        }
-                    }).catch(error => console.log("books populated returned error", error));
-                })
-            </script>
+                </script>
 
             {% endblock quickAccess %}
 
 
+            </div>
+
+            <div class="twelve wide column">
+                {% block body %}{% endblock body %}
+            </div>
+
         </div>
 
-        <div class="twelve wide column">
-            {% block body %}{% endblock body %}
-        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
+        {% load static %}
+        <script src="{% static " bible.js " %}"></script>
 
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
-    {% load static %}
-    <script src="{% static "bible.js" %}"></script>
-
-    <!--DEBUG-->
-    <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre>
+        <!--DEBUG-->
+        <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre>
 </body>
 
 </html>

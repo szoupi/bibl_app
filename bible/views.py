@@ -13,7 +13,9 @@ from .models import Book, Chapter, Verse, Annotation, FavoriteBook, FavoriteChap
 # Book uses generic view
 from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm, UserLoginForm
 import json
+from django.core import serializers #for JSON
 from django.http import JsonResponse
+
 
 
 # TODO
@@ -406,9 +408,25 @@ class UserRegistrationView(View):
             'form': form
         })
 
+
+class populateQuickAccessView(View):
+    ''' populate the dropdown boxes async
+    with books, chapters and verses
+    fetched as json
+    '''
+    def get(self, request):
+        # https://stackoverflow.com/questions/12553599/create-json-response-in-django-with-model?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+        # https://docs.djangoproject.com/en/1.9/topics/serialization/
+        data = {
+            'fetchedBooks': serializers.serialize('json', Book.objects.all()),
+            'fetchedChapters': serializers.serialize('json', Chapter.objects.all()),
+            'fetchedVerses': serializers.serialize('json', Verse.objects.all()),
+        }
+        return JsonResponse(data)
+
+
+
 # FAVORITES one view for books, chapters etc
-
-
 class FavoriteView(LoginRequiredMixin, View):
     # This variable will set the favorite model to be processed
     # model = FavoriteBook

@@ -24,3 +24,7 @@ function getCookie(name) {
 }
 
 var csrftoken = getCookie('csrftoken')
+
+$('select.dropdown')
+	.dropdown()
+	

@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from .import views
 from django.views.generic import TemplateView 
 from django.conf.urls import include
-from .models import FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation
+from .models import Book, Chapter, Verse, FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation
 
 app_name = 'bible'
 
@@ -160,6 +160,15 @@ urlpatterns = [
     # TODO: TEST IF MODEL CAN BE OMITTED IN THIS CASE
     url(r'^favorites/$',
         views.DisplayFavoritesView.as_view(), name='favorites'),
+    
+    
+    # POPULATE DROPDOWN INPUTS  #####################################################
+
+    # POPULATE QUICK ACCESS
+    # /bible/populate/books
+    url(r'^populate/all/$',
+        views.populateQuickAccessView.as_view(), name='populate-all'),
+
 
 
 ]

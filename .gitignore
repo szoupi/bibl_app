@@ -1,0 +1,9 @@
+.vscode
+annotations/
+data/
+img-raw/
+media/
+static/
+*.zip
+*.js
+*.json

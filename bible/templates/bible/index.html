@@ -64,7 +64,7 @@
                                             method: "put",
                                             credentials: "same-origin",
                                             headers: {
-                                                "X-CSRFToken": window.csrftoken,
+                                                "X-CSRFToken": "{% csrf_token %}",
                                                 "Accept": "application/json",
                                                 "Content-Type": "application/json"
                                             },

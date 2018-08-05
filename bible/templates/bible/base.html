@@ -20,9 +20,6 @@
 <body>
     {% comment %} NAVIGATION MENU {% endcomment %}
     <div class="ui stackable container container inverted menu">
-        <div class="item" style="font-weight:800;">
-            BIBL.app
-        </div>
         <a class="item" href="{% url 'bible:index' %}">
             <i class="book inverted icon"></i>
             Books
@@ -114,7 +111,7 @@
                                 method: "get",
                                 credentials: "same-origin",
                                 headers: {
-                                    "X-CSRFToken": "{% csrf_token %}",
+                                    "X-CSRFToken": window.csrftoken,
                                     "Accept": "application/json",
                                     "Content-Type": "application/json",
                                 },
@@ -177,10 +174,10 @@
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
         {% load static %}
-        <script src="{% static " bible.js " %}"></script>
+        <script src="{% static "bible.js" %}"></script>
 
         <!--DEBUG-->
-        <!-- <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre> -->
+        <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre>
 </body>
 
 </html>

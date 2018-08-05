@@ -61,7 +61,7 @@ Book details
                     method: "put",
                     credentials: "same-origin",
                     headers: {
-                        "X-CSRFToken": "{% csrf_token %}",
+                        "X-CSRFToken": window.csrftoken,
                         "Accept": "application/json",
                         "Content-Type": "application/json"
                     },
@@ -109,7 +109,7 @@ Book details
                     method: "get", //  GET
                     credentials: "same-origin",
                     headers: {
-                        "X-CSRFToken": "{% csrf_token %}",
+                        "X-CSRFToken": window.csrftoken,
                         "Accept": "application/json",
                         "Content-Type": "application/json"
                     },
@@ -188,7 +188,7 @@ Book details
                                         method: "put",
                                         credentials: "same-origin",
                                         headers: {
-                                            "X-CSRFToken": "{% csrf_token %}",
+                                            "X-CSRFToken": window.csrftoken,
                                             "Accept": "application/json",
                                             "Content-Type": "application/json"
                                         },

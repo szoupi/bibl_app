@@ -122,28 +122,28 @@
     {% endif %}
 {% endblock leftColumn %}
 
-{% block breadcrumbs %}
-<div class="ui card">
-    <div class="content">
-        <div class="header">NAVIGATION</div>
-        <div>
-            <p>Book:
+{% block body %}
+ {% block breadcrumbs %}
+    <div class="ui breadcrumb">
+        <div class="section">
+            Book:
                 <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-            </p>
-            <p>Chapter:
-                <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">{{ chapter.number }}</a>
-            </p>
-            <p>Verse:{{ verse.number }}</p>
         </div>
+        <div class="divider"> / </div>
+        <div class="section">Chapter:
+            <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">{{ chapter.number }}</a>
+        </div>
+        <div class="divider"> / </div>
+        <div class="active section">
+            Verse:{{ verse.number }}
+        </div>        
     </div>
-</div>
 {% endblock %}
 
 
-{% block body %}
     <div class="ui text container">
         {% if verse.annotation_set.all %}
-            <h2>ANNOTATIONS</h2>
+            {# <h2>ANNOTATIONS</h2> #}
             <div class="ui one cards">
                 {% for annotation in verse.annotation_set.all %}
                     <div class="card">

@@ -150,89 +150,89 @@
     <div class="ui text container">
         {# <h2>CHAPTERS</h2> #}
         {% if book.chapter_set.all %}
-        <div class="ui one cards">
-            {% for chapter in book.chapter_set.all %}
-            <div class="card">
-                <div class="ui bottom right attached label">Chapter {{ chapter.number }}</div>
-                <div class="content">
-                    <div class="header">
-                        {% if user.is_authenticated %}
+            <div class="ui one cards">
+                {% for chapter in book.chapter_set.all %}
+                    <div class="card">
+                        <div class="ui bottom right attached label">Chapter {{ chapter.number }}</div>
+                        <div class="content">
+                            <div class="header">
+                                {% if user.is_authenticated %}
 
-                            <!-- ==================FAVORITE CHAPTER STAR=================== -->
-                            <i class="star outline icon ui compact  right floated " 
-                                id="favChapterStar{{ chapter.id }}"
-                            ></i>
-                            
-                            <!-- FAVORITE CHECK -->
-                            <!--loop through chapterFavorite records -->
-                            <!--if fav raw exists, make star black -->
-                            {% for fav in favorite_chapters %}
-                                {% if fav.user_id == user.id and fav.obj_id == chapter.id %}
+                                    <!-- ==================FAVORITE CHAPTER STAR=================== -->
+                                    <i class="star outline icon ui compact  right floated " 
+                                        id="favChapterStar{{ chapter.id }}"
+                                    ></i>
+                                    
+                                    <!-- FAVORITE CHECK -->
+                                    <!--loop through chapterFavorite records -->
+                                    <!--if fav raw exists, make star black -->
+                                    {% for fav in favorite_chapters %}
+                                        {% if fav.user_id == user.id and fav.obj_id == chapter.id %}
+                                            <script>
+                                                document.getElementById("favChapterStar{{ chapter.id }}").classList.remove("outline");
+                                            </script>
+                                        {% endif %} 
+                                    {% endfor %}
+
                                     <script>
-                                        document.getElementById("favChapterStar{{ chapter.id }}").classList.remove("outline");
-                                    </script>
-                                {% endif %} 
-                            {% endfor %}
+                                        // when document load display the status of star
+                                        document.getElementById("favChapterStar{{ chapter.id }}").addEventListener('click', function(){
 
-                            <script>
-                                // when document load display the status of star
-                                document.getElementById("favChapterStar{{ chapter.id }}").addEventListener('click', function(){
+                                            // note the trailing slash favorite/
+                                            fetch("/chapter/{{ chapter.id }}/favorite/", {
+                                                    method: "put",
+                                                    credentials: "same-origin",
+                                                    headers: {
+                                                        "X-CSRFToken": window.csrftoken,
+                                                        "Accept": "application/json",
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    body: JSON.stringify({
+                                                        "user_id" : {{ user.id }},
+                                                        "obj_id" : {{ chapter.id }}
+                                                    })
+                                                })
+                                                .then(response => response.json())
+                                                .catch(error => {
+                                                    console.log("favorite does not exist, create a new one", error);
+                                                });
 
-                                    // note the trailing slash favorite/
-                                    fetch("/chapter/{{ chapter.id }}/favorite/", {
-                                            method: "put",
-                                            credentials: "same-origin",
-                                            headers: {
-                                                "X-CSRFToken": window.csrftoken,
-                                                "Accept": "application/json",
-                                                "Content-Type": "application/json"
-                                            },
-                                            body: JSON.stringify({
-                                                "user_id" : {{ user.id }},
-                                                "obj_id" : {{ chapter.id }}
-                                            })
+                                            // toggle outside fetch because
+                                            // put creates error if db row does not exist
+                                            // so paint is not executed
+                                            // if placed in next then(), as we should...
+                                            document.getElementById("favChapterStar{{ chapter.id }}").classList.toggle("outline")
                                         })
-                                        .then(response => response.json())
-                                        .catch(error => {
-                                            console.log("favorite does not exist, create a new one", error);
-                                        });
 
-                                    // toggle outside fetch because
-                                    // put creates error if db row does not exist
-                                    // so paint is not executed
-                                    // if placed in next then(), as we should...
-                                    document.getElementById("favChapterStar{{ chapter.id }}").classList.toggle("outline")
-                                })
-
-                            </script>
-                            <!-- ==================FAVORITE END=================== -->
-                            
-                            <!--...and if the user has edit rights -->
-                            {% if perms.bible.change_chapter %}
-                                <a href="{% url 'bible:chapter-update' book.id chapter.id %}"
-                                    class="ui compact icon right floated button">
-                                    <i class="edit icon"></i>
-                                </a>
-                                <a href="{% url 'bible:chapter-delete' book.id chapter.id %}"
-                                    class="ui compact icon right floated button">
-                                    <i class="trash icon"></i>
-                                </a> 
-                            {% endif %}
-                        {% endif %}
-                        {{ chapter.number }}
-                    </div>
-                    <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">
-                        <div class="description">
-                            {{ chapter.title }}
+                                    </script>
+                                    <!-- ==================FAVORITE END=================== -->
+                                    
+                                    <!--...and if the user has edit rights -->
+                                    {% if perms.bible.change_chapter %}
+                                        <a href="{% url 'bible:chapter-update' book.id chapter.id %}"
+                                            class="ui compact icon right floated button">
+                                            <i class="edit icon"></i>
+                                        </a>
+                                        <a href="{% url 'bible:chapter-delete' book.id chapter.id %}"
+                                            class="ui compact icon right floated button">
+                                            <i class="trash icon"></i>
+                                        </a> 
+                                    {% endif %}
+                                {% endif %}
+                                {{ chapter.number }}
+                            </div>
+                            <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">
+                                <div class="description">
+                                    {{ chapter.title }}
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
 
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
         {% else %}
-        <h2>No Chapters to display</h2>
+            <h2>No Chapters to display</h2>
         {% endif %}
     </div>
 

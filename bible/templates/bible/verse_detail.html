@@ -141,90 +141,90 @@
 
 
 {% block body %}
-<div class="ui text container">
-    {% if verse.annotation_set.all %}
-        <h2>ANNOTATIONS</h2>
-        <div class="ui one cards">
-            {% for annotation in verse.annotation_set.all %}
-                <div class="card">
-                    <div class="content">
-                        <div class="ui bottom right attached label">Annotation</div>
-                        <div id="annotation{{ annotation.number }}" class="header">
-                            {% if user.is_authenticated %}
+    <div class="ui text container">
+        {% if verse.annotation_set.all %}
+            <h2>ANNOTATIONS</h2>
+            <div class="ui one cards">
+                {% for annotation in verse.annotation_set.all %}
+                    <div class="card">
+                        <div class="content">
+                            <div class="ui bottom right attached label">Annotation</div>
+                            <div id="annotation{{ annotation.number }}" class="header">
+                                {% if user.is_authenticated %}
 
-                                <!-- ==================FAVORITE CHAPTER STAR=================== -->
-                                <i class="star outline icon ui compact  right floated " 
-                                    id="favAnnotationStar{{ annotation.id }}"
-                                ></i>
-                                
-                                <!-- FAVORITE CHECK -->
-                                <!--loop through chapterFavorite records -->
-                                <!--if fav raw exists, make star black -->
-                                {% for fav in favorite_annotations %}
-                                    {% if fav.user_id == user.id and fav.obj_id == annotation.id %}
-                                        <script>
-                                            document.getElementById("favAnnotationStar{{ annotation.id }}").classList.remove("outline");
-                                        </script>
-                                    {% endif %} 
-                                {% endfor %}
+                                    <!-- ==================FAVORITE CHAPTER STAR=================== -->
+                                    <i class="star outline icon ui compact  right floated " 
+                                        id="favAnnotationStar{{ annotation.id }}"
+                                    ></i>
+                                    
+                                    <!-- FAVORITE CHECK -->
+                                    <!--loop through chapterFavorite records -->
+                                    <!--if fav raw exists, make star black -->
+                                    {% for fav in favorite_annotations %}
+                                        {% if fav.user_id == user.id and fav.obj_id == annotation.id %}
+                                            <script>
+                                                document.getElementById("favAnnotationStar{{ annotation.id }}").classList.remove("outline");
+                                            </script>
+                                        {% endif %} 
+                                    {% endfor %}
 
-                                <script>
-                                    // when document load display the status of stars
-                                    document.getElementById("favAnnotationStar{{ annotation.id }}").addEventListener('click', function(){
+                                    <script>
+                                        // when document load display the status of stars
+                                        document.getElementById("favAnnotationStar{{ annotation.id }}").addEventListener('click', function(){
 
-                                        // note the trailing slash favorite/
-                                        fetch("/annotation/{{ annotation.id }}/favorite/", {
-                                                method: "put",
-                                                credentials: "same-origin",
-                                                headers: {
-                                                    "X-CSRFToken": window.csrftoken,
-                                                    "Accept": "application/json",
-                                                    "Content-Type": "application/json"
-                                                },
-                                                body: JSON.stringify({
-                                                    "user_id" : {{ user.id }},
-                                                    "obj_id" : {{ annotation.id }}
+                                            // note the trailing slash favorite/
+                                            fetch("/annotation/{{ annotation.id }}/favorite/", {
+                                                    method: "put",
+                                                    credentials: "same-origin",
+                                                    headers: {
+                                                        "X-CSRFToken": window.csrftoken,
+                                                        "Accept": "application/json",
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    body: JSON.stringify({
+                                                        "user_id" : {{ user.id }},
+                                                        "obj_id" : {{ annotation.id }}
+                                                    })
                                                 })
-                                            })
-                                            .then(response => response.json())
-                                            .catch(error => {
-                                                console.log("favorite does not exist, create a new one", error);
-                                            });
+                                                .then(response => response.json())
+                                                .catch(error => {
+                                                    console.log("favorite does not exist, create a new one", error);
+                                                });
 
-                                        // toggle outside fetch because
-                                        // put creates error if db row does not exist
-                                        // so paint is not executed
-                                        // if placed in next then(), as we should...
-                                        document.getElementById("favAnnotationStar{{ annotation.id }}").classList.toggle("outline")
-                                    })
+                                            // toggle outside fetch because
+                                            // put creates error if db row does not exist
+                                            // so paint is not executed
+                                            // if placed in next then(), as we should...
+                                            document.getElementById("favAnnotationStar{{ annotation.id }}").classList.toggle("outline")
+                                        })
 
-                                </script>
-                                <!-- ==================FAVORITE END=================== -->
-                                
-                                <!--...and if the user has edit rights -->
+                                    </script>
+                                    <!-- ==================FAVORITE END=================== -->
+                                    
+                                    <!--...and if the user has edit rights -->
 
 
-                                {% if perms.bible.change_annotation %} 
-                                    <a href="{% url 'bible:annotation-update' book.id chapter.id verse.id annotation.id  %}" 
-                                        class="ui compact icon right floated button">
-                                        <i class="edit icon"></i>
-                                    </a>
-                                    <a href="{% url 'bible:annotation-delete' book.id chapter.id verse.id annotation.id  %}" 
-                                        class="ui compact icon right floated button">
-                                        <i class="trash icon"></i>
-                                    </a>
-                                {% endif %} 
-                            {% endif %}
-                            {{ annotation.number }} - {{ annotation.phrase}}
+                                    {% if perms.bible.change_annotation %} 
+                                        <a href="{% url 'bible:annotation-update' book.id chapter.id verse.id annotation.id  %}" 
+                                            class="ui compact icon right floated button">
+                                            <i class="edit icon"></i>
+                                        </a>
+                                        <a href="{% url 'bible:annotation-delete' book.id chapter.id verse.id annotation.id  %}" 
+                                            class="ui compact icon right floated button">
+                                            <i class="trash icon"></i>
+                                        </a>
+                                    {% endif %} 
+                                {% endif %}
+                                {{ annotation.number }} - {{ annotation.phrase}}
+                            </div>
+                            <div class="description">{{ annotation.annotation }}</div>
                         </div>
-                        <div class="description">{{ annotation.annotation }}</div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
             </div>
-        </div>
-    
-    {% else %}
-        <h2>No annotations to display</h2>
-    {% endif %}
+            
+        {% else %}
+            <h2>No annotations to display</h2>
+        {% endif %}
+    </div>
 {% endblock body %}

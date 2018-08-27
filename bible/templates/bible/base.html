@@ -8,18 +8,18 @@
         {% block title %} Bible {% endblock title %}
     </title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1"> {% comment %} load the path to static files and then the files to be loaded {% endcomment %}
+    <meta name="viewport" content="width=device-width, initial-scale=1"> {# load the path to static files and then the files to be loaded #}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" /> 
     {% load staticfiles %} 
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
-    {% comment %} custom style always after the cdn/css framework, so as not be overiden {% endcomment %}
+    {# custom style always after the cdn/css framework, so as not be overiden #}
 
 
 
 </head>
 
 <body>
-    {% comment %} NAVIGATION MENU {% endcomment %}
+    {# NAVIGATION MENU #}
     <div class="ui stackable container container inverted menu">
         <a class="item" href="{% url 'bible:index' %}">
             <i class="book inverted icon"></i>
@@ -47,13 +47,13 @@
                     <a href="{% url 'bible:logout'%}?next={{request.path}}" class="item">Log out, {{ user.get_username }}</a>
                     {% else %}
                     <a href="{% url 'bible:login' %}?next={{request.path}}" class="item">Log in</a>
-                    {% endif %} {% comment %}
-                    <a href="{% url 'bible:register' %}" class="item">Register</a> {% endcomment %}
+                    {% endif %} {#
+                    <a href="{% url 'bible:register' %}" class="item">Register</a> #}
                 </div>
             </div>
         </div>
     </div>
-    {% comment %} NAVIGATION MENU END {% endcomment %}
+     {# NAVIGATION MENU END  #}
 
 
     <div class="ui grid stackable container">
@@ -172,8 +172,8 @@
         {% load static %}
         <script src="{% static "bible.js" %}"></script>
 
-        <!--DEBUG-->
-        <!-- <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre> -->
+        {# DEBUG #}
+        {# <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre> #}
 </body>
 
 </html>

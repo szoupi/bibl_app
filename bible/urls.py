@@ -16,6 +16,11 @@ urlpatterns = [
     # put  service-worker.js in the root of templates directory
     url(r'^sw.js', (TemplateView.as_view(template_name="sw.js",
                                          content_type='application/javascript', )), name='sw.js'),
+
+    # put manifest.json in the root of templates directory
+    url(r'^manifest.json', (TemplateView.as_view(template_name="manifest.json",
+                                                 content_type='application/json')), name='manifest.json'),
+    
     # AUTHENTICATE django defaults names and paths
     # accounts/login/ 
     # accounts/logout/

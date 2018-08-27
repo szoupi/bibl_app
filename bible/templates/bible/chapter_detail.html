@@ -133,9 +133,11 @@
         <div class="ui one cards">
             {% for verse in chapter.verse_set.all %}
             <div class="card">
-                <div class="content">
-                    <div class="ui bottom right attached label">Verse</div>
-                    <div class="header">
+                <div class="content two column stackable ui grid">
+                    <div class="ui bottom right attached label">
+                        Verse {{ verse.number }}
+                    </div>
+                    <div class="header row">
                         {% if user.is_authenticated %}
 
                             <!-- ==================FAVORITE CHAPTER STAR=================== -->
@@ -201,10 +203,15 @@
                         {% endif %}
                         {{ verse.number }}
                     </div>
-                    <a class="description" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
-                        <p>{{ verse.original_text }}</p>
-                        <p><em>{{ verse.greek_translation }}</em></p>
-                    </a>
+                    <div class="two column row">
+
+                        <a class="original-text column" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
+                            <p>{{ verse.original_text }}</p>
+                        </a>
+                        <a class="greek-translation column" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
+                            <p><em>{{ verse.greek_translation }}</em></p>
+                        </a>
+                    </div>
                 </div>
         
             </div>

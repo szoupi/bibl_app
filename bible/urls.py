@@ -13,9 +13,14 @@ urlpatterns = [
     #/bible/ 
     url(r'^$', views.IndexView.as_view(), name='index'),
 
-    # # put  service-worker.js in the root of templates directory
-    # url(r'^sw.js', (TemplateView.as_view(template_name="sw.js",
-    #                                      content_type='application/javascript', )), name='sw.js'),
+    # put  service-worker.js in the root of templates directory
+    url(r'^sw.js', (TemplateView.as_view(template_name="sw.js",
+                                         content_type='application/javascript', )), name='sw.js'),
+
+    # NEEDS TO BE TESTED AS URL PATTERN, CURRENTLY IS LOADED AS STATIC
+    # # put manifest.json in the root of templates directory
+    # url(r'^manifest.json', (TemplateView.as_view(template_name="manifest.json",
+    #                                              content_type='application/json')), name='manifest.json'),
     
     # AUTHENTICATE django defaults names and paths
     # accounts/login/ 

@@ -9,9 +9,10 @@
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1"> {% comment %} load the path to static files and then the files to be loaded {% endcomment %}
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" /> {% load staticfiles %} {% comment %} custom style always after the cdn/css framework, so as not be overiden {% endcomment
-    %}
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" /> 
+    {% load staticfiles %} 
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+    {% comment %} custom style always after the cdn/css framework, so as not be overiden {% endcomment %}
 
 
 

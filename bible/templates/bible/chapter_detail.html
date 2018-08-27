@@ -134,10 +134,10 @@
             {% for verse in chapter.verse_set.all %}
             <div class="card">
                 <div class="content two column stackable ui grid">
-                    <div class="ui top left attached label">
+                    <div class="ui bottom right attached label">
                         Verse {{ verse.number }}
                     </div>
-                    <div class="header row">
+                    <div class="header two column row">
                         {% if user.is_authenticated %}
 
                             <!-- ==================FAVORITE CHAPTER STAR=================== -->
@@ -201,7 +201,7 @@
                                 </a>
                             {% endif %}
                         {% endif %}
-                        {# {{ verse.number }} #}
+                        {{ verse.number }}
                     </div>
                     <div class="two column row">
 

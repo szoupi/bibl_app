@@ -6,6 +6,10 @@ body {
     margin-bottom: 0.5rem;
 }
 
+.ui.breadcrumb {
+    margin-bottom: 2rem;
+}
+
 form span {
     font-style: italic;
 }

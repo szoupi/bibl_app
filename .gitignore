@@ -3,7 +3,7 @@ annotations/
 data/
 img-raw/
 media/
-static/
+/static/
 *.zip
 *.js
 *.json

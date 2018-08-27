@@ -5,8 +5,8 @@ img-raw/
 media/
 /static/
 *.zip
-*.js
-*.json
+/*.js
+/*.json
 README
 README.md
 manage.py

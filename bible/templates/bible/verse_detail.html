@@ -1,13 +1,13 @@
 {% extends "bible/base.html" %}
 {% block title %}
-    Chapter {{chapter.number}} details
+    Κεφάλαιο {{chapter.number}}
 {% endblock title %}
 
 
 {% block leftColumn %}
     <div class="ui card">
         <div class="content">
-            <div class="header">VERSE {{verse.number}}</div>
+            <div class="header">Κεφάλαιο {{verse.number}}</div>
             <div class="description">
                 <p>{{ verse.original_text }}</p>
             </div>
@@ -101,7 +101,7 @@
                 <a class="item" href="{% url 'bible:annotation-create' book.id chapter.id verse.id %}">
                     <div class="ui bottom attached button">
                         <i class="add icon"></i>
-                        Add Annotation
+                        Προσθήκη Υπομνηματισμού
                     </div>
                 </a>
             {% endif %}    
@@ -111,7 +111,7 @@
     {% if verse.annotation_set.all %}
         <div class="ui card">
             <div class="content">
-                <div class="header">ANNOTATIONS LIST</div>
+                <div class="header">Λίστα Υπομνηματισμών</div>
                 <div class="ui list">
                     {% for annotation in verse.annotation_set.all %}
                     <a href="#annotation{{ annotation.number }}" class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
@@ -126,16 +126,16 @@
  {% block breadcrumbs %}
     <div class="ui breadcrumb">
         <div class="section">
-            Book:
+            Βιβλίο:
                 <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
         </div>
         <div class="divider"> / </div>
-        <div class="section">Chapter:
+        <div class="section">Κεφάλαιο:
             <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">{{ chapter.number }}</a>
         </div>
         <div class="divider"> / </div>
         <div class="active section">
-            Verse:{{ verse.number }}
+            Στίχος:{{ verse.number }}
         </div>        
     </div>
 {% endblock %}
@@ -148,7 +148,7 @@
                 {% for annotation in verse.annotation_set.all %}
                     <div class="card">
                         <div class="content">
-                            <div class="ui bottom right attached label">Annotation</div>
+                            <div class="ui bottom right attached label">Υπομνηματισμός</div>
                             <div id="annotation{{ annotation.number }}" class="header">
                                 {% if user.is_authenticated %}
 
@@ -224,7 +224,14 @@
             </div>
             
         {% else %}
-            <h2>No annotations to display</h2>
+            <h2>Δεν υπάρχουν υπομνηματισμοί για το στίχο αυτό</h2>
+                        {% if perms.bible.add_annotation %} 
+                <!-- BUTTON -->
+                <a class="item" href="{% url 'bible:annotation-create' book.id chapter.id verse.id %}">
+                    Ευκαιρία να προσθέσετε νέο Υπομνηματισμό!
+                </a>
+            {% endif %}    
+
         {% endif %}
     </div>
 {% endblock body %}

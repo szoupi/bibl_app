@@ -1,5 +1,5 @@
 {% extends "bible/base.html" %} 
-{% block title %} Book details {% endblock title %} 
+{% block title %} Αγαπημένα {% endblock title %} 
 
 {% block leftColumn %}
 
@@ -9,13 +9,14 @@
             <img src="{{ book.image.url }}">
         </a>
         <div class="content">
-<div class="header">Hello {{ user.get_username }}!</div>
+        <div class="header">
+            Γεια σου {{ user.get_username }}!
+        </div>
             <div class="meta">
-                <div>This page displays your favorites books, 
-                    chapters, verses and annotations! 
-                    You can mark/unmark them as favorites
-                    by clicking on the star.
-                </div>
+                <div>Αυτή η σελίδα εμφανίζει τα αγαπημένα σου βιβλία,
+                    κεφάλαια, στίχους και υπομνηματισμούς που έχεις επισημάνει ως "αγαπημένα"
+                    κάνοντας κλικ στο εικονίδιο με το αστέρι.
+                </div> 
             </div>
         </div>
     </div>
@@ -28,7 +29,7 @@
 <div class="ui text container">
     {# ========= BOOKS ========== #} 
     {% if favorite_books %}
-        <h2>MY FAVORITES BOOKS</h2>
+        <h2>Τα Αγαπημένα μου Βιβλία</h2>
         <div class="ui two doubling link cards">
             {%for book in favorite_books%}
                 <div class="card">
@@ -41,22 +42,22 @@
             {% endfor %}
         </div>
     {% else %}
-        <h2>No Favorites Books to display</h2>
+        <h2>Δεν υπάρχουν αγαπημένα βιβλία</h2>
     {% endif %}
 
  
     {# ========= CHAPTERS ========== #}
     {% if favorite_chapters %}
-        <h2>MY FAVORITES CHAPTERS</h2>
+        <h2>Τα Αγαπημένα μου Κεφάλαια</h2>
         <div class="ui two doubling link cards">
             {%for chapter in favorite_chapters%}
                 <div class="card">
                     <div class="content">
                             {% if user.is_authenticated  %}
                                 <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">
-                                    {{chapter.book}} 
-                                    Chapter: {{chapter.number}} 
-                                    - {{chapter.title}}
+                                    {{chapter.book}} <br />
+                                    <strong>ΚΕΦΑΛΑΙΟ: {{chapter.number}} </strong><br />
+                                    <em>{{chapter.title}}</em>
                                 </a>
                             {% endif %}
                     </div>
@@ -64,12 +65,12 @@
             {% endfor %}
         </div>
     {% else %}
-        <h2>No Favorites Chapters to display</h2>
+        <h2>Δεν υπάρχουν αγαπημένα κεφάλαια</h2>
     {% endif %}
 
     {# ========= VERSES ========== #}
     {% if favorite_verses %}
-    <h2>MY FAVORITES VERSES</h2>
+    <h2>Οι Αγαπημένοι μου στίχοι</h2>
 
         <div class="ui two doubling link cards">
             {% for verse in favorite_verses %}
@@ -77,9 +78,10 @@
                     <div class="content">
                                 {% if user.is_authenticated %}
                                 <a href="{% url 'bible:verse-detail' verse.chapter.book_id verse.chapter_id verse.id %}">
-                                    {{verse.chapter.book}} 
-                                    Verse: {{verse.number}} 
-                                    - {{verse.original_text}}
+                                    {{verse.chapter.book}} <br />
+                                    Κεφάλαιο: {{verse.chapter}} <br /><br />
+                                    <strong> ΣΤΙΧΟΣ: {{verse.number}} </strong><br />
+                                    <em> {{verse.original_text}}</em>
                                 </a>
                             {% endif %}
                     </div>
@@ -87,12 +89,12 @@
             {% endfor %}
         </div>
     {% else %}
-        <h2>No Favorites Verses to display</h2>
+        <h2>Δεν υπάρχουν αγαπημένοι στίχοι</h2>
     {% endif %}
 
      {# ========= ANNOTATIONS ========== #}
      {% if favorite_annotations %}
-     <h2>MY FAVORITES ANNOTATIONS</h2>
+     <h2>Οι Αγαπημένοι μου Υπομνηματισμοί</h2>
      
      <div class="ui two doubling link cards">
          {% for annotation in favorite_annotations %}
@@ -101,9 +103,11 @@
                 {% if user.is_authenticated %}
                     {# there is no detail view, fall back to chapter detail view #}
                     <a href="{% url 'bible:verse-detail'  annotation.verse.chapter.book_id  annotation.verse.chapter_id annotation.verse_id  %}">
-                        {{annotation.verse.chapter.book}} 
-                        Annotation: {{annotation.number}} 
-                        - {{annotation.phrase}}
+                        {{annotation.verse.chapter.book}} <br />
+                        Κεφάλαιο: {{annotation.verse.chapter}} <br />
+                        Στίχος: {{annotation.verse}} <br /><br />
+                        <strong> ΥΠΟΜΝΗΜΑΤΙΣΜΟΣ: {{annotation.number}} <br />
+                        <em>{{annotation.phrase}}</em></strong>
                     </a>
                 {% endif %}
             </div>
@@ -111,7 +115,7 @@
         {% endfor %}
     </div>
     {% else %}
-     <h2>No Favorites annotation to display</h2>
+     <h2>Δεν υπάρχουν αγαπημένοι υπομνηματισμοί</h2>
     {% endif %}
 
 

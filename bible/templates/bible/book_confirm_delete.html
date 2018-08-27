@@ -1,12 +1,16 @@
-{% extends "bible/base.html" %} {% block title %} Delete Book {% endblock title %}
+{% extends "bible/base.html" %} {% block title %} Διαγραφή Βιβλίου {% endblock title %}
 
- {% block body %} 
-<h1>Delete book</h1>
+{% block body %} 
+    <h1>Διαγραφή Βιβλίου</h1>
 
-<p>Are you sure you want to delete the book: <strong>{{ book.title }}</strong>?</p>
+    <p>Είστε σίγουρος ότι θέλετε να διαγράψετε το βιβλίο με τίτλο: <strong>{{ book.title }}</strong>;</p>
+    <p>Η διαγραφή είναι μη αναστρέψιμη.</p>
+    <p>Υπόψιν ότι το βιβλίο δεν μπορεί να διαγραφεί αν περιέχει κεφάλαια. Πρέπει να διαγράψετε πρώτα τα κεφάλαια.</p>
+    <br />
+    
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <input class="ui button red" type="submit" action="" value="Yes, delete the book." />
-</form>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input class="ui button red" type="submit" action="" value="Ναι, διάγραψε το βιβλίο" />
+    </form>
 {% endblock body %}

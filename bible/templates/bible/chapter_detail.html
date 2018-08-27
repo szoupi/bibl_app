@@ -1,13 +1,13 @@
 {% extends "bible/base.html" %}
 {% block title %}
-    Chapter {{chapter.number}} details
+    Κεφάλαιο {{chapter.number}}
 {% endblock title %}
 
 {% block leftColumn %}
     <div class="ui one cards">
         <div class="card">
             <div class="content">
-                <div class="header">CHAPTER {{chapter.number}}</div>
+                <div class="header">ΚΕΦΑΛΑΙΟ {{chapter.number}}</div>
                 <div class="meta">
                     <div>{{ chapter.title }}</div>
                 </div>
@@ -98,10 +98,9 @@
             
                 {% if perms.bible.add_verse %}
                     <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
-                    {% comment %} <a class="item" href=""> {% endcomment %}
                         <div class="ui bottom attached button">
                             <i class="add icon"></i>
-                            Add Verse
+                            Προσθήκη στίχου
                         </div>
                     </a>
                 {% endif %}
@@ -117,10 +116,10 @@
     {% block breadcrumbs %}
         <div class="ui breadcrumb">
             <div class="section">
-                Book: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                Βιβλίο: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
             </div>
             <div class="divider"> / </div>
-            <div class="active section">Chapter: {{ chapter.number }} </div>
+            <div class="active section">Κεφάλαιο: {{ chapter.number }} </div>
         </div>
     {% endblock %}
 
@@ -132,7 +131,7 @@
                     <div class="card">
                         <div class="content two column stackable ui grid">
                             <div class="ui bottom right attached label">
-                                Verse {{ verse.number }}
+                                Στίχος {{ verse.number }}
                             </div>
                             <div class="header two column row">
                                 {% if user.is_authenticated %}
@@ -215,7 +214,12 @@
                 {% endfor %}
             </div>
         {% else %}
-            <h2>No Verses to display</h2>
+            <h2>Δεν υπάρχουν στίχοι για το κεφάλαιο αυτό.</h2>
+            {% if perms.bible.add_verse %}
+                <a href="{% url 'bible:verse-create' book.id chapter.id %}">
+                        Ευκαιρία να προσθέσετε νέο στίχο!
+                </a>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock body %}

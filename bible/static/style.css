@@ -17,3 +17,8 @@ form span {
 label {
     font-weight: 800;
 }
+
+.ui.attached.button {
+    background-color: green;
+    color: white;
+}

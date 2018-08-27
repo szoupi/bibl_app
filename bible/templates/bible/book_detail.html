@@ -1,7 +1,7 @@
 {% extends "bible/base.html" %}
 
 {% block title %}
-    Book details
+    Κεφάλαια Βιβλίου
 {% endblock title %}
 
 
@@ -136,7 +136,7 @@
                     <a class="item" href="{% url 'bible:chapter-create' book.id %}">
                         <div class="ui bottom attached button">
                             <i class="add icon"></i>
-                            Add Chapters
+                            Προσθήκη Κεφαλαίου
                         </div>
                     </a>
                 {% endif %}
@@ -153,7 +153,7 @@
             <div class="ui one cards">
                 {% for chapter in book.chapter_set.all %}
                     <div class="card">
-                        <div class="ui bottom right attached label">Chapter {{ chapter.number }}</div>
+                        <div class="ui bottom right attached label">Κεφάλαιο {{ chapter.number }}</div>
                         <div class="content">
                             <div class="header">
                                 {% if user.is_authenticated %}
@@ -232,7 +232,12 @@
                 {% endfor %}
             </div>
         {% else %}
-            <h2>No Chapters to display</h2>
+            <h2>Δεν υπάρχουν κεφάλαια για το βιβλίο αυτό.</h2>
+                {% if perms.bible.add_chapter %}
+                    <a href="{% url 'bible:chapter-create' book.id %}">
+                            Ευκαιρία να προσθέσετε νέο κεφάλαιο!
+                    </a>
+                {% endif %}
         {% endif %}
     </div>
 

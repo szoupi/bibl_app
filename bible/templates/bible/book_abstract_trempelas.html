@@ -1,0 +1,136 @@
+{% extends "bible/base.html" %}
+
+{% block title %}
+    Περίληψη Βιβλίου
+{% endblock title %}
+
+
+{% block leftColumn %}
+
+    <div class="ui one cards">
+        <div class="card">
+            <a href="{% url 'bible:index' %}" class="image">
+                <img src="{{ book.image.url }}">
+            </a>
+            <div class="content">
+                <div class="header">{{ book.title }}</div>
+                <div class="meta">
+                    <div>{{ book.writer }}</div>
+                </div>
+            </div>
+
+            <!-- BUTTON -->
+            {% if user.is_authenticated %}
+                <div class="content">
+                    <i class="star outline icon" 
+                        id="favoriteStar{{ book.id }}"
+                        onclick="favoriteBook()"
+                        ></i>
+                </div>
+
+
+                {# DEBUG #}
+                {% if user.is_superuser %}
+                    <div class="content">
+                        <h2>DEBUG</h2>
+                        <ul>
+                            <li>username: {{ user.username }}</li>
+                            <li>user id: {{ user.id }}</li>
+                            <li>book id: {{ book.id }}</li>
+                            <li>favorite book: {{ favorite.obj_id }}</li>
+                            <li>favorite user: {{ favorite.user_id }}</li>
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <script>
+
+                    const favstar = document.getElementById("favoriteStar{{ book.id }}") 
+
+                    function favoriteBook() {
+                        console.log('favorite button clicked')
+                        // note the trailing slash favorite/
+                        const url = "/book/{{ book.id }}/favorite/";
+                        
+                        // what to pass to db
+                        let json_data = {
+                            'user_id': {{user.id}},
+                            'obj_id': {{book.id}}
+                        }
+
+                        let fetch_data = {
+                            method: "put",
+                            credentials: "same-origin",
+                            headers: {
+                                "X-CSRFToken": window.csrftoken,
+                                "Accept": "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(json_data)
+                        }
+
+                        fetch(url, fetch_data)
+                        .then(response =>   response.json())
+                        .catch(error => {
+                            console.log("favorite does not exist, create a new one", error);
+                        });
+                        
+                        // toggle outside fetch because
+                        // put creates error if db row does not exist
+                        // so paint is not executed
+                        // if placed in next then(), as we should...
+                        favstar.classList.toggle("outline")
+                    }
+                    
+                    function toggleFavorite(){
+                        favstar.classList.toggle("outline")
+                    }
+                    
+                    // update the favorite
+                    document.addEventListener("DOMContentLoaded", function (event) {
+                        if ("{{ favorite.id}}") {
+                        toggleFavorite()
+                        }
+                    });
+
+                </script>
+
+
+                {% if perms.bible.add_chapter %}
+                    <a class="item" href="{% url 'bible:chapter-create' book.id %}">
+                        <div class="ui bottom attached button">
+                            <i class="add icon"></i>
+                            Προσθήκη Κεφαλαίου
+                        </div>
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock leftColumn %}
+
+{% block body %}
+    {# CHAPTERS LIST #}
+    <div class="ui text container">
+        {% if book.abstract_trempelas %}
+            <div class="ui one cards">
+                <div class="card">
+                    <div class="ui top right attached label">
+                        ΕΙΣΑΓΩΓΗ
+                    </div>
+                    <div class="content">
+                        {{ book.abstract_trempelas }}
+                    </div>
+                    <p><a class="ui primary basic button attached" 
+                        href="{% url 'bible:book-detail' book.id %}"><i class="left chevron icon"></i> Επιστροφή στο {{ book.title }}
+                    </a></p>
+                    
+
+                </div>
+            </div>
+        {% endif %}
+
+
+    </div>
+
+{% endblock body %}}

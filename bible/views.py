@@ -79,18 +79,30 @@ def book_detail_view(request, book_id):
     user = request.user.id
     # first does not produce error if row does not exists
     favorite = FavoriteBook.objects.filter(obj_id=book_id, user=user).first()
-    favorite_chapters = FavoriteChapter.objects.all()
 
     # the context {'book':book} contain the variables passed to template
     return render(request, 'bible/book_detail.html', {
         'book': book,
         'favorite': favorite,
-        'favorite_chapters': favorite_chapters
     })
 
     # model = Book
     # template_name = ""
     # context_object_name = 'all_books'
+
+
+def book_abstract_trempelas_view(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    user = request.user.id
+    # first does not produce error if row does not exists
+    favorite = FavoriteBook.objects.filter(obj_id=book_id, user=user).first()
+    favorite_chapters = FavoriteChapter.objects.all()
+
+    return render(request, 'bible/book_abstract_trempelas.html',{
+        'book': book,
+        'favorite': favorite,
+        'favorite_chapters': favorite_chapters
+    })
 
 #####################################################
 # CREATE BOOKS

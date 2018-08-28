@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <meta charset="utf-8" />
@@ -49,9 +49,11 @@
 
 <body>
     {# NAVIGATION MENU #}
-    <div class="ui stackable container container inverted menu">
+    <nav class="ui stackable container container inverted menu" >
         <div class="item">
-            <a href="/"><img src="{% static 'img/bibl_logo.png' %}" style="height:1.3em;width:unset"></a>
+            <a href="/"><img src="{% static 'img/bibl_logo.png' %}" 
+                style="height:1.3em;width:unset"
+                alt="bibl app logo"></a>
         </div>
         <a class="item" href="{% url 'bible:index' %}">
             <i class="book inverted icon"></i>
@@ -84,11 +86,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
      {# NAVIGATION MENU END  #}
 
 
-    <div class="ui grid stackable container">
+    <main class="ui grid stackable container">
 
         <div class="four wide column">
             {% block leftColumn %}{% endblock leftColumn %}
@@ -200,7 +202,7 @@
                 {% block body %}{% endblock body %}
             </div>
 
-        </div>
+        </main>
 
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>

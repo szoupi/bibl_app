@@ -114,12 +114,10 @@
 
 {% block body %}
     {% block breadcrumbs %}
-        <div class="ui breadcrumb">
-            <div class="section">
+        <div class="ui text container segment">
                 Βιβλίο: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-            </div>
-            <div class="divider"> / </div>
-            <div class="active section">Κεφάλαιο: {{ chapter.number }} </div>
+            <i class="right angle icon divider"></i>
+            <strong>Κεφάλαιο: {{ chapter.number }} </strong>
         </div>
     {% endblock %}
 

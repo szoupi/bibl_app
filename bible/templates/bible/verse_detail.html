@@ -1,13 +1,13 @@
 {% extends "bible/base.html" %}
 {% block title %}
-    Κεφάλαιο {{chapter.number}}
+    Στίχος {{verse.number}}
 {% endblock title %}
 
 
 {% block leftColumn %}
     <div class="ui card">
         <div class="content">
-            <div class="header">Κεφάλαιο {{verse.number}}</div>
+            <div class="header">Στίχος {{verse.number}}</div>
             <div class="description">
                 <p>{{ verse.original_text }}</p>
             </div>
@@ -124,19 +124,12 @@
 
 {% block body %}
  {% block breadcrumbs %}
-    <div class="ui breadcrumb">
-        <div class="section">
-            Βιβλίο:
-                <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-        </div>
-        <div class="divider"> / </div>
-        <div class="section">Κεφάλαιο:
-            <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">{{ chapter.number }}</a>
-        </div>
-        <div class="divider"> / </div>
-        <div class="active section">
-            Στίχος:{{ verse.number }}
-        </div>        
+    <div class="ui text container segment">
+        Βιβλίο: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+        <i class="right angle icon divider"></i>
+        Κεφάλαιο: <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">{{ chapter.number }}</a>
+        <i class="right angle icon divider"></i>
+        <strong>Στίχος:{{ verse.number }}</strong>
     </div>
 {% endblock %}
 

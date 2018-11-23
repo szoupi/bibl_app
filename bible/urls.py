@@ -17,10 +17,6 @@ urlpatterns = [
     url(r'^sw.js', (TemplateView.as_view(template_name="sw.js",
                                          content_type='application/javascript', )), name='sw.js'),
 
-    # NEEDS TO BE TESTED AS URL PATTERN, CURRENTLY IS LOADED AS STATIC
-    # # put manifest.json in the root of templates directory
-    # url(r'^manifest.json', (TemplateView.as_view(template_name="manifest.json",
-    #                                              content_type='application/json')), name='manifest.json'),
     
     # AUTHENTICATE django defaults names and paths
     # accounts/login/ 
@@ -89,6 +85,9 @@ urlpatterns = [
     # childeren CHAPTERS are displayed as list
     url(r'^book/(?P<book_id>[0-9]+)$',
         views.book_detail_view, name='book-detail'),
+
+    url(r'^book/(?P<book_id>[0-9]+)/abstract$',
+        views.book_abstract_trempelas_view, name='book-abstract-trempelas'),
 
     # CHAPTER DETAIL  bible/book_id/chapter/chapter_id
     url(r'^book/(?P<book_id>[0-9]+)/chapter/(?P<chapter_id>[0-9]+)$',

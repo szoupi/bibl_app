@@ -5,7 +5,11 @@
 
 
 {% block leftColumn %}
+<<<<<<< HEAD
     <div class="ui one cards ">
+=======
+    <aside class="ui one cards">
+>>>>>>> 34b9c382375be518e563428d64b7a3daff45c551
         <div class="card">
             <div class="content">
                 <div class="header">ΚΕΦΑΛΑΙΟ {{chapter.number}}</div>
@@ -107,7 +111,7 @@
                 {% endif %}
             {% endif %}
         </div>
-    </div>
+    </aside>
 
 
 {% endblock leftColumn %}
@@ -139,7 +143,7 @@
         </div>
     {% endblock %}
 
-    <div class="ui text container">
+    <main class="ui text container">
         {# <H1>VERSES</H1> #}
         {% if chapter.verse_set.all %}
             <div class="ui one cards">
@@ -237,5 +241,5 @@
                 </a>
             {% endif %}
         {% endif %}
-    </div>
+    </main>
 {% endblock body %}

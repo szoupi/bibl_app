@@ -7,7 +7,7 @@
 
 {% block leftColumn %}
 
-    <div class="ui one cards">
+    <aside class="ui one cards">
         <div class="card">
             <a href="{% url 'bible:index' %}" class="image">
                 <img src="{{ book.image.url }}">
@@ -142,13 +142,25 @@
                 {% endif %}
             {% endif %}
         </div>
-    </div>
+    </aside>
 {% endblock leftColumn %}
 
 {% block body %}
     {# CHAPTERS LIST #}
-    <div class="ui text container">
-        {# <h2>CHAPTERS</h2> #}
+    <main class="ui text container">
+        {% if book.abstract_trempelas %}
+            <div class="ui one cards">
+                <div class="card">
+                    <div class="ui top left attached label">ΕΙΣΑΓΩΓΗ
+                    </div>
+                    <div class="content">
+                        {{ book.abstract_trempelas | truncatewords:50 }}
+                        <p><a class="ui primary basic button right floated" href="{% url 'bible:book-abstract-trempelas' book.id %}">Περισσότερα...</a></p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         {% if book.chapter_set.all %}
             <div class="ui one cards">
                 {% for chapter in book.chapter_set.all %}
@@ -239,6 +251,6 @@
                     </a>
                 {% endif %}
         {% endif %}
-    </div>
+    </main>
 
 {% endblock body %}}

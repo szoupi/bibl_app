@@ -10,13 +10,13 @@
     -->
 
 
-    <div class="ui four doubling link cards">
+    <main class="ui four doubling link cards">
 
         {% for book in all_books %}
 
             <div class="card">
                 <a class="image" href="{% url 'bible:book-detail' book.id %}">
-                    <img src="{{ book.image.url }}">
+                    <img src="{{ book.image.url }}" alt="the writer of the book {{ book.title }}">
                 </a>
                 <a class="item" href="{% url 'bible:book-detail' book.id %}">
 
@@ -119,7 +119,7 @@
                 {% endif %}
             </div>
         {% endfor %}
-    </div>
+    </main>
 {% else %} 
     no books to display
 {% endif %} 

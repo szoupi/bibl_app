@@ -123,8 +123,7 @@
 {% endblock leftColumn %}
 
 {% block body %}
-    {% block breadcrumbs %}
-        <div class="ui steps">
+        <div class="ui container steps">
             <a class="step" href="{{ book.get_absolute_url }}">
                 <i class="book icon"></i>
                 <div class="content">
@@ -147,7 +146,6 @@
                 </div>
             </div>
         </div>
-    {% endblock %}
 
 
     <main class="ui text container">
@@ -243,4 +241,29 @@
 
         {% endif %}
     </main>
+    
+    {# FOOTER BREADCRUMPS #}
+    <div class="ui container steps">
+        <a class="step" href="{{ book.get_absolute_url }}">
+            <i class="book icon"></i>
+            <div class="content">
+                <div class="title">Βιβλίο</div>
+                <div class="description">{{ book.title }}</div>
+            </div>
+        </a>
+        <a class="step" href="{% url 'bible:chapter-detail' book.id chapter.id %}">
+            <i class="file alternate outline icon"></i>
+            <div class="content">
+                <div class="title">Κεφάλαιο</div>
+                <div class="description">{{ chapter.number }}</div>
+            </div>
+        </a>
+        <div class="active step">
+            <i class="list ol icon"></i>
+            <div class="content">
+                <div class="title">Στίχος</div>
+                <div class="description">{{ verse.number }}</div>
+            </div>
+        </div>
+    </div>
 {% endblock body %}

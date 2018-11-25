@@ -13,10 +13,6 @@
                     <div>{{ chapter.title }}</div>
                 </div>
             </div>
-            <div class="extra content">
-                <i class="book icon"></i>
-                {{chapter.book}}
-            </div>
             <!-- BUTTON -->
             {% if user.is_authenticated %}
 
@@ -114,30 +110,29 @@
 
 
 {% block body %}
-    {% block breadcrumbs %}
-        <div class="ui steps">
-            <a class="step" href="{{ book.get_absolute_url }}">
-                <i class="book icon"></i>
-                <div class="content">
-                    <div class="title">Βιβλίο</div>
-                    <div class="description">{{ book.title }}</div>
-                </div>
-            </a>
-            <div class="active step">
-                <i class="file alternate outline icon"></i>
-                <div class="content">
-                    <div class="title">Κεφάλαιο</div>
-                    <div class="description">{{ chapter.number }}</div>
-                </div>
+    {# BREADCRUMB #}
+    <div class="ui container steps">
+        <a class="step" href="{{ book.get_absolute_url }}">
+            <i class="book icon"></i>
+            <div class="content">
+                <div class="title">Βιβλίο</div>
+                <div class="description">{{ book.title }}</div>
             </div>
-            <div class="disabled step">
-                <i class="list ol icon"></i>
-                <div class="content">
-                    <div class="title">Στίχος</div>
-                </div>
+        </a>
+        <div class="active step">
+            <i class="file alternate outline icon"></i>
+            <div class="content">
+                <div class="title">Κεφάλαιο</div>
+                <div class="description">{{ chapter.number }}</div>
             </div>
         </div>
-    {% endblock %}
+        <div class="disabled step">
+            <i class="list ol icon"></i>
+            <div class="content">
+                <div class="title">Στίχος</div>
+            </div>
+        </div>
+    </div>
 
     <main class="ui text container">
         {# <H1>VERSES</H1> #}
@@ -238,4 +233,29 @@
             {% endif %}
         {% endif %}
     </main>
+
+        {# BREADCRUMB #}
+        <div class="ui container steps">
+            <a class="step" href="{{ book.get_absolute_url }}">
+                <i class="book icon"></i>
+                <div class="content">
+                    <div class="title">Βιβλίο</div>
+                    <div class="description">{{ book.title }}</div>
+                </div>
+            </a>
+            <div class="active step">
+                <i class="file alternate outline icon"></i>
+                <div class="content">
+                    <div class="title">Κεφάλαιο</div>
+                    <div class="description">{{ chapter.number }}</div>
+                </div>
+            </div>
+            <div class="disabled step">
+                <i class="list ol icon"></i>
+                <div class="content">
+                    <div class="title">Στίχος</div>
+                </div>
+            </div>
+        </div>
+
 {% endblock body %}

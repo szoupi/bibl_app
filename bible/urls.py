@@ -171,11 +171,16 @@ urlpatterns = [
 
     # POPULATE QUICK ACCESS
     # /bible/populate/books
-    url(r'^populate/all/$',
-        views.populateQuickAccessView.as_view(), name='populate-all'),
+    url(r'^populate/books/$',
+        views.populateQuickAccessBooksView.as_view(), name='populate-books'),
 
+    # /bible/populate/chapters
+    url(r'^populate/chapters/$',
+        views.populateQuickAccessChaptersView.as_view(), name='populate-chapters'),
 
-
+    # /bible/populate/chapters
+    url(r'^populate/verses/$',
+        views.populateQuickAccessVersesView.as_view(), name='populate-verses'),
 ]
 
 # if settings.DEBUG:

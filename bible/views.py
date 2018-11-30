@@ -421,7 +421,7 @@ class UserRegistrationView(View):
         })
 
 
-class populateQuickAccessView(View):
+class populateQuickAccessBooksView(View):
     ''' populate the dropdown boxes async
     with books, chapters and verses
     fetched as json
@@ -431,12 +431,29 @@ class populateQuickAccessView(View):
         # https://docs.djangoproject.com/en/1.9/topics/serialization/
         data = {
             'fetchedBooks': serializers.serialize('json', Book.objects.all()),
-            'fetchedChapters': serializers.serialize('json', Chapter.objects.all()),
-            'fetchedVerses': serializers.serialize('json', Verse.objects.all()),
         }
         return JsonResponse(data)
 
 
+class populateQuickAccessChaptersView(View):
+
+    def get(self, request):
+        # selected_book = request.GET.get('selected_book')
+        data = {
+            'fetchedChapters': serializers.serialize('json', Chapter.objects.all()),
+        }
+
+        return JsonResponse(data)
+
+
+class populateQuickAccessVersesView(View):
+
+    def get(self, request):
+        data = {
+            'fetchedVerses': serializers.serialize('json', Verse.objects.all()),
+        }
+
+        return JsonResponse(data)
 
 # FAVORITES one view for books, chapters etc
 class FavoriteView(LoginRequiredMixin, View):

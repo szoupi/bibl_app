@@ -98,6 +98,7 @@
         <div class="four wide column">
             {% block leftColumn %}{% endblock leftColumn %}
             
+            {# QUICK ACCESS ////////////////////////////////////////// #}
             {% if user.is_authenticated %}
                 {% block quickAccess %}
                     <h2>Γρήγορη Πρόσβαση (υπό ανάπτυξη)</h2>
@@ -140,9 +141,10 @@
                         because this waits only for the DOM to be ready, 
                         not for all images to load
                         */
+                        // POPULATE BOOKS
                         document.addEventListener("DOMContentLoaded", function (event) {
                             // note the trailing slash favorite/
-                            window.fetch("/populate/all/", {
+                            window.fetch("/populate/books/", {
                                 method: "get",
                                 credentials: "same-origin",
                                 headers: {
@@ -155,13 +157,9 @@
                             .then(data => {
                                 // console.log("Data fetched succesfully", data)
                                 var select_book = document.getElementById('select-book')
-                                var select_chapter = document.getElementById('select-chapter')
-                                var select_verse = document.getElementById('select-verse')
                                 
                                 // convert fetched data string  to json (objects)
                                 var books = JSON.parse(data.fetchedBooks)
-                                var chapters = JSON.parse(data.fetchedChapters)
-                                var verses = JSON.parse(data.fetchedVerses)
                                 
                                 //console.log(books[0].fields.title)
                                 
@@ -174,27 +172,98 @@
                                     select_book.appendChild(option);
                                 }
                                 
-                                // populate Chapters
-                                for (i = 0; i < chapters.length; i++) {
-                                    const option = document.createElement('option');
-                                    option.value = chapters[i].pk;
-                                    //number - title
-                                    option.innerHTML = chapters[i].fields.number // + ' - ' + chapters[i].fields.title;
-                                    select_chapter.appendChild(option);
-                                }
-                                
-                                // populate Verses
-                                for (i = 0; i < verses.length; i++) {
-                                    const option = document.createElement('option');
-                                    option.value = verses[i].pk;
-                                    //number - title
-                                    option.innerHTML = verses[i].fields.number // + ' - ' + verses[i].fields.original_text;
-                                    select_verse.appendChild(option);
-                                }
                             }).catch(error => console.log("books populated returned error", error));
                         })
-                    </script>
-                        
+
+
+                    //POPULATE CHAPTERS
+                    document.getElementById('select-book').addEventListener("change", function (event) {
+
+                        // note the trailing slash favorite/
+                        window.fetch("/populate/chapters/", {
+                            method: "get",
+                            credentials: "same-origin",
+                            headers: {
+                                "X-CSRFToken": window.csrftoken,
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Data fetched succesfully", data)
+                                
+                                var selected_book = document.getElementById('select-book').value
+                                var select_chapter = document.getElementById('select-chapter')
+                                //var select_verse = document.getElementById('select-verse')
+                                // console.log("selected book: ", selected_book)
+
+                                // convert fetched data string  to json (objects)
+                                var chapters = JSON.parse(data.fetchedChapters)
+                                //console.log("chapters: ", chapters)
+
+                                //var verses = JSON.parse(data.fetchedVerses)
+                                
+                                // populate Chapters
+                                select_chapter.innerHTML = ""; //empty select
+                                for (i = 0; i < chapters.length; i++) {
+                                    // console.log("chapter: ", chapters[i].fields.book, chapters[i].fields.title)
+                                    if (chapters[i].fields.book == selected_book) {
+                                        const option = document.createElement('option');
+                                        option.value = chapters[i].pk;
+                                        //number - title
+                                        option.innerHTML = chapters[i].fields.number // + ' - ' + chapters[i].fields.title;
+                                        select_chapter.appendChild(option);
+                                    }
+                                                                      
+                                }
+                            }).catch(error => console.log("Chapters population returned error", error));
+                    })
+
+                    //POPULATE VERSES
+                    document.getElementById('select-chapter').addEventListener("change", function (event) {
+
+                        // note the trailing slash favorite/
+                        window.fetch("/populate/verses/", {
+                            method: "get",
+                            credentials: "same-origin",
+                            headers: {
+                                "X-CSRFToken": window.csrftoken,
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Data fetched succesfully", data)
+
+                                // var selected_book = document.getElementById('select-book').value
+                                var selected_chapter = document.getElementById('select-chapter').value
+                                var select_verse = document.getElementById('select-verse')
+                                console.log("selected_chapter: ", selected_chapter)
+
+                                // convert fetched data string  to json (objects)
+                                var verses = JSON.parse(data.fetchedVerses)
+                                console.log("verses: ", verses)
+                                
+                                
+                                // populate Verses
+                                select_verse.innerHTML = ""; //empty select
+                                for (i = 0; i < verses.length; i++) {
+                                    if (verses[i].fields.chapter == selected_chapter) {
+                                        const option = document.createElement('option');
+                                        option.value = verses[i].pk;
+                                        //number - title
+                                        option.innerHTML = verses[i].fields.number // + ' - ' + verses[i].fields.original_text;
+                                        select_verse.appendChild(option);
+                                    }
+                                }
+                            }).catch(error => console.log("Verses population returned error", error));
+                    })
+
+</script>
+                    
+
                 {% endblock quickAccess %}
             {% endif %}    
         </div>

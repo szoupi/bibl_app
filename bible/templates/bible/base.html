@@ -101,7 +101,7 @@
             {# QUICK ACCESS ////////////////////////////////////////// #}
             {% if user.is_authenticated %}
                 {% block quickAccess %}
-                    <h2>Γρήγορη Πρόσβαση (υπό ανάπτυξη ο ΣΤΙΧΟΣ)</h2>
+                    <h2>Γρήγορη Πρόσβαση</h2>
                     <form name="quickAccessForm" class="ui form">
                         <div class="field">
                             <!--<label>Book</label>-->
@@ -172,6 +172,7 @@
                                     select_book.appendChild(option);
                                 }
                                 
+                               
                             }).catch(error => console.log("books populated returned error", error));
                         })
 
@@ -215,11 +216,13 @@
                                         option.innerHTML = chapters[i].fields.number // + ' - ' + chapters[i].fields.title;
                                         select_chapter.appendChild(option);
                                     }
-                                                                      
                                 }
 
+                                // GO TO BOOK
                                 // modify form action
                                 document.quickAccessForm.action="/book/" + selected_book;
+                                select_chapter.value = ""
+                                
 
                             }).catch(error => console.log("Chapters population returned error", error));
                     })
@@ -263,10 +266,25 @@
                                     }
                                 }
 
+                                // GO TO CHAPTER
                                 // modify form action
-                                document.quickAccessForm.action = "/book/" + selected_book + "/chapter/" + selected_chapter;    
+                                document.quickAccessForm.action = "/book/" + selected_book + "/chapter/" + selected_chapter;
+                                select_verse.value=""
+                                
                             }).catch(error => console.log("Verses population returned error", error));
-                    })
+                    });
+
+                    // GO TO VERSE
+                    // select-verse has been already populated onChange event of chapter-select
+                    document.getElementById('select-verse').addEventListener("change", function (event) {
+                        var selected_book = document.getElementById('select-book').value
+                        var selected_chapter = document.getElementById('select-chapter').value
+                        var selected_verse = document.getElementById('select-verse').value
+
+                        document.quickAccessForm.action = "/book/" + selected_book 
+                                                        + "/chapter/" + selected_chapter
+                                                        + "/verse/" + selected_verse;    
+                    });
 
 </script>
                     

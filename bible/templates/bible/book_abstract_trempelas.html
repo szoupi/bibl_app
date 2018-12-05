@@ -114,6 +114,11 @@
     <div class="ui text container">
         {% if book.abstract_trempelas %}
             <div class="ui one cards">
+                <div>
+                    <a class="ui primary basic button" href="{% url 'bible:book-detail' book.id %}"><i class="left chevron icon"></i>
+                        Επιστροφή στο {{ book.title }}
+                    </a>
+                </div>
                 <div class="card">
                     <div class="ui top right attached label">
                         ΕΙΣΑΓΩΓΗ
@@ -121,11 +126,12 @@
                     <div class="content">
                         {{ book.abstract_trempelas }}
                     </div>
-                    <p><a class="ui primary basic button attached" 
+                </div>
+                <div style="margin-bottom: 4rem;"">
+                    <a class="ui primary basic button" 
                         href="{% url 'bible:book-detail' book.id %}"><i class="left chevron icon"></i> Επιστροφή στο {{ book.title }}
-                    </a></p>
-                    
-
+                    </a>
+                   
                 </div>
             </div>
         {% endif %}

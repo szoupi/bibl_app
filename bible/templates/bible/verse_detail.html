@@ -3,6 +3,64 @@
     Στίχος {{verse.number}}
 {% endblock title %}
 
+{% block rightSidebar %}
+
+    <div class="ui card">
+        <div class="content">
+            <div class="header">Στίχος {{verse.number}}</div>
+            <div class="description">
+                <p>{{ verse.original_text }}</p>
+            </div>
+        </div>
+        <div class="extra content">
+            <i class="info icon"></i>
+            {{verse.greek_translation}}
+        </div>
+        
+        {% if verse.annotation_set.all %}
+            <div class="ui card">
+                <div class="content">
+                    <div class="header">Λίστα Υπομνηματισμών</div>
+                    <div class="ui list">
+                        {% for annotation in verse.annotation_set.all %}
+                        <a href="#annotation{{ annotation.number }}" class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock rightSidebar %}
+
+
+
+{# this breadcrumb is used for the left sidebar#}
+{% block leftBarBreadcrumb %}
+    <div class="ui container vertical steps">
+        <a class="step" href="{{ book.get_absolute_url }}">
+            <i class="book icon"></i>
+            <div class="content">
+                <div class="title">Βιβλίο</div>
+                <div class="description">{{ book.title }}</div>
+            </div>
+        </a>
+        <a class="step" href="{% url 'bible:chapter-detail' book.id chapter.id %}">
+            <i class="file alternate outline icon"></i>
+            <div class="content">
+                <div class="title">Κεφάλαιο</div>
+                <div class="description">{{ chapter.number }}</div>
+            </div>
+        </a>
+        <div class="active step">
+            <i class="list ol icon"></i>
+            <div class="content">
+                <div class="title">Στίχος</div>
+                <div class="description">{{ verse.number }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock leftBarBreadcrumb %}
 
 {% block leftColumn %}
     <aside class="ui card">
@@ -123,6 +181,10 @@
 {% endblock leftColumn %}
 
 {% block body %}
+
+
+    <main class="ui text container">
+        {# BREADCRUMB #}
         <div class="ui container steps">
             <a class="step" href="{{ book.get_absolute_url }}">
                 <i class="book icon"></i>
@@ -147,8 +209,6 @@
             </div>
         </div>
 
-
-    <main class="ui text container">
         {% if verse.annotation_set.all %}
             {# <h2>ANNOTATIONS</h2> #}
             <div class="ui one cards">

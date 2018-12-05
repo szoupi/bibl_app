@@ -49,10 +49,16 @@
 </head>
 
 <body>
-    <!-- SIDEBAR -->
-    <div class="ui sidebar vertical menu" style="padding:1.5rem;padding-top:4rem">
+    <!-- SIDEBAR RIGHT -->
+    <div id="right-sidebar" class="ui wide right sidebar vertical menu" style="padding:1.5rem;padding-top:4rem">
+        {% block rightSidebar %}
+        {% endblock rightSidebar %}
+    </div>
+
+    <!-- SIDEBAR LEFT -->
+    <div id="left-sidebar" class="ui wide sidebar vertical menu" style="padding:1.5rem;padding-top:4rem">
         {# QUICK ACCESS ////////////////////////////////////////// #}
-        <a class="item toggle-sidebar">
+        <a class="item toggle-left-sidebar">
             <i class="window close outline icon"></i>
             Απόκρυψη
         </a>
@@ -126,9 +132,7 @@
         </form>
         <br />
         <!-- LEFT COLUMN -->
-        {% block leftColumn %}
-        
-        {% endblock leftColumn %}
+
 
 
         <script>
@@ -285,6 +289,9 @@
         </script>
         
         {% endblock quickAccess %}
+
+        {% block leftBarBreadcrumb %}
+        {% endblock leftBarBreadcrumb %}
     </div>
     
     
@@ -299,7 +306,7 @@
                     style="height:1.3em;width:unset"
                     alt="bibl app logo"></a>
             </div>
-            <a class="item toggle-sidebar">
+            <a class="item toggle-left-sidebar">
                 <i class="bars inverted icon"></i>
             </a>
             <a class="item" href="{% url 'bible:index' %}">
@@ -335,6 +342,9 @@
                         {# <a href="{% url 'bible:register' %}" class="item">Register</a> #}
                     </div>
                 </div>
+                <a class="item toggle-right-sidebar">
+                    <i class="bars inverted icon"></i>
+                </a>
             </div>
         </nav>
         {# NAVIGATION MENU END  #}
@@ -342,14 +352,14 @@
 
         <main class="ui grid stackable container" style="margin-top:2rem">
 
-            <!-- <div class="four wide column"> -->
-
-                
-
-            <!-- </div> -->
+            <div class="four wide column">
+                {% block leftColumn %}
+                {% endblock leftColumn %}
+            </div>
             
-            <div class="sixteen wide column">
-                {% block body %}{% endblock body %}
+            <div class="ten wide column">
+                {% block body %}
+                {% endblock body %}
             </div>
         </main>
 
@@ -361,12 +371,16 @@
 
     <!-- SIDEBAR https://semantic-ui.com/modules/sidebar.html#/settings -->
     <script>
-        $('.ui.sidebar').first()
-            .sidebar('attach events', '.toggle-sidebar')
+        $('#left-sidebar').first()
+            .sidebar('attach events', '.toggle-left-sidebar')
             .sidebar('setting', 'dimPage', false)
             .sidebar('setting', 'closable', false)
         ;
-
+        $('#right-sidebar').first()
+            .sidebar('attach events', '.toggle-right-sidebar')
+            .sidebar('setting', 'dimPage', false)
+            .sidebar('setting', 'closable', false)
+        ;
 
     </script>
     

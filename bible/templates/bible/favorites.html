@@ -29,7 +29,7 @@
 <div class="ui text container">
     {# ========= BOOKS ========== #} 
     {% if favorite_books %}
-        <h2><i class=" book icon"></i> Τα Αγαπημένα μου Βιβλία</h2>
+        <h2><i class="circular inverted  book icon"></i> Τα Αγαπημένα μου Βιβλία</h2>
         <div class="ui two doubling link cards">
             {%for book in favorite_books%}
                 <div class="card">
@@ -51,7 +51,7 @@
  
     {# ========= CHAPTERS ========== #}
     {% if favorite_chapters %}
-        <h2><i class="file alternate outline icon"></i> Τα Αγαπημένα μου Κεφάλαια</h2>
+        <h2><i class="circular inverted file alternate outline icon"></i> Τα Αγαπημένα μου Κεφάλαια</h2>
         <div class="ui two doubling link cards">
             {%for chapter in favorite_chapters%}
                 <div class="card">
@@ -76,7 +76,7 @@
 
     {# ========= VERSES ========== #}
     {% if favorite_verses %}
-    <h2><i class="list ol icon"></i> Οι Αγαπημένοι μου στίχοι</h2>
+    <h2><i class="circular inverted list ol icon"></i> Οι Αγαπημένοι μου στίχοι</h2>
 
         <div class="ui two doubling link cards">
             {% for verse in favorite_verses %}
@@ -103,7 +103,7 @@
 
      {# ========= ANNOTATIONS ========== #}
      {% if favorite_annotations %}
-     <h2><i class="info icon"></i> Οι Αγαπημένοι μου Υπομνηματισμοί</h2>
+     <h2><i class="circular inverted info icon"></i> Οι Αγαπημένοι μου Υπομνηματισμοί</h2>
      
      <div class="ui two doubling link cards">
          {% for annotation in favorite_annotations %}

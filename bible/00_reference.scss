@@ -1,0 +1,7 @@
+/* BROWSER SYNC */
+/* 
+// https://www.metaltoad.com/blog/instant-reload-django-npm-and-browsersync
+browser-sync start --proxy http://127.0.0.1:8000 --files "/home/sz/apps/django/annotations/*" --reload-delay=300 --reload-debounce=500
+
+
+// python manage.py runserver

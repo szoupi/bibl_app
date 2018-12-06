@@ -1,7 +1,7 @@
 {
     "name": "Bibl app",
     "short_name": "Bibl app",
-    "start_url": ".",
+    "start_url": "https://www.bibl.app/",
     "description": "Υπόμνημα Τρεμπέλα",
     "lang": "el-GR",
     "display": "standalone",

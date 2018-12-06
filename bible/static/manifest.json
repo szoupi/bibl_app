@@ -1,9 +1,9 @@
 {
-    "short_name": "Bibl app",
     "name": "Bibl app",
-    "start_url": "/",
+    "short_name": "Bibl app",
+    "start_url": ".",
     "description": "Υπόμνημα Τρεμπέλα",
-    "lang": "en-US",
+    "lang": "el-GR",
     "display": "standalone",
     "background_color": "black",
     "theme_color": "#000",

@@ -12,9 +12,7 @@
     <form method="post" class="ui form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <p>
-            Προσθέστε ΟΝΟΜΑΤΕΠΩΝΥΜΟ, EMAIL και ΟΜΑΔΑ
-        </p>
+        <br>
         <br>
         <button class="ui button primary" type="submit">Αποστολή</button>
     </form>

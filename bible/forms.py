@@ -53,6 +53,10 @@ class UserLoginForm(forms.ModelForm):
 
 class ContactForm(forms.Form):
     # gmail overrides from_email option with EMAIL_HOST_USER
-    from_email = forms.EmailField(required=True)
+    from_email = forms.EmailField(required=False)
     subject = forms.CharField(required=True)
+    name = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
+    team = forms.CharField(required=True)
+
     message = forms.CharField(widget=forms.Textarea, required=True)

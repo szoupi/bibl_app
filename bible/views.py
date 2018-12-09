@@ -11,10 +11,12 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Book, Chapter, Verse, Annotation, FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation
 # Book uses generic view
-from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm, UserLoginForm
+from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm, UserLoginForm, ContactForm
 import json
 from django.core import serializers #for JSON
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.core.mail import send_mail, BadHeaderError
+
 
 
 
@@ -548,17 +550,31 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
             'favorite_annotations': favorite_annotations
         })
 
+# --------- send email form --------------------------------------------
+def emailView(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # gmail overrides from_email option with EMAIL_HOST_USER
+            from_email = form.cleaned_data['from_email']
+            recipient_list = ['szoupi@gmail.com']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            try:
+                send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('/success')
+    return render(request, "bible/email.html", {'form': form})
 
-# class Isfavorite(LoginRequiredMixin, View):
-#     model = None
+
+def successView(request):
+    return HttpResponse('Success! Thank you for your  message.')
 
 
 
-    # def get_favorite_count(self, request, pk):
-    #     user = auth.get_user(request)
-    #     favorite = self.model.objects.get(user=user, obj_id=pk)
-    #     count = favorite.count()
-    #     return count
 
 
 # class LoginView(View):

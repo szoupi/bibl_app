@@ -49,3 +49,10 @@ class UserLoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username',  'password']
+
+
+class ContactForm(forms.Form):
+    # gmail overrides from_email option with EMAIL_HOST_USER
+    from_email = forms.EmailField(required=True)
+    subject = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)

@@ -181,6 +181,12 @@ urlpatterns = [
     # /bible/populate/chapters
     url(r'^populate/verses/$',
         views.populateQuickAccessVersesView.as_view(), name='populate-verses'),
+
+    # send email form
+    url(r'^email/$',
+        views.emailView, name='email-send'),
+    url(r'^success/$',
+        views.successView, name='email-success'),
 ]
 
 # if settings.DEBUG:

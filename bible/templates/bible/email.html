@@ -1,0 +1,24 @@
+{% extends "bible/base.html" %}
+
+{% block body %}
+{% if error_message %}
+<p>
+    <strong>{{ error_message }}</strong>
+</p>
+{% endif %}
+
+<div class="ui text container">
+    <h2>Επικοινωνία</h2>
+    <form method="post" class="ui form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            Προσθέστε ΟΝΟΜΑΤΕΠΩΝΥΜΟ, EMAIL, και ΟΜΑΔΑ
+        </p>
+        <br>
+        <button class="ui button primary" type="submit">Αποστολή</button>
+    </form>
+
+</div>
+
+{% endblock body %}

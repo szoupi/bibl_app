@@ -28,7 +28,7 @@ msgstr "Θέμα"
 
 #: bible/forms.py:64
 msgid "name"
-msgstr "Όνομα'"
+msgstr "Oνομα'"
 
 #: bible/forms.py:69
 msgid "team"

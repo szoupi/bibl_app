@@ -9,14 +9,16 @@
 {% endif %}
 
 <div class="ui text container">
-        {{ LANGUAGE_CODE }}
+    {# {% get_current_language as LANGUAGE_CODE %} #}
+       {# <h1> {{ LANGUAGE_CODE }}</h1> #}
+       
     <h2>Επικοινωνία</h2>
     <form method="post" class="ui form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <br>
         <br>
-        <button class="ui button primary" type="submit">{% trans 'send' %}</button>
+        <button class="ui button primary" type="submit">{% trans 'Send email' %}</button>
     </form>
 
 </div>

@@ -55,7 +55,6 @@ class UserLoginForm(forms.ModelForm):
 class ContactForm(forms.Form):
     # gmail overrides from_email option with EMAIL_HOST_USER
     from_email = forms.EmailField(required=False)
-    # self.fields['from_email'].label = _(FROM_EMAIL)
     subject = forms.CharField(required=True)
     name = forms.CharField(required=True)
     email = forms.EmailField(required=True)

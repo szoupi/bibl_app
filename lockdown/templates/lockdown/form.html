@@ -3,18 +3,19 @@
 {% block title %}ΕΞΟΥΣΙΟΔΟΤΗΜΕΝΗ ΠΡΟΣΒΑΣΗ{% endblock %}
 
 {% block content %}
-<div id="lockdown">
-  <h2>BIBL app</h>
-  <h3>ΕΞΟΥΣΙΟΔΟΤΗΜΕΝΗ ΠΡΟΣΒΑΣΗ</h3>
+  <main id="lockdown" class="ui grid stackable container" style="margin-top: 2rem;">
+    <div class="six wide column ">
+    <h2>BIBL app</h>
+    <h3>ΕΞΟΥΣΙΟΔΟΤΗΜΕΝΗ ΠΡΟΣΒΑΣΗ</h3>
 
-  <p>Η πρόσβαση στην εφαρμογή επιτρέπεται μόνο σε εξουσιοδοτημένους χρήστες</p>
+    <p>Η πρόσβαση στην εφαρμογή επιτρέπεται μόνο σε εξουσιοδοτημένους χρήστες</p>
 
-  {% if form %}
-  <form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <p><input type="submit" value="Είσοδος στην εφαρμογή" /></p>
-  </form>
-  {% endif %}
-
+    {% if form %}
+    <form class="ui form" action="" method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <p><input class="ui primary button "  type="submit" value="Είσοδος στην εφαρμογή" /></p>
+    </form>
+    {% endif %}
 </div>
+  </main>
 {% endblock %}

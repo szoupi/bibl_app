@@ -1,4 +1,5 @@
 {% extends "bible/base.html" %}
+{% load i18n %}
 
 {% block body %}
 {% if error_message %}
@@ -8,13 +9,14 @@
 {% endif %}
 
 <div class="ui text container">
+        {{ LANGUAGE_CODE }}
     <h2>Επικοινωνία</h2>
     <form method="post" class="ui form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <br>
         <br>
-        <button class="ui button primary" type="submit">Αποστολή</button>
+        <button class="ui button primary" type="submit">{% trans 'send' %}</button>
     </form>
 
 </div>

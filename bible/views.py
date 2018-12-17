@@ -17,7 +17,13 @@ from django.core import serializers #for JSON
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, BadHeaderError
 
+from django.contrib.auth.forms import UserCreationForm
 
+# ACCOUNTS
+class SignUp(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'signup.html'
 
 
 # TODO

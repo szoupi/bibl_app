@@ -114,6 +114,7 @@
                 <a href="{% url 'bible:login' %}?next={{request.path}}" class="item">Σύνδεση</a>
             {% endif %} 
             {# <a href="{% url 'bible:register' %}" class="item">Register</a> #}
+            <a href="{% url 'bible:password_reset' %}" class="item">I forgot my password</a>
         </nav>            
 
         {% block quickAccess %}

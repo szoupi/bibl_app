@@ -22,14 +22,11 @@
             {{ form }}
             <br>
             <br>
-            {% comment %} <button class="ui button" type="submit">Log in</button> {% endcomment %}
             <input class="ui button" type="submit" value="login" />
             <input type="hidden" name="next" value="{{ next }}" />
         </form>
-        {% comment %} TODO FIX FOLLOWING BUG {% endcomment %}
-         {% comment %} https://code.i-harness.com/en/q/135de11 {% endcomment %}
          <p>
-            <a href="{% url 'bible:password_reset' %}">Lost password?</a>
+            <a href="{% url 'bible:password_reset' %}">Lost password??</a>
         </p> 
     </div>
 

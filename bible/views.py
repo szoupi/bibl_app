@@ -16,15 +16,13 @@ import json
 from django.core import serializers #for JSON
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, BadHeaderError
-
 from django.contrib.auth.forms import UserCreationForm
 
-# ACCOUNTS
+
 class SignUp(generic.CreateView):
     form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'signup.html'
-
+    success_url = reverse_lazy('bible:index')
+    template_name = 'accounts/signup.html'
 
 # TODO
 # IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -389,44 +387,44 @@ def Annotation_Delete(request, book_id, chapter_id, verse_id, annotation_id):
     })
 
 
-class UserRegistrationView(View):
-    form_class = UserRegistrationForm
-    template_name = 'registration/registration_form.html'
+# class UserRegistrationView(View):
+#     form_class = UserRegistrationForm
+#     template_name = 'registration/registration_form.html'
 
-    # built in functions for GET/POST requests
-    # display blank form, None is the context
-    def get(self, request):
-        form = self.form_class(None)
-        return render(request, self.template_name, {
-            'form': form
-        })
+#     # built in functions for GET/POST requests
+#     # display blank form, None is the context
+#     def get(self, request):
+#         form = self.form_class(None)
+#         return render(request, self.template_name, {
+#             'form': form
+#         })
 
-    def post(self, request):
-        form = self.form_class(request.POST)
+#     def post(self, request):
+#         form = self.form_class(request.POST)
 
-        if form.is_valid():
-            # create user object from data, but not save it yet to db
-            user = form.save(commit=False)
+#         if form.is_valid():
+#             # create user object from data, but not save it yet to db
+#             user = form.save(commit=False)
 
-            # cleaned (normalized) data
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user.set_password(password)
-            user.save()
+#             # cleaned (normalized) data
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
+#             user.set_password(password)
+#             user.save()
 
-            # return user objects if credentials are correct
-            user = authenticate(username=username, password=password)
+#             # return user objects if credentials are correct
+#             user = authenticate(username=username, password=password)
 
-            # check if user is already registered
-            if user is not None:
+#             # check if user is already registered
+#             if user is not None:
 
-                if user.is_active:
-                    login(request, user)
-                    return redirect('bible:index')
+#                 if user.is_active:
+#                     login(request, user)
+#                     return redirect('bible:index')
         
-        return render(request, self.template_name, {
-            'form': form
-        })
+#         return render(request, self.template_name, {
+#             'form': form
+#         })
 
 
 class populateQuickAccessBooksView(View):

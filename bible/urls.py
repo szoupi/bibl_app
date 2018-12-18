@@ -15,21 +15,29 @@ urlpatterns = [
 
     # put  service-worker.js in the root of templates directory
     url(r'^sw.js', (TemplateView.as_view(template_name="sw.js",
-                                         content_type='application/javascript', )), name='sw.js'),
+        content_type='application/javascript', )), name='sw.js'),
 
     
     # AUTHENTICATE django defaults names and paths
     # accounts/login/ 
     # accounts/logout/
 
-    # not the accounts app but the buildin "accounts" 
-    # needed for login and logout
-    # for registrations and password reset custom account app is used
-    #see also annotations/url.py
     url('^accounts/', include('django.contrib.auth.urls')), 
     url(r'^login/$', auth_views.login, name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': '/bible/login'}, name='logout'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/bible/password_change_done'}, name='logout'),
+    url('^signup/$', views.SignUp.as_view(), name='signup'),
     # url(r'^register/$', views.UserRegistrationView.as_view(), name='register'),
+    url(r'^password_change/$', auth_views.password_change, name='password_change'),
+    url(r'^password_change_done/$', auth_views.password_change_done,
+        name='password_change_done'),
+    url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
+    url(r'^password_reset_done/$', auth_views.password_reset_done,
+        name='password_reset_done'),
+    url(r'^password_reset_confirm/$', auth_views.password_reset_confirm,
+        name='password_reset_confirm'),
+    url(r'^password_reset_complete/$', auth_views.password_reset_complete,
+        name='password_reset_complete'),
+
 
 
     # ADD (CREATE) VIEW ###########################################################

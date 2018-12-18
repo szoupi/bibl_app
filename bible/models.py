@@ -1,5 +1,6 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.text import Truncator
 from django.contrib.auth.models import User
@@ -104,7 +105,7 @@ class FavoriteBase(models.Model):
     class Meta:
         abstract = True
 
-    user = models.ForeignKey(User, default='', verbose_name="User")
+    user = models.ForeignKey(User, default='', verbose_name="User", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -115,7 +116,7 @@ class FavoriteBook(FavoriteBase):
     class Meta:
         db_table = "favorite_book"
 
-    obj = models.ForeignKey(Book, default='', verbose_name="Book")
+    obj = models.ForeignKey(Book, default='', verbose_name="Book", on_delete=models.CASCADE)
 
 
 class FavoriteChapter(FavoriteBase):
@@ -123,7 +124,7 @@ class FavoriteChapter(FavoriteBase):
     class Meta:
         db_table = "favorite_chapter"
 
-    obj = models.ForeignKey(Chapter, default='', verbose_name="Chapter")
+    obj = models.ForeignKey(Chapter, default='', verbose_name="Chapter", on_delete=models.CASCADE)
 
 
 class FavoriteVerse(FavoriteBase):
@@ -131,7 +132,7 @@ class FavoriteVerse(FavoriteBase):
     class Meta:
         db_table = "favorite_verse"
 
-    obj = models.ForeignKey(Verse, default='', verbose_name="Verse")
+    obj = models.ForeignKey(Verse, default='', verbose_name="Verse", on_delete=models.CASCADE)
 
 
 class FavoriteAnnotation(FavoriteBase):
@@ -139,4 +140,4 @@ class FavoriteAnnotation(FavoriteBase):
     class Meta:
         db_table = "favorite_annotation"
 
-    obj = models.ForeignKey(Annotation, default='', verbose_name="Annotation")
+    obj = models.ForeignKey(Annotation, default='', verbose_name="Annotation", on_delete=models.CASCADE)

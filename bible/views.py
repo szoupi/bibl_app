@@ -24,6 +24,11 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('bible:index')
     template_name = 'accounts/signup.html'
 
+
+class PasswordResetView(View):
+    success_url = reverse_lazy('bible:password_reset_done')
+    template_name = 'registration/password_reset.html'
+
 # TODO
 # IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 

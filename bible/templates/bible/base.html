@@ -109,12 +109,12 @@
 
 
             {% if user.is_authenticated %}
-                <a href="{% url 'bible:logout'%}?next={{request.path}}" class="item">Αποσύνδεση, {{ user.get_username }}</a>
+                <a href="{% url 'logout'%}?next={{request.path}}" class="item">Αποσύνδεση, {{ user.get_username }}</a>
             {% else %}
-                <a href="{% url 'bible:login' %}?next={{request.path}}" class="item">Σύνδεση</a>
+                <a href="{% url 'login' %}?next={{request.path}}" class="item">Σύνδεση</a>
             {% endif %} 
             {# <a href="{% url 'bible:register' %}" class="item">Register</a> #}
-            <a href="{% url 'bible:password_reset' %}" class="item">I forgot my password</a>
+            <a href="{% url 'password_reset' %}" class="item">I forgot my password</a>
         </nav>            
 
         {% block quickAccess %}

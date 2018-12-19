@@ -26,9 +26,9 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/password_change_done'}, name='logout'),
     url('^signup/$', views.SignUp.as_view(), name='signup'),
-    url(r'password_change/$', auth_views.PasswordChangeView.as_view(
+    url(r'^password_change/$', auth_views.PasswordChangeView.as_view(
         template_name='password_change.html', success_url='/accounts/password_change_done')),
-    url(r'password_change_done/',
+    url(r'^password_change_done/',
         auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html')),
     url(r'password_reset/$', auth_views.PasswordResetView.as_view(template_name='password_reset.html', email_template_name='password_reset_email.html',
                                                                   subject_template_name='password_reset_subject.txt', success_url='/accounts/password_reset_done/', from_email='szoupi@gmail.com')),

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-11 01:25+0200\n"
+"POT-Creation-Date: 2018-12-19 23:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,3 +41,91 @@ msgstr "Κείμενο"
 #: bible/templates/bible/email.html:21
 msgid "Send email"
 msgstr "Αποστολή"
+
+#: bible/templates/registration/login.html:20
+msgid "LOG IN"
+msgstr "ΣΥΝΔΕΣΗ"
+
+#: bible/templates/registration/login.html:31
+msgid "I forgot my password"
+msgstr "Δεν θυμάμαι τον κωδικό μου"
+
+#: bible/templates/registration/password_change_done.html:8
+msgid "Your password changed successfully!"
+msgstr "Ο κωδικός σας άλλαξε με επιτυχία!"
+
+#: bible/templates/registration/password_change_form.html:8
+msgid "Change your password"
+msgstr "Αλλαγή κωδικού"
+
+#: bible/templates/registration/password_change_form.html:12
+msgid "Change Password"
+msgstr "Αλλαγή κωδικού"
+
+#: bible/templates/registration/password_reset_done.html:7
+msgid "Email Sent"
+msgstr "Αποστολή email"
+
+#: bible/templates/registration/password_reset_done.html:9
+msgid ""
+"We have emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly!"
+msgstr "Στείλαμε οδηγίες στην ηλεκτρονική διεύθυνση (email) που μας δώσατε προηγουμένως, "
+"με την προϋπόθεση ότι κάποιος λογαριασμός (account) σχετίζεται με τη διεύθυνση αυτή. "
+"Σε σύντομο χρονικό διάστημα θα λάβετε το μήνυμα."
+
+
+#: bible/templates/registration/password_reset_done.html:13
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr "Αν δεν λάβετε κάποιο ηλεκτρονικό μήνυμα, βεβαιωθήτε ότι χρησιμοποιήσατε "
+"για την επαναφορά του κωδικού σας, την ηλεκτρονική διεύθυνση (email) με την οποία "
+"εγγραφήκατε στην ιστοσελίδα. Επίσης, ελέγξτε τον φάκελο της ανεπιθύμητης αλληλογραφίας (spam folder)."
+
+
+#: bible/templates/registration/password_reset_email.html:4
+#, python-format
+msgid ""
+"You are receiving this email because you requested a password reset for your "
+"user account at %(site_name)s. "
+msgstr ""
+"Λάβατε αυτό το μήνυμα διότι αιτηθήκατε την επαναφορά του κωδικού σας για το "
+"λογαριασμό που κατέχετε στον ιστότοπο %(site_name)s."
+
+#: bible/templates/registration/password_reset_email.html:6
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+"Παρακαλούμε επισκεφθήτε την ακόλουθη σελίδα και επιλέξτε ένα νέο κωδικό "
+"πρόσβασης:"
+
+#: bible/templates/registration/password_reset_email.html:9
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+"Το όνομα χρήστη με το οποίο είστε καταχωρημένος, σε περίπτωση που το έχετε "
+"ξεχάσει είναι:"
+
+#: bible/templates/registration/password_reset_email.html:11
+msgid "Thanks for using our site!"
+msgstr "Με εκτίμηση"
+
+#: bible/templates/registration/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Η ομάδα του %(site_name)s"
+
+#: bible/templates/registration/password_reset_form.html:6
+msgid "Forgot your password?"
+msgstr "Δεν θυμάσαι τον κωδικό σου;"
+
+#: bible/templates/registration/password_reset_form.html:7
+msgid ""
+"Enter your email address below, and we'll email instructions for setting a "
+"new one."
+msgstr ""
+"Κανένα πρόβλημα! Γράψε την ηλεκτρονική σου διεύθυνση και θα σου στείλουμε "
+"οδηγίες για να αλλάξεις τον κωδικό σου."
+
+#: bible/templates/registration/password_reset_form.html:11
+msgid "Send me instructions!"
+msgstr "Στείλε μου οδηγίες"

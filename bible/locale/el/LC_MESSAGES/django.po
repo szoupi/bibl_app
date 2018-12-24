@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-19 23:27+0000\n"
+"POT-Creation-Date: 2018-12-24 16:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,17 +38,44 @@ msgstr "Ομάδα"
 msgid "message"
 msgstr "Κείμενο"
 
+#: bible/templates/bible/base.html:112 bible/templates/bible/base.html:370
+msgid "Log out, "
+msgstr "Αποσύνδεση, "
+
+#: bible/templates/bible/base.html:113 bible/templates/bible/base.html:371
+msgid "Change password"
+msgstr "Αλλαγή κωδικού"
+
+#: bible/templates/bible/base.html:116 bible/templates/bible/base.html:373
+#: bible/templates/registration/logged_out.html:13
+#: bible/templates/registration/password_reset_complete.html:9
+msgid "Sign in"
+msgstr "Σύνδεση"
+
+#: bible/templates/bible/base.html:120 bible/templates/bible/base.html:374
+#: bible/templates/registration/login.html:33
+msgid "I forgot my password"
+msgstr "Δεν θυμάμαι τον κωδικό μου"
+
 #: bible/templates/bible/email.html:21
 msgid "Send email"
 msgstr "Αποστολή"
+
+#: bible/templates/registration/logged_out.html:7
+msgid "Log out"
+msgstr "Αποσύνδεση"
+
+#: bible/templates/registration/logged_out.html:10
+msgid "Logged out!"
+msgstr "Έχετε αποσυνδεθεί από την εφαρμογή, "
 
 #: bible/templates/registration/login.html:20
 msgid "LOG IN"
 msgstr "ΣΥΝΔΕΣΗ"
 
-#: bible/templates/registration/login.html:31
-msgid "I forgot my password"
-msgstr "Δεν θυμάμαι τον κωδικό μου"
+#: bible/templates/registration/login.html:26
+msgid "Login"
+msgstr "Σύνδεση"
 
 #: bible/templates/registration/password_change_done.html:8
 msgid "Your password changed successfully!"
@@ -59,8 +86,26 @@ msgid "Change your password"
 msgstr "Αλλαγή κωδικού"
 
 #: bible/templates/registration/password_change_form.html:12
+#: bible/templates/registration/password_reset_confirm.html:8
+#: bible/templates/registration/password_reset_confirm.html:12
 msgid "Change Password"
 msgstr "Αλλαγή κωδικού"
+
+#: bible/templates/registration/password_reset_complete.html:8
+msgid "Your password has been set!"
+msgstr "Ο κωδικός σας άλλαξε με επιτυχία!"
+
+#: bible/templates/registration/password_reset_confirm.html:15
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used."
+msgstr ""
+"Ο σύνδεσμος με τον οποίο μεταφερθήκατε στην παρούσα σελίδα ήταν άκυρος, "
+"πιθανόν διότι έχει ήδη χρησιμοποιηθεί."
+
+#: bible/templates/registration/password_reset_confirm.html:16
+msgid "Please request a new password reset."
+msgstr " Παρακαλούμε αιτηθήτε καινούργιο σύνδεσμο επαναφοράς κωδικού."
 
 #: bible/templates/registration/password_reset_done.html:7
 msgid "Email Sent"
@@ -70,19 +115,20 @@ msgstr "Αποστολή email"
 msgid ""
 "We have emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly!"
-msgstr "Στείλαμε οδηγίες στην ηλεκτρονική διεύθυνση (email) που μας δώσατε προηγουμένως, "
-"με την προϋπόθεση ότι κάποιος λογαριασμός (account) σχετίζεται με τη διεύθυνση αυτή. "
-"Σε σύντομο χρονικό διάστημα θα λάβετε το μήνυμα."
-
+msgstr ""
+"Στείλαμε οδηγίες στην ηλεκτρονική διεύθυνση (email) που μας δώσατε "
+"προηγουμένως, με την προϋπόθεση ότι κάποιος λογαριασμός (account) σχετίζεται "
+"με τη διεύθυνση αυτή. Σε σύντομο χρονικό διάστημα θα λάβετε το μήνυμα."
 
 #: bible/templates/registration/password_reset_done.html:13
 msgid ""
 "If you don't receive an email, please make sure you've entered the address "
 "you registered with, and check your spam folder."
-msgstr "Αν δεν λάβετε κάποιο ηλεκτρονικό μήνυμα, βεβαιωθήτε ότι χρησιμοποιήσατε "
-"για την επαναφορά του κωδικού σας, την ηλεκτρονική διεύθυνση (email) με την οποία "
-"εγγραφήκατε στην ιστοσελίδα. Επίσης, ελέγξτε τον φάκελο της ανεπιθύμητης αλληλογραφίας (spam folder)."
-
+msgstr ""
+"Αν δεν λάβετε κάποιο ηλεκτρονικό μήνυμα, βεβαιωθήτε ότι χρησιμοποιήσατε για "
+"την επαναφορά του κωδικού σας, την ηλεκτρονική διεύθυνση (email) με την "
+"οποία εγγραφήκατε στην ιστοσελίδα. Επίσης, ελέγξτε τον φάκελο της "
+"ανεπιθύμητης αλληλογραφίας (spam folder)."
 
 #: bible/templates/registration/password_reset_email.html:4
 #, python-format
@@ -129,3 +175,10 @@ msgstr ""
 #: bible/templates/registration/password_reset_form.html:11
 msgid "Send me instructions!"
 msgstr "Στείλε μου οδηγίες"
+
+#: bible/templates/registration/password_reset_subject.txt:2
+msgid "Password reset request"
+msgstr "Αίτημα αλλαγής κωδικού"
+
+#~ msgid "Your password has been set. You may go ahead and sign in now."
+#~ msgstr "Ο κωδικός σας άλλαξε!"

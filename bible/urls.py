@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/password_change_done'}, name='logout'),
     url('^signup/$', views.SignUp.as_view(), name='signup'),
+
+    # ############ deactivate the next lines on pythonanywhere 
     url(r'^password_change/$', auth_views.PasswordChangeView.as_view(
         template_name='password_change.html', success_url='/accounts/password_change_done')),
     url(r'^password_change_done/',
@@ -41,6 +43,7 @@ urlpatterns = [
         template_name='password_reset_confirm.html', success_url='/accounts/password_reset_complete/')),
     url(r'password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='password_reset_complete.html')),
+    # ############ end of deactivation
 
 
 

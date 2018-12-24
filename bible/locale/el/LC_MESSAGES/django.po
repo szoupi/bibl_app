@@ -67,7 +67,7 @@ msgstr "Αποσύνδεση"
 
 #: bible/templates/registration/logged_out.html:10
 msgid "Logged out!"
-msgstr "Έχετε αποσυνδεθεί από την εφαρμογή, "
+msgstr "Έχετε αποσυνδεθεί από την εφαρμογή!"
 
 #: bible/templates/registration/login.html:20
 msgid "LOG IN"

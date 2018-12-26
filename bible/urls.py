@@ -183,6 +183,9 @@ urlpatterns = [
         views.emailView, name='email-send'),
     url(r'^success/$',
         views.successView, name='email-success'),
+
+    # search everywhere
+    url(r'^search/$', views.SearchView.as_view(), name='search'),
 ]
 
 # if settings.DEBUG:

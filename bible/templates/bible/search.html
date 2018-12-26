@@ -1,0 +1,127 @@
+{% extends "bible/base.html" %} 
+{% block title %} Αγαπημένα {% endblock title %} 
+
+{% block leftColumn %}
+{% endblock leftColumn %} 
+
+{% block body %} 
+    <form class="ui form" action="" method="GET">
+        <div class="field">
+            <div class="field">
+                <input type="text" name="q" 
+                    placeholder="Search books, chapters, verses and annotations">
+            </div>
+            <div>
+                <button class="ui button" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+{# SEARCH RESULTS ======================================= #}
+{# see search view #}
+<div class="ui text container">
+    {# ========= BOOKS ========== #} 
+    {% if books_filtered %}
+        <h2>
+            <i class="circular inverted  book icon"></i>
+            Found {{ books_filtered|length }} book{{ books_filtered|pluralize }}.
+        </h2>
+        <div class="ui two doubling link cards">
+            {% for book in books_filtered %}
+                <div class="card">
+                    <div class="content">
+                        <div class="ui bottom right attached label">
+                            Βιβλίο
+                        </div>
+                        <a href="{% url 'bible:book-detail' book.id %}">{{book.title}}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>Δεν βρέθηκαν βιβλία</h2>
+    {% endif %}
+
+    {# ========= CHAPTERS ========== #}
+    {% if chapters_filtered %}
+        <h2><i class="circular inverted file alternate outline icon"></i>
+            Found {{ chapters_filtered|length }} chapter{{ chapters_filtered|pluralize }}.
+        </h2>
+        <div class="ui two doubling link cards">
+            {% for chapter in chapters_filtered %}
+                <div class="card">
+                    <div class="content">
+                        <div class="ui bottom right attached label">
+                            Κεφάλαιο
+                        </div>
+                        <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">
+                            {{chapter.book}} <br />
+                            <strong>ΚΕΦΑΛΑΙΟ: {{chapter.number}} </strong><br />
+                            <em>{{chapter.title}}</em>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>Δεν βρέθηκαν κεφάλαια</h2>
+    {% endif %}
+
+    {# ========= VERSES ========== #}
+    {% if verses_filtered %}
+        <h2><i class="circular inverted list ol icon"></i> 
+            Found {{ verses_filtered|length }} verse{{ verses_filtered|pluralize }}.
+        </h2>
+        
+        <div class="ui two doubling link cards">
+            {% for verse in verses_filtered %}
+                <div class="card">
+                    <div class="content">
+                        <div class="ui bottom right attached label">
+                            Στίχος
+                        </div>
+                        <a href="{% url 'bible:verse-detail' verse.chapter.book_id verse.chapter_id verse.id %}">
+                            {{verse.chapter.book}} <br />
+                            Κεφάλαιο: {{verse.chapter}} <br /><br />
+                            <strong> ΣΤΙΧΟΣ: {{verse.number}} </strong><br />
+                            <em> {{verse.original_text}}</em>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>Δεν βρέθηκαν στίχοι</h2>
+    {% endif %}
+
+    {# ========= ANNOTATIONS ========== #}
+    {% if annotations_filtered %}
+        <h2><i class="circular inverted info icon"></i> 
+            Found {{ annotations_filtered|length }} annotation{{ annotations_filtered|pluralize }}.
+        </h2>
+        
+        <div class="ui two doubling link cards">
+            {% for annotation in annotations_filtered %}
+                <div class="card">
+                    <div class="content">
+                        {# there is no detail view, fall back to chapter detail view #}
+                        <div class="ui bottom right attached label">
+                            Υπομνηματισμός
+                        </div>
+                        <a href="{% url 'bible:verse-detail'  annotation.verse.chapter.book_id  annotation.verse.chapter_id annotation.verse_id  %}">
+                            {{annotation.verse.chapter.book}} <br />
+                            Κεφάλαιο: {{annotation.verse.chapter}} <br />
+                            Στίχος: {{annotation.verse}} <br /><br />
+                            <strong> ΥΠΟΜΝΗΜΑΤΙΣΜΟΣ: {{annotation.number}} <br />
+                            <em>{{annotation.phrase}}</em></strong>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>Δεν βρέθηκαν υπομνηματισμοί</h2>
+    {% endif %}
+
+</div>
+
+{% endblock body %}}

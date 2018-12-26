@@ -53,7 +53,7 @@
     {% if favorite_chapters %}
         <h2><i class="circular inverted file alternate outline icon"></i> Τα Αγαπημένα μου Κεφάλαια</h2>
         <div class="ui two doubling link cards">
-            {%for chapter in favorite_chapters%}
+            {% for chapter in favorite_chapters %}
                 <div class="card">
                     <div class="content">
                             {% if user.is_authenticated  %}
@@ -101,33 +101,33 @@
         <h2>Δεν υπάρχουν αγαπημένοι στίχοι</h2>
     {% endif %}
 
-     {# ========= ANNOTATIONS ========== #}
-     {% if favorite_annotations %}
-     <h2><i class="circular inverted info icon"></i> Οι Αγαπημένοι μου Υπομνηματισμοί</h2>
-     
-     <div class="ui two doubling link cards">
-         {% for annotation in favorite_annotations %}
-         <div class="card">
-             <div class="content">
-                {% if user.is_authenticated %}
-                    {# there is no detail view, fall back to chapter detail view #}
-                    <div class="ui bottom right attached label">
-                        Υπομνηματισμός
+    {# ========= ANNOTATIONS ========== #}
+    {% if favorite_annotations %}
+        <h2><i class="circular inverted info icon"></i> Οι Αγαπημένοι μου Υπομνηματισμοί</h2>
+        
+        <div class="ui two doubling link cards">
+            {% for annotation in favorite_annotations %}
+                <div class="card">
+                    <div class="content">
+                        {% if user.is_authenticated %}
+                            {# there is no detail view, fall back to chapter detail view #}
+                            <div class="ui bottom right attached label">
+                                Υπομνηματισμός
+                            </div>
+                            <a href="{% url 'bible:verse-detail'  annotation.verse.chapter.book_id  annotation.verse.chapter_id annotation.verse_id  %}">
+                                {{annotation.verse.chapter.book}} <br />
+                                Κεφάλαιο: {{annotation.verse.chapter}} <br />
+                                Στίχος: {{annotation.verse}} <br /><br />
+                                <strong> ΥΠΟΜΝΗΜΑΤΙΣΜΟΣ: {{annotation.number}} <br />
+                                <em>{{annotation.phrase}}</em></strong>
+                            </a>
+                        {% endif %}
                     </div>
-                    <a href="{% url 'bible:verse-detail'  annotation.verse.chapter.book_id  annotation.verse.chapter_id annotation.verse_id  %}">
-                        {{annotation.verse.chapter.book}} <br />
-                        Κεφάλαιο: {{annotation.verse.chapter}} <br />
-                        Στίχος: {{annotation.verse}} <br /><br />
-                        <strong> ΥΠΟΜΝΗΜΑΤΙΣΜΟΣ: {{annotation.number}} <br />
-                        <em>{{annotation.phrase}}</em></strong>
-                    </a>
-                {% endif %}
-            </div>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     {% else %}
-     <h2>Δεν υπάρχουν αγαπημένοι υπομνηματισμοί</h2>
+        <h2>Δεν υπάρχουν αγαπημένοι υπομνηματισμοί</h2>
     {% endif %}
 
 </div>

@@ -37,6 +37,8 @@ class IndexView(generic.ListView):
     model = Book
     template_name = 'bible/index.html'
 
+
+
     # queryset = Book.object.filter(title__icontains='mysearch')[:5] # Get 5 books containing the title mysearch
 
     # return all book objects from the db
@@ -255,6 +257,7 @@ def chapter_detail_view(request, book_id, chapter_id):
         'favorite': favorite,
         'favorite_verses': favorite_verses
     })
+
 
 
 def verse_detail_view(request, book_id, chapter_id, verse_id):
@@ -559,6 +562,38 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
             'favorite_annotations': favorite_annotations
         })
 
+class SearchView(View):
+    
+    # pass multiple models to template
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data(**kwargs)
+        return context
+
+    def get(self, request):
+        if 'q' in request.GET and request.GET['q']:
+            q = request.GET['q']
+            books_filtered = Book.objects.filter(title__icontains=q)
+            chapters_filtered = Chapter.objects.filter(title__icontains=q)
+            verses_filtered = Verse.objects.filter(original_text__icontains=q)
+            annotations_filtered = Annotation.objects.filter(
+                annotation__icontains=q)
+            # message = 'You searched for: %r' % request.GET['q']
+
+            return render(request, 'bible/search.html', {
+                'books_filtered': books_filtered,
+                'chapters_filtered': chapters_filtered,
+                'verses_filtered': verses_filtered,
+                'annotations_filtered': annotations_filtered,
+                'query': q,
+            })
+
+        else:
+            return render(request, 'bible/search.html')
+
+# search books, chapters, verses, annotations content
+# def search(request):
+    
+
 # --------- send email form --------------------------------------------
 def emailView(request):
     if request.method == 'GET':
@@ -584,6 +619,13 @@ def emailView(request):
 
 def successView(request):
     return HttpResponse('Success! Thank you for your  message.')
+
+# --------- end send email form -----------------------------------------
+
+# --------- Search --------------------------------------------
+# def filter_books(request):
+#     query = request.GET.get('q')
+
 
 
 

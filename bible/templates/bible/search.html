@@ -26,14 +26,14 @@
     {% if books_filtered %}
         <h2>
             <i class="circular inverted  book icon"></i>
-            {% blocktrans %}Found {{ books_filtered|length }} book{{ books_filtered|pluralize }}.{% endblocktrans %}
+            Βρέθηκαν βιβλία: {{ books_filtered|length }}
         </h2>
         <div class="ui two doubling link cards">
             {% for book in books_filtered %}
                 <div class="card">
                     <div class="content">
                         <div class="ui bottom right attached label">
-                            {% trans 'Βιβλίο' %}
+                            {% trans 'Book' %}
                         </div>
                         <a href="{% url 'bible:book-detail' book.id %}">{{book.title}}</a>
                     </div>
@@ -47,14 +47,14 @@
     {# ========= CHAPTERS ========== #}
     {% if chapters_filtered %}
         <h2><i class="circular inverted file alternate outline icon"></i>
-            {% blocktrans %}Found {{ chapters_filtered|length }} chapter{{ chapters_filtered|pluralize }}.{% endblocktrans %}
+            Βρέθηκαν κεφάλαια: {{ chapters_filtered|length }}
         </h2>
         <div class="ui two doubling link cards">
             {% for chapter in chapters_filtered %}
                 <div class="card">
                     <div class="content">
                         <div class="ui bottom right attached label">
-                            {% trans 'Κεφάλαιο' %}
+                            {% trans 'Chapter' %}
                         </div>
                         <a href="{% url 'bible:chapter-detail' chapter.book_id chapter.id %}">
                             {{chapter.book}} <br />
@@ -72,7 +72,7 @@
     {# ========= VERSES ========== #}
     {% if verses_filtered %}
         <h2><i class="circular inverted list ol icon"></i> 
-            {% blocktrans %}Found {{ verses_filtered|length }} verse{{ verses_filtered|pluralize }}.{% endblocktrans %}
+            Βρέθηκαν στίχοι: {{ verses_filtered|length }}
         </h2>
         
         <div class="ui two doubling link cards">
@@ -80,7 +80,7 @@
                 <div class="card">
                     <div class="content">
                         <div class="ui bottom right attached label">
-                            {% trans 'Στίχος' %}
+                            {% trans 'Verse' %}
                         </div>
                         <a href="{% url 'bible:verse-detail' verse.chapter.book_id verse.chapter_id verse.id %}">
                             {{verse.chapter.book}} <br />
@@ -99,7 +99,7 @@
     {# ========= ANNOTATIONS ========== #}
     {% if annotations_filtered %}
         <h2><i class="circular inverted info icon"></i> 
-            {% blocktrans %}Found {{ annotations_filtered|length }} annotation{{ annotations_filtered|pluralize }}.{% endblocktrans %}
+            Βρέθηκαν υπομνηματισμοί: {{ annotations_filtered|length }} 
         </h2>
         
         <div class="ui two doubling link cards">
@@ -108,7 +108,7 @@
                     <div class="content">
                         {# there is no detail view, fall back to chapter detail view #}
                         <div class="ui bottom right attached label">
-                            {% trans 'Υπομνηματισμός' %}
+                            {% trans 'Annotation' %}
                         </div>
                         <a href="{% url 'bible:verse-detail'  annotation.verse.chapter.book_id  annotation.verse.chapter_id annotation.verse_id  %}">
                             {{annotation.verse.chapter.book}} <br />

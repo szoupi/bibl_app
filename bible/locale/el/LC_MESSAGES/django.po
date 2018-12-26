@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-26 16:59+0000\n"
+"POT-Creation-Date: 2018-12-26 17:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,66 +62,44 @@ msgstr "Αποστολή"
 
 #: bible/templates/bible/search.html:4 bible/templates/bible/search.html:15
 msgid "Search"
-msgstr ""
+msgstr "Αναζήτηση"
 
 #: bible/templates/bible/search.html:12
 msgid "Search books, chapters, verses and annotations"
 msgstr ""
-
-#: bible/templates/bible/search.html:29
-#, python-format
-msgid "Found %(books_filtered|length)s book%(books_filtered|pluralize)s."
-msgstr ""
+"Ελεύθερη αναζήτηση περιεχομενου βιβλίων, κεφαλαίων, στίχων και υπομνηματισμών"
 
 #: bible/templates/bible/search.html:36
-msgid "Βιβλίο"
-msgstr ""
+msgid "Book"
+msgstr "Βιβλίο"
 
 #: bible/templates/bible/search.html:44
 msgid "No books found"
-msgstr ""
-
-#: bible/templates/bible/search.html:50
-#, python-format
-msgid ""
-"Found %(chapters_filtered|length)s chapter%(chapters_filtered|pluralize)s."
-msgstr ""
+msgstr "Δεν βρέθηκαν βιβλία"
 
 #: bible/templates/bible/search.html:57
-msgid "Κεφάλαιο"
-msgstr ""
+msgid "Chapter"
+msgstr "Κεφάλαιο"
 
 #: bible/templates/bible/search.html:69
 msgid "No chapters found"
-msgstr ""
-
-#: bible/templates/bible/search.html:75
-#, python-format
-msgid "Found %(verses_filtered|length)s verse%(verses_filtered|pluralize)s."
-msgstr ""
+msgstr "Δεν βρέθηκαν κεφάλαια"
 
 #: bible/templates/bible/search.html:83
-msgid "Στίχος"
-msgstr ""
+msgid "Verse"
+msgstr "Στίχος"
 
 #: bible/templates/bible/search.html:96
 msgid "No verses found"
-msgstr ""
-
-#: bible/templates/bible/search.html:102
-#, python-format
-msgid ""
-"Found %(annotations_filtered|length)s annotation"
-"%(annotations_filtered|pluralize)s."
-msgstr ""
+msgstr "Δεν βρέθηκαν στίχοι"
 
 #: bible/templates/bible/search.html:111
-msgid "Υπομνηματισμός"
-msgstr ""
+msgid "Annotation"
+msgstr "Υπομνηματισμός"
 
 #: bible/templates/bible/search.html:125
 msgid "No annotations found"
-msgstr ""
+msgstr "Δεν βρέθηκαν υπομνηματισμοί"
 
 #: bible/templates/registration/logged_out.html:7
 msgid "Log out"
@@ -242,6 +219,10 @@ msgstr "Στείλε μου οδηγίες"
 #: bible/templates/registration/password_reset_subject.txt:2
 msgid "Password reset request"
 msgstr "Αίτημα αλλαγής κωδικού"
+
+#~ msgid "Found %(books_filtered|length)s book%(books_filtered|pluralize)s."
+#~ msgstr ""
+#~ "Βρέθηκαν %(books_filtered|length)s βιβλίο%(books_filtered|pluralize)s."
 
 #~ msgid "Your password has been set. You may go ahead and sign in now."
 #~ msgstr "Ο κωδικός σας άλλαξε!"

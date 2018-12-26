@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-24 16:27+0000\n"
+"POT-Creation-Date: 2018-12-26 16:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,21 +38,21 @@ msgstr "Ομάδα"
 msgid "message"
 msgstr "Κείμενο"
 
-#: bible/templates/bible/base.html:112 bible/templates/bible/base.html:370
+#: bible/templates/bible/base.html:115 bible/templates/bible/base.html:381
 msgid "Log out, "
 msgstr "Αποσύνδεση, "
 
-#: bible/templates/bible/base.html:113 bible/templates/bible/base.html:371
+#: bible/templates/bible/base.html:116 bible/templates/bible/base.html:382
 msgid "Change password"
 msgstr "Αλλαγή κωδικού"
 
-#: bible/templates/bible/base.html:116 bible/templates/bible/base.html:373
+#: bible/templates/bible/base.html:119 bible/templates/bible/base.html:384
 #: bible/templates/registration/logged_out.html:13
 #: bible/templates/registration/password_reset_complete.html:9
 msgid "Sign in"
 msgstr "Σύνδεση"
 
-#: bible/templates/bible/base.html:120 bible/templates/bible/base.html:374
+#: bible/templates/bible/base.html:123 bible/templates/bible/base.html:385
 #: bible/templates/registration/login.html:33
 msgid "I forgot my password"
 msgstr "Δεν θυμάμαι τον κωδικό μου"
@@ -60,6 +60,69 @@ msgstr "Δεν θυμάμαι τον κωδικό μου"
 #: bible/templates/bible/email.html:21
 msgid "Send email"
 msgstr "Αποστολή"
+
+#: bible/templates/bible/search.html:4 bible/templates/bible/search.html:15
+msgid "Search"
+msgstr ""
+
+#: bible/templates/bible/search.html:12
+msgid "Search books, chapters, verses and annotations"
+msgstr ""
+
+#: bible/templates/bible/search.html:29
+#, python-format
+msgid "Found %(books_filtered|length)s book%(books_filtered|pluralize)s."
+msgstr ""
+
+#: bible/templates/bible/search.html:36
+msgid "Βιβλίο"
+msgstr ""
+
+#: bible/templates/bible/search.html:44
+msgid "No books found"
+msgstr ""
+
+#: bible/templates/bible/search.html:50
+#, python-format
+msgid ""
+"Found %(chapters_filtered|length)s chapter%(chapters_filtered|pluralize)s."
+msgstr ""
+
+#: bible/templates/bible/search.html:57
+msgid "Κεφάλαιο"
+msgstr ""
+
+#: bible/templates/bible/search.html:69
+msgid "No chapters found"
+msgstr ""
+
+#: bible/templates/bible/search.html:75
+#, python-format
+msgid "Found %(verses_filtered|length)s verse%(verses_filtered|pluralize)s."
+msgstr ""
+
+#: bible/templates/bible/search.html:83
+msgid "Στίχος"
+msgstr ""
+
+#: bible/templates/bible/search.html:96
+msgid "No verses found"
+msgstr ""
+
+#: bible/templates/bible/search.html:102
+#, python-format
+msgid ""
+"Found %(annotations_filtered|length)s annotation"
+"%(annotations_filtered|pluralize)s."
+msgstr ""
+
+#: bible/templates/bible/search.html:111
+msgid "Υπομνηματισμός"
+msgstr ""
+
+#: bible/templates/bible/search.html:125
+msgid "No annotations found"
+msgstr ""
 
 #: bible/templates/registration/logged_out.html:7
 msgid "Log out"

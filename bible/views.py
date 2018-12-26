@@ -17,6 +17,7 @@ from django.core import serializers #for JSON
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
 
 
 class SignUp(generic.CreateView):
@@ -562,6 +563,7 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
             'favorite_annotations': favorite_annotations
         })
 
+# search books, chapters, verses, annotations content
 class SearchView(View):
     
     # pass multiple models to template
@@ -570,13 +572,16 @@ class SearchView(View):
         return context
 
     def get(self, request):
+        # q varilable is passed from the form
         if 'q' in request.GET and request.GET['q']:
-            q = request.GET['q']
-            books_filtered = Book.objects.filter(title__icontains=q)
-            chapters_filtered = Chapter.objects.filter(title__icontains=q)
-            verses_filtered = Verse.objects.filter(original_text__icontains=q)
-            annotations_filtered = Annotation.objects.filter(
-                annotation__icontains=q)
+            query = request.GET['q']
+            books_filtered = Book.objects.filter(
+                Q(title__icontains=query) | Q(abstract_trempelas__icontains=query))
+            chapters_filtered = Chapter.objects.filter(
+                Q(title__icontains=query) | Q(abstract_trempelas__icontains=query))
+            verses_filtered = Verse.objects.filter(
+                Q(original_text__icontains=query) | Q(greek_translation__icontains=query))
+            annotations_filtered = Annotation.objects.filter(annotation__icontains=query)
             # message = 'You searched for: %r' % request.GET['q']
 
             return render(request, 'bible/search.html', {
@@ -584,15 +589,12 @@ class SearchView(View):
                 'chapters_filtered': chapters_filtered,
                 'verses_filtered': verses_filtered,
                 'annotations_filtered': annotations_filtered,
-                'query': q,
+                'query': query,
             })
 
         else:
             return render(request, 'bible/search.html')
 
-# search books, chapters, verses, annotations content
-# def search(request):
-    
 
 # --------- send email form --------------------------------------------
 def emailView(request):

@@ -86,7 +86,17 @@
                 ></i>
             </div>
     
-    
+            {# TAGS #}
+            {% if verse.tags.all %}
+            <div class="extra content">
+                {% for tag in verse.tags.all %}
+                <div class="ui label mini">
+                    {{ tag.name }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             {# DEBUG #}
             {% if user.is_superuser %}
             <div class="content">
@@ -286,7 +296,19 @@
                             </div>
                             <div class="description">{{ annotation.annotation }}</div>
                         </div>
-                    </div>
+                        
+                        {# TAGS #}
+                        {% if annotation.tags.all %}
+                            <div class="extra content">
+                                {% for tag in annotation.tags.all %}
+                                <div class="ui label mini">
+                                    {{ tag.name }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                    </div> {# end card#}
                 {% endfor %}
             </div>
             

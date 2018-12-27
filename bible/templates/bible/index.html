@@ -19,13 +19,24 @@
                 </a>
                 <a class="item" href="{% url 'bible:book-detail' book.id %}">
 
+                    {# WRITER #}
                     <div class="content">
-
                         <div class="header">{{ book.title }}</div>
                         <div class="meta">
                             <a>{{ book.writer }}</a>
                         </div>
                     </div>
+                    
+                    {# TAGS #}
+                    {% if book.tags.all %}
+                        <div class=" content">
+                            {% for tag in book.tags.all %}
+                                <div class="ui label mini">
+                                    {{ tag.name }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
                     {# DEBUG #}
                     {% if user.is_superuser %}

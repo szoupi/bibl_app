@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.text import Truncator
 from django.contrib.auth.models import User
-
+from taggit.managers import TaggableManager # tagging 
 
 class Book(models.Model):
     title = models.CharField(max_length=250, blank = False)
@@ -13,6 +13,7 @@ class Book(models.Model):
     image = models.FileField(default='/default.jpg')
     abstract_trempelas = models.TextField()
     notes = models.TextField()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['title']
@@ -38,6 +39,8 @@ class Chapter(models.Model):
     title = models.CharField(max_length=255)
     abstract_trempelas = models.TextField(blank=True)
     notes = models.TextField(blank=True)
+    tags = TaggableManager()
+
 
     class Meta:
         ordering = ['number']
@@ -63,6 +66,8 @@ class Verse(models.Model):
         max_length=1000, help_text='Ancient Greek script')
     greek_translation = models.TextField(
         'Translation', max_length=1000, help_text='Modern Greek translation')
+    tags = TaggableManager()
+
 
     class Meta:
         ordering = ['number']
@@ -97,6 +102,8 @@ class Annotation(models.Model):
             'verse_id': self.verse,
             'annotation_id': self.pk
         })
+    tags = TaggableManager()
+
 
 # FAVORITES many to many
 

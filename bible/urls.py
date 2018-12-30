@@ -186,6 +186,7 @@ urlpatterns = [
 
     # search everywhere
     url(r'^search/$', views.SearchView.as_view(), name='search'),
+    
 ]
 
 # if settings.DEBUG:

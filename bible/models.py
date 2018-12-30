@@ -5,6 +5,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.text import Truncator
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager # tagging 
+from taggit_autosuggest.managers import TaggableManager  # django-taggit-autosuggest front end 
+
 
 class Book(models.Model):
     title = models.CharField(max_length=250, blank = False)

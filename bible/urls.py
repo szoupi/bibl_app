@@ -185,8 +185,10 @@ urlpatterns = [
         views.successView, name='email-success'),
 
     # search everywhere
-    url(r'^search/$', views.SearchView.as_view(), name='search'),
+    url(r'^search/$', views.Search.as_view(), name='search'),
     
+    # dashboard everywhere
+    url(r'^dashboard/$', views.Dashboard.as_view(), name='dashboard'),
 ]
 
 # if settings.DEBUG:

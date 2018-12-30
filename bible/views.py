@@ -563,8 +563,9 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
             'favorite_annotations': favorite_annotations
         })
 
+# --------- Search --------------------------------------------
 # search books, chapters, verses, annotations content
-class SearchView(View):
+class Search(View):
     
     # pass multiple models to template
     def get_context_data(self, **kwargs):
@@ -595,6 +596,9 @@ class SearchView(View):
         else:
             return render(request, 'bible/search.html')
 
+# --------- DASHBOARD --------------------------------------------
+class Dashboard(View):
+    pass
 
 # --------- send email form --------------------------------------------
 def emailView(request):
@@ -624,9 +628,6 @@ def successView(request):
 
 # --------- end send email form -----------------------------------------
 
-# --------- Search --------------------------------------------
-# def filter_books(request):
-#     query = request.GET.get('q')
 
 
 

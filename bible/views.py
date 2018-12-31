@@ -590,12 +590,13 @@ class DashboardView(View):
         if Profile.objects.filter(user=user).exists():
             p = Profile.objects.get(user=user)
             continue_reading_url = p.continue_reading_url
+            return render(request, 'bible/dashboard.html', {
+                'continue_reading_url': continue_reading_url
+            })
+        else:
+            return render(request, 'bible/dashboard.html', {
 
-
-        return render(request, 'bible/dashboard.html', {
-            'continue_reading_url': continue_reading_url
-
-        })
+            })
 
 
 # --------- send email form --------------------------------------------

@@ -1,34 +1,23 @@
 {% extends "bible/base.html" %} 
+{% load static i18n %}
+
 {% block title %} Dashboard {% endblock title %} 
 
 {% block leftColumn %}
 {% endblock leftColumn %} 
 
 {% block body %} 
-<p>
-    <a class="ui button" href="{{ continue_reading_url }}">Continue reading from last visited page</a>
-</p>
 
 {# FAVORITES ======================================= #}
 {# see DisplayFavoritesView #}
 <div class="ui text container">
-    {# ========= BOOKS ========== #} 
-    {% if favorite_books %}
-        <h2><i class="circular inverted  book icon"></i> Τα Αγαπημένα μου Βιβλία</h2>
-        <div class="ui two doubling link cards">
-            {%for book in favorite_books%}
-                <div class="card">
-                    <div class="content">
-                            {% if user.is_authenticated  %}
-                                <div class="ui bottom right attached label">
-                                    Βιβλίο
-                                </div>
-                                <a href="{% url 'bible:book-detail' book.id %}">{{book.title}}</a>
-                            {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+    {# ========= CONTINUE READING ========== #} 
+    {% if continue_reading_url %}
+        <p>
+            <a class="ui button" href="{{ continue_reading_url }}">
+                {% trans 'Continue reading from last visited page' %}
+            </a>
+        </p>
     {% else %}
         <h2>Το dashboard είναι άδειο</h2>
     {% endif %}

@@ -1,0 +1,258 @@
+{% load static i18n %}
+
+{% block sidebarLeft %}
+    <div id="left-sidebar" class="ui wide sidebar vertical menu" style="padding:1.5rem;padding-top:4rem">
+        {# QUICK ACCESS ////////////////////////////////////////// #}
+        <a class="item toggle-left-sidebar">
+            <i class="close icon link icon"></i>
+            Απόκρυψη
+        </a>
+    
+        <nav>
+    
+            <a class="item" href="{% url 'bible:index' %}">
+                <i class="book icon"></i>
+                Βιβλία
+            </a>
+            <a class="item" href="{% url 'bible:email-send' %}">
+                <i class="envelope icon"></i>
+                Αναζήτηση
+            </a>
+            {% if user.is_authenticated %}
+            <a class="item" href="{% url 'bible:favorites' %}">
+                <i class="star icon"></i>
+                Αγαπημένα
+            </a>
+            {% endif %}
+    
+            {% if user.is_authenticated %}
+            {% if perms.bible.add_book %}
+            <a class="item" href="{% url 'bible:book-add' %}">
+                <i class="plus icon"></i>
+                Προσθήκη Βιβλίου
+            </a>
+            {% endif %}
+            {% endif %}
+    
+            <a class="item" href="{% url 'bible:search' %}">
+                <i class="search icon"></i>
+                Επικοινωνία
+            </a>
+            {% if user.is_authenticated %}
+            <a class="item" href="{% url 'bible:dashboard' %}">
+                <i class="home icon"></i>{% trans 'Dashboard' %}
+            </a>
+            <a href="{% url 'logout'%}?next={{request.path}}" class="item">{% trans 'Log out, ' %} {{ user.get_username }}</a>
+            <a href="{% url 'password_change' %}" class="item">{% trans 'Change password' %}</a>
+            {% else %}
+            <a href="{% url 'login' %}?next={{request.path}}" class="item">
+                <i class="user circle icon"></i>{% trans 'Sign in' %}
+            </a>
+            <a href="{% url 'password_reset' %}" class="item">
+                <i class="edit icon"></i>
+                {% trans 'I forgot my password' %}
+            </a>
+            {% endif %}
+            {# <a href="{% url 'bible:register' %}" class="item">Register</a> #}
+        </nav>
+    
+        {% block quickAccess %}
+        <h2>Γρήγορη Πρόσβαση</h2>
+        <form name="quickAccessForm" class="ui form" style="margin-bottom: 2rem;">
+            <div class="field">
+                <!--<label>Book</label>-->
+                <select id="select-book" class="ui search dropdown">
+                    <option value="">Βιβλίο</option>
+                    <!-- populate async -->
+                    {% for book in data.id %}
+                    <option value="{{ book.id }}">
+                        {{ book.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <div class="field">
+                <!--<label>Chapter</label>-->
+                <select id="select-chapter" class="ui search dropdown">
+                    <option value="">Κεφάλαιο</option>
+    
+    
+                </select>
+            </div>
+    
+            <div class="field">
+                <!--<label>verse</label>-->
+                <select id="select-verse" class="ui search dropdown">
+                    <option value="">Στίχος</option>
+                </select>
+            </div>
+    
+            <button id="quick-access-button" class="ui right labeled  icon button">
+                <i class="right play icon"></i>
+                ΜΕΤΑΒΑΣΗ
+            </button>
+        </form>
+        <br />
+        <!-- LEFT COLUMN -->
+    
+    
+    
+        <script>
+            // TODO:
+            /* add self executing function here
+            faster to execute than an onload handler 
+            because this waits only for the DOM to be ready, 
+            not for all images to load
+            */
+            // POPULATE BOOKS
+            document.addEventListener("DOMContentLoaded", function (event) {
+                // note the trailing slash favorite/
+                window.fetch("/populate/books/", {
+                    method: "get",
+                    credentials: "same-origin",
+                    headers: {
+                        "X-CSRFToken": window.csrftoken,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log("Data fetched succesfully", data)
+                        var select_book = document.getElementById('select-book')
+
+                        // convert fetched data string  to json (objects)
+                        var books = JSON.parse(data.fetchedBooks)
+
+                        //console.log(books[0].fields.title)
+
+                        // populate Books
+                        for (i = 0; i < books.length; i++) {
+                            const option = document.createElement('option');
+                            // console.log(books[i].fields.title)
+                            option.value = books[i].pk;
+                            option.innerHTML = books[i].fields.title;
+                            select_book.appendChild(option);
+                        }
+
+
+                    }).catch(error => console.log("books populated returned error", error));
+            })
+
+
+            //POPULATE CHAPTERS
+            document.getElementById('select-book').addEventListener("change", function (event) {
+
+                // note the trailing slash favorite/
+                window.fetch("/populate/chapters/", {
+                    method: "get",
+                    credentials: "same-origin",
+                    headers: {
+                        "X-CSRFToken": window.csrftoken,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Data fetched succesfully", data)
+
+                        var selected_book = document.getElementById('select-book').value
+                        var select_chapter = document.getElementById('select-chapter')
+                        //var select_verse = document.getElementById('select-verse')
+                        // console.log("selected book: ", selected_book)
+
+                        // convert fetched data string  to json (objects)
+                        var chapters = JSON.parse(data.fetchedChapters)
+                        //console.log("chapters: ", chapters)
+
+                        //var verses = JSON.parse(data.fetchedVerses)
+
+                        // populate Chapters
+                        select_chapter.innerHTML = ""; //empty select
+                        for (i = 0; i < chapters.length; i++) {
+                            // console.log("chapter: ", chapters[i].fields.book, chapters[i].fields.title)
+                            if (chapters[i].fields.book == selected_book) {
+                                const option = document.createElement('option');
+                                option.value = chapters[i].pk;
+                                //number - title
+                                option.innerHTML = chapters[i].fields.number // + ' - ' + chapters[i].fields.title;
+                                select_chapter.appendChild(option);
+                            }
+                        }
+
+                        // GO TO BOOK
+                        // modify form action
+                        document.quickAccessForm.action = "/book/" + selected_book;
+                        select_chapter.value = ""
+
+
+                    }).catch(error => console.log("Chapters population returned error", error));
+            })
+
+            //POPULATE VERSES
+            document.getElementById('select-chapter').addEventListener("change", function (event) {
+
+                // note the trailing slash favorite/
+                window.fetch("/populate/verses/", {
+                    method: "get",
+                    credentials: "same-origin",
+                    headers: {
+                        "X-CSRFToken": window.csrftoken,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Data fetched succesfully", data)
+
+                        var selected_book = document.getElementById('select-book').value
+                        var selected_chapter = document.getElementById('select-chapter').value
+                        var select_verse = document.getElementById('select-verse')
+                        console.log("selected_chapter: ", selected_chapter)
+
+                        // convert fetched data string  to json (objects)
+                        var verses = JSON.parse(data.fetchedVerses)
+                        console.log("verses: ", verses)
+
+
+                        // populate Verses
+                        select_verse.innerHTML = ""; //empty select
+                        for (i = 0; i < verses.length; i++) {
+                            if (verses[i].fields.chapter == selected_chapter) {
+                                const option = document.createElement('option');
+                                option.value = verses[i].pk;
+                                //number - title
+                                option.innerHTML = verses[i].fields.number // + ' - ' + verses[i].fields.original_text;
+                                select_verse.appendChild(option);
+                            }
+                        }
+
+                        // GO TO CHAPTER
+                        // modify form action
+                        document.quickAccessForm.action = "/book/" + selected_book + "/chapter/" + selected_chapter;
+                        select_verse.value = ""
+
+                    }).catch(error => console.log("Verses population returned error", error));
+            });
+
+            // GO TO VERSE
+            // select-verse has been already populated onChange event of chapter-select
+            document.getElementById('select-verse').addEventListener("change", function (event) {
+                var selected_book = document.getElementById('select-book').value
+                var selected_chapter = document.getElementById('select-chapter').value
+                var selected_verse = document.getElementById('select-verse').value
+
+                document.quickAccessForm.action = "/book/" + selected_book
+                    + "/chapter/" + selected_chapter
+                    + "/verse/" + selected_verse;
+            });
+        </script>
+    
+        {% endblock quickAccess %}
+    
+        {% block leftBarBreadcrumb %}
+        {% endblock leftBarBreadcrumb %}
+    </div>
+{% endblock %}

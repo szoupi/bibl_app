@@ -6,16 +6,19 @@ from django.utils.text import Truncator
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager # tagging 
 from taggit_autosuggest.managers import TaggableManager  # django-taggit-autosuggest front end 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 
 class Book(models.Model):
     title = models.CharField(max_length=250, blank = False)
     writer = models.CharField(max_length=160)
     #/media/default.jpg
-    image = models.FileField(default='/default.jpg')
-    abstract_trempelas = models.TextField()
-    notes = models.TextField()
-    tags = TaggableManager()
+    image = models.FileField(default='default.jpg')
+    abstract_trempelas = models.TextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    tags = TaggableManager(blank=True)
 
     class Meta:
         ordering = ['title']
@@ -39,8 +42,8 @@ class Chapter(models.Model):
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
     number = models.CharField(max_length=10, help_text='numbers in 2-digit format, eg 01, 02')
     title = models.CharField(max_length=255)
-    abstract_trempelas = models.TextField(blank=True)
-    notes = models.TextField(blank=True)
+    abstract_trempelas = models.TextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
     tags = TaggableManager()
 
 
@@ -92,6 +95,7 @@ class Annotation(models.Model):
         max_length=60, help_text='The words that are annotated')
     # TextField.max_length only for the form, not the db field
     annotation = models.TextField(max_length=5000)
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['number']
@@ -104,7 +108,6 @@ class Annotation(models.Model):
             'verse_id': self.verse,
             'annotation_id': self.pk
         })
-    tags = TaggableManager()
 
 
 # FAVORITES many to many
@@ -150,3 +153,21 @@ class FavoriteAnnotation(FavoriteBase):
         db_table = "favorite_annotation"
 
     obj = models.ForeignKey(Annotation, default='', verbose_name="Annotation", on_delete=models.CASCADE)
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    continue_reading_url = models.URLField(null=True, blank=True)
+
+
+# we are hooking the create_user_profile and 
+# save_user_profile methods to the User model, 
+# whenever a save event occurs
+# https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoonesa
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()

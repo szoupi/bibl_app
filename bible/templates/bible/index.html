@@ -15,7 +15,7 @@
 
             <div class="card">
                 <a class="image" href="{% url 'bible:book-detail' book.id %}">
-                    <img src="{{ book.image.url }}" alt="the writer of the book {{ book.title }}">
+                    <img src="{{ book.image.url|default_if_none:'default.jpg' }}" alt="the writer of the book {{ book.title }}">
                 </a>
                 <a class="item" href="{% url 'bible:book-detail' book.id %}">
 

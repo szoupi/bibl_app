@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import permission_required #for functions
 from django.contrib.auth.mixins import PermissionRequiredMixin #for class
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Book, Chapter, Verse, Annotation, FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation
+from .models import Book, Chapter, Verse, Annotation, FavoriteBook, FavoriteChapter, FavoriteVerse, FavoriteAnnotation, Profile
 # Book uses generic view
 from .forms import ChapterForm, VerseForm, AnnotationForm, UserRegistrationForm, UserLoginForm, ContactForm
 import json
@@ -38,10 +38,6 @@ class IndexView(generic.ListView):
     model = Book
     template_name = 'bible/index.html'
 
-
-
-    # queryset = Book.object.filter(title__icontains='mysearch')[:5] # Get 5 books containing the title mysearch
-
     # return all book objects from the db
     # it returns a var called object_list
     # with a list of the objects (books)
@@ -49,41 +45,10 @@ class IndexView(generic.ListView):
     #context_object_name = 'my_variable'
     context_object_name = 'all_books'
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(IndexView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['favorite_books'] = FavoriteBook.objects.all()
-        # TODO: test next line to pass field as variable for js 
-        # context['book.id'] = 'book_id'
-        # context['user.id'] = 'user_id'
-        return context
-
-
-    # def get_queryset(self):
-    #     return Item.objects.filter(user=self.request.user)
-
     def get_queryset(self):
         return Book.objects.all()
         # limit objects to 2
         # return Book.objects.all()[:2]
-
-    # TODO: test for filtering favorites
-    # def get(self, request):
-    #     user = auth.get_user(request)
-    #     fav_books_list = FavoriteBook.objects.filter(user=request.user)
-    #     fav_chapters_list = FavoriteChapter.objects.filter(user=request.user)
-    #     fav_verse_list = FavoriteVerse.objects.filter(user=request.user)
-    #     fav_annotations_list = FavoriteAnnotation.objects.filter(
-    #         user=request.user)
-
-    #     return render(request, 'bible/favorites.html', {
-    #         'fav_books_list': fav_books_list,
-    #         'fav_chapters_list': fav_chapters_list,
-    #         'fav_verse_list': fav_verse_list,
-    #         'fav_annotations_list': fav_annotations_list
-    #     })
-
 
 
 # BOOK DETAIL page: display details about one object (book)
@@ -94,10 +59,37 @@ def book_detail_view(request, book_id):
     # first does not produce error if row does not exists
     favorite = FavoriteBook.objects.filter(obj_id=book_id, user=user).first()
 
+    # CONTINUE READIND
+    # If user exists on Profile model 
+    # update continue_reading_url with current path
+    # else create new record and set continue_reading_url
+    # count checks if record exists
+    # save() updates existing record
+    if user:
+        if Profile.objects.filter(user=user).count():
+            p = Profile.objects.get(user=user)
+            p.continue_reading_url = request.path
+            p.save()
+        else:
+            p = Profile()
+            p.user_id = user
+            p.continue_reading_url = request.path
+            p.save()
+
+    # r stands for raw strings
+    if r'book' in request.path:
+        continue_reading_url = request.path
+    else:
+        continue_reading_url = 'no url ' + request.path
+        
+    
+
+
     # the context {'book':book} contain the variables passed to template
     return render(request, 'bible/book_detail.html', {
         'book': book,
         'favorite': favorite,
+        # 'continue_reading_url': continue_reading_url,
     })
 
     # model = Book
@@ -565,7 +557,7 @@ class DisplayFavoritesView(LoginRequiredMixin, View):
 
 # --------- Search --------------------------------------------
 # search books, chapters, verses, annotations content
-class Search(View):
+class SearchView(View):
     
     # pass multiple models to template
     def get_context_data(self, **kwargs):
@@ -597,8 +589,25 @@ class Search(View):
             return render(request, 'bible/search.html')
 
 # --------- DASHBOARD --------------------------------------------
-class Dashboard(View):
-    pass
+
+
+class DashboardView(View):
+    
+    template_name = "bible/dashboard.html"
+
+    # pass multiple models to template
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        return context
+
+    def get(self, request):
+        user = auth.get_user(request)
+
+        return render(request, 'bible/dashboard.html', {
+
+
+        })
+
 
 # --------- send email form --------------------------------------------
 def emailView(request):
@@ -627,74 +636,3 @@ def successView(request):
     return HttpResponse('Success! Thank you for your  message.')
 
 # --------- end send email form -----------------------------------------
-
-
-
-
-
-
-
-# class LoginView(View):
-#     form_class = UserLoginForm
-#     template_name = 'bible/login_form.html'
-
-#     def get(self, request):
-#         form = self.form_class(None)
-#         return render(request, self.template_name, {
-#             'form': form
-#         })
-
-#     def post(self, request):
-#         print(request.user.is_authenticated())
-#         next = request.GET.get('next')
-#         form = self.form_class(request.POST)
-
-#         if form.is_valid():
-
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-#             user = authenticate(username=username, password=password)
-#             if user is not None:
-#                 if user.is_active:
-#                     print('user is active')
-#                     login(request, user)
-#                     if next:
-#                         return redirect(next)
-#                     return redirect('/')
-#                 else:
-#                     print('user is disabled')
-#                     return render(request, 'bible/login_form.html', {
-#                         'error_message': 'Your account has been disabled',
-#                         'form': form
-#                     })
-#             else:
-#                 print('user is active')
-#                 return render(request, 'bible/login_form.html', {
-#                     'error_message': 'Invalid login',
-#                     'form': form
-#                     })
-#             print('form is valid only')
-#         return redirect('/')
-
-
-# def logout_view(request):
-#     logout(request)
-#     return redirect('/')
-
-
-# def login_user(request):
-#     form_class = UserLoginForm
-#     if request.method == "POST":
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             if user.is_active:
-#                 login(request, user)
-#                 # books = Book.objects.filter(user=request.user)
-#                 return render(request, 'bible/index.html')
-#             else:
-#                 return render(request, 'bible/login_form.html', {'error_message': 'Your account has been disabled'})
-#         else:
-#             return render(request, 'bible/login_form.html', {'error_message': 'Invalid login'})
-#     return render(request, 'bible/login_form.html')

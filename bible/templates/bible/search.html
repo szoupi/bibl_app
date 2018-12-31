@@ -4,21 +4,22 @@
 {% block title %} {% trans 'Search' %} {% endblock title %} 
 
 {% block leftColumn %}
-    <form class="ui form large" action="" method="GET">
-        <div class="field">
-            <div class="field">
-                <input type="text" name="q"
-                    value="{{ query }}" 
-                    placeholder="{% trans 'Search books, chapters, verses and annotations'%}">
-            </div>
-            <div>
-                <button class="ui button" type="submit">{% trans 'Search' %}</button>
-            </div>
-        </div>
-    </form>
+
 {% endblock leftColumn %} 
 
 {% block body %} 
+    <form class="ui form large inline" action="" method="GET" style="margin-bottom:2rem">
+        <div class="field">
+            <div class="field">
+                <input type="text" name="q" value="{{ query }}" placeholder="{% trans 'Search books, chapters, verses and annotations'%}">
+            </div>
+            <div>
+                <button class="ui button primary" type="submit">{% trans 'Search' %}</button>
+            </div>
+        </div>
+    </form>
+
+
 {# SEARCH RESULTS ======================================= #}
 {# see search view #}
 <div class="ui text container">
@@ -40,8 +41,6 @@
                 </div>
             {% endfor %}
         </div>
-    {% else %}
-        <h2>{% trans 'No books found' %}</h2>
     {% endif %}
 
     {# ========= CHAPTERS ========== #}
@@ -65,8 +64,6 @@
                 </div>
             {% endfor %}
         </div>
-    {% else %}
-        <h2>{% trans 'No chapters found' %}</h2>
     {% endif %}
 
     {# ========= VERSES ========== #}
@@ -92,8 +89,6 @@
                 </div>
             {% endfor %}
         </div>
-    {% else %}
-        <h2>{% trans 'No verses found' %}</h2>
     {% endif %}
 
     {# ========= ANNOTATIONS ========== #}
@@ -121,8 +116,6 @@
                 </div>
             {% endfor %}
         </div>
-    {% else %}
-        <h2>{% trans 'No annotations found' %}</h2>
     {% endif %}
 
 </div>

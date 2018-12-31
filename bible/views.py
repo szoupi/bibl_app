@@ -18,6 +18,8 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
+from functions import continue_reading
+
 
 
 class SignUp(generic.CreateView):
@@ -59,43 +61,18 @@ def book_detail_view(request, book_id):
     # first does not produce error if row does not exists
     favorite = FavoriteBook.objects.filter(obj_id=book_id, user=user).first()
 
-    # CONTINUE READIND
-    # If user exists on Profile model 
-    # update continue_reading_url with current path
-    # else create new record and set continue_reading_url
-    # count checks if record exists
-    # save() updates existing record
-    if user:
-        if Profile.objects.filter(user=user).count():
-            p = Profile.objects.get(user=user)
-            p.continue_reading_url = request.path
-            p.save()
-        else:
-            p = Profile()
-            p.user_id = user
-            p.continue_reading_url = request.path
-            p.save()
-
-    # r stands for raw strings
-    if r'book' in request.path:
-        continue_reading_url = request.path
-    else:
-        continue_reading_url = 'no url ' + request.path
-        
-    
-
+    # save current path
+    continue_reading(request)
 
     # the context {'book':book} contain the variables passed to template
     return render(request, 'bible/book_detail.html', {
         'book': book,
         'favorite': favorite,
-        # 'continue_reading_url': continue_reading_url,
     })
 
     # model = Book
     # template_name = ""
     # context_object_name = 'all_books'
-
 
 def book_abstract_trempelas_view(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
@@ -243,6 +220,10 @@ def chapter_detail_view(request, book_id, chapter_id):
     favorite = FavoriteChapter.objects.filter(
         obj_id=chapter_id, user=user).first()
     favorite_verses = FavoriteVerse.objects.all()
+    
+    # save current path
+    continue_reading(request)
+
     # assert False
     return render(request, 'bible/chapter_detail.html', {
         'book': book,
@@ -260,6 +241,9 @@ def verse_detail_view(request, book_id, chapter_id, verse_id):
     user = request.user.id
     favorite = FavoriteVerse.objects.filter(obj_id=verse_id, user=user).first()
     favorite_annotations = FavoriteAnnotation.objects.all()
+
+    # save current path 
+    continue_reading(request)
 
     return render(request, 'bible/verse_detail.html', {
         'book': book,
@@ -602,9 +586,14 @@ class DashboardView(View):
 
     def get(self, request):
         user = auth.get_user(request)
+        
+        if Profile.objects.filter(user=user).exists():
+            p = Profile.objects.get(user=user)
+            continue_reading_url = p.continue_reading_url
+
 
         return render(request, 'bible/dashboard.html', {
-
+            'continue_reading_url': continue_reading_url
 
         })
 

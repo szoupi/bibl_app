@@ -5,7 +5,9 @@
 {% endblock leftColumn %} 
 
 {% block body %} 
-<p>Current path: {{ request.path }}</p>
+<p>
+    <a class="ui button" href="{{ continue_reading_url }}">Continue reading from last visited page</a>
+</p>
 
 {# FAVORITES ======================================= #}
 {# see DisplayFavoritesView #}

@@ -3,6 +3,7 @@
     Κεφάλαιο {{chapter.number}}
 {% endblock title %}
 
+
 {# this breadcrumb is used for the left sidebar#}
 {% block leftBarBreadcrumb %}
     {# BREADCRUMB #}
@@ -148,6 +149,7 @@
 
 
 {% block body %}
+<a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a>
 
 {# MAIN BODY #}
     <main class="ui text container">
@@ -184,81 +186,99 @@
                             <div class="ui bottom right attached label">
                                 Στίχος {{ verse.number }}
                             </div>
-                            <div class="header two column row">
-                                {% if user.is_authenticated %}
 
-                                    <!-- ==================FAVORITE CHAPTER STAR=================== -->
-                                    <i class="star outline icon ui compact right floated " 
-                                        id="favVerseStar{{ verse.id }}"
-                                    ></i>
-                                    
-                                    <!-- FAVORITE CHECK -->
-                                    <!--loop through chapterFavorite records -->
-                                    <!--if fav raw exists, make star black -->
-                                    {% for fav in favorite_verses %}
-                                        {% if fav.user_id == user.id and fav.obj_id == verse.id %}
-                                            <script>
-                                                document.getElementById("favVerseStar{{ verse.id }}").classList.remove("outline");
-                                            </script>
-                                        {% endif %} 
-                                    {% endfor %}
 
-                                    <script>
-                                        // when document load display the status of stars
-                                        document.getElementById("favVerseStar{{ verse.id }}").addEventListener('click', function(){
+                            <div class="ui grid stackable">
+                                {# NUMBER COLUMN #}
+                                <div class="one wide column large-number">
+                                    {{ verse.number }}
+                                </div>
 
-                                            // note the trailing slash favorite/
-                                            fetch("/verse/{{ verse.id }}/favorite/", {
-                                                    method: "put",
-                                                    credentials: "same-origin",
-                                                    headers: {
-                                                        "X-CSRFToken": window.csrftoken,
-                                                        "Accept": "application/json",
-                                                        "Content-Type": "application/json"
-                                                    },
-                                                    body: JSON.stringify({
-                                                        "user_id" : {{ user.id }},
-                                                        "obj_id" : {{ verse.id }}
+                                {# ORIGINAL TEXT COLUMN #}
+                                <div class="seven wide column">
+                                    <a class="original-text column" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
+                                        <p>{{ verse.original_text }}</p>
+                                    </a>
+                                </div>
+
+                                {# TRANSLATION COLUMN #}
+                                <div class="seven wide column">
+                                    <a class="greek-translation column" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
+                                        <p><em>{{ verse.greek_translation }}</em></p>
+                                    </a>
+                                </div>
+                                
+                                <div class="one wide column">
+                                    {% if user.is_authenticated %}
+
+                                        <!-- ==================FAVORITE CHAPTER STAR=================== -->
+                                        <i class="star outline large icon ui compact right floated" style="margin: 0.5rem" 
+                                            id="favVerseStar{{ verse.id }}"
+                                        ></i>
+                                        
+                                        <!-- FAVORITE CHECK -->
+                                        <!--loop through chapterFavorite records -->
+                                        <!--if fav raw exists, make star black -->
+                                        {% for fav in favorite_verses %}
+                                            {% if fav.user_id == user.id and fav.obj_id == verse.id %}
+                                                <script>
+                                                    document.getElementById("favVerseStar{{ verse.id }}").classList.remove("outline");
+                                                </script>
+                                            {% endif %} 
+                                        {% endfor %}
+
+                                        <script>
+                                            // when document load display the status of stars
+                                            document.getElementById("favVerseStar{{ verse.id }}").addEventListener('click', function(){
+
+                                                // note the trailing slash favorite/
+                                                fetch("/verse/{{ verse.id }}/favorite/", {
+                                                        method: "put",
+                                                        credentials: "same-origin",
+                                                        headers: {
+                                                            "X-CSRFToken": window.csrftoken,
+                                                            "Accept": "application/json",
+                                                            "Content-Type": "application/json"
+                                                        },
+                                                        body: JSON.stringify({
+                                                            "user_id" : {{ user.id }},
+                                                            "obj_id" : {{ verse.id }}
+                                                        })
                                                     })
-                                                })
-                                                .then(response => response.json())
-                                                .catch(error => {
-                                                    console.log("favorite does not exist, create a new one", error);
-                                                });
+                                                    .then(response => response.json())
+                                                    .catch(error => {
+                                                        console.log("favorite does not exist, create a new one", error);
+                                                    });
 
-                                            // toggle outside fetch because
-                                            // put creates error if db row does not exist
-                                            // so paint is not executed
-                                            // if placed in next then(), as we should...
-                                            document.getElementById("favVerseStar{{ verse.id }}").classList.toggle("outline")
-                                        })
+                                                // toggle outside fetch because
+                                                // put creates error if db row does not exist
+                                                // so paint is not executed
+                                                // if placed in next then(), as we should...
+                                                document.getElementById("favVerseStar{{ verse.id }}").classList.toggle("outline")
+                                            })
 
-                                    </script>
-                                    <!-- ==================FAVORITE END=================== -->
+                                        </script>
+                                        <!-- ==================FAVORITE END=================== -->
 
 
-                                    {% if perms.bible.change_verse %}
-                                        <a href="{% url 'bible:verse-update' book.id chapter.id verse.id  %}" 
-                                            class="ui compact icon right floated button">
-                                            <i class="edit icon"></i>
-                                        </a>
-                                        <a href="{% url 'bible:verse-delete' book.id chapter.id verse.id  %}" 
-                                            class="ui compact icon right floated button">
-                                            <i class="trash icon"></i>
-                                        </a>
+                                        {% if perms.bible.change_verse %}
+                                            <a href="{% url 'bible:verse-update' book.id chapter.id verse.id  %}" 
+                                                class="ui compact icon right floated" style="margin: 0.5rem 0">
+                                                <i class="edit icon bordered inverted blue"></i>
+                                            </a>
+                                            <a href="{% url 'bible:verse-delete' book.id chapter.id verse.id  %}" 
+                                                class="ui compact icon right floated" style="margin: 0.5rem 0">
+                                                <i class="trash icon bordered inverted red"></i>
+                                            </a>
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                                {{ verse.number }}
-                            </div>
-                            <div class="two column row">
 
-                                <a class="original-text column" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
-                                    <p>{{ verse.original_text }}</p>
-                                </a>
-                                <a class="greek-translation column" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
-                                    <p><em>{{ verse.greek_translation }}</em></p>
-                                </a>
+                                </div>
+
+
+
                             </div>
+
                         </div>
 
                         {# TAGS #}

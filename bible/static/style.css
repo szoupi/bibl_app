@@ -100,3 +100,15 @@ label {
     display: none !important;
   }
 }
+
+.sz-visible {
+  display: block;
+}
+
+.large-number {
+  font-size: 25px;
+  font-weight: 900;
+  font-style: normal;
+  line-height: 1.2;
+  color: #666;
+}

@@ -28,3 +28,9 @@ var csrftoken = getCookie('csrftoken')
 $('select.dropdown')
 	.dropdown()
 	
+
+
+// document.getElementsByClassName('card').addEventListener('onmouseover', function () { 
+// 	document.getElementsByClassName('form-buttons').classList.add('sz-visible')
+
+// }, false);

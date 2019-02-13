@@ -4,10 +4,12 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.text import Truncator
 from django.contrib.auth.models import User
-from taggit.managers import TaggableManager # tagging 
-from taggit_autosuggest.managers import TaggableManager  # django-taggit-autosuggest front end 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# django-taggit-autosuggest front end 
+# disable on pythonanywhere until installation
+from taggit.managers import TaggableManager # tagging
+from taggit_autosuggest.managers import TaggableManager 
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 
 
 
@@ -18,7 +20,7 @@ class Book(models.Model):
     image = models.FileField(default='default.jpg')
     abstract_trempelas = models.TextField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(blank=True)  # disable on pythonanywhere
 
     class Meta:
         ordering = ['title']
@@ -44,7 +46,7 @@ class Chapter(models.Model):
     title = models.CharField(max_length=255)
     abstract_trempelas = models.TextField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)  # disable on pythonanywhere
 
 
     class Meta:
@@ -71,7 +73,7 @@ class Verse(models.Model):
         max_length=1000, help_text='Ancient Greek script')
     greek_translation = models.TextField(
         'Translation', max_length=1000, help_text='Modern Greek translation')
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)  # disable on pythonanywhere
 
 
     class Meta:
@@ -95,7 +97,7 @@ class Annotation(models.Model):
         max_length=60, help_text='The words that are annotated')
     # TextField.max_length only for the form, not the db field
     annotation = models.TextField(max_length=5000)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)  # disable on pythonanywhere
 
     class Meta:
         ordering = ['number']

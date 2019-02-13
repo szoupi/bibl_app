@@ -223,13 +223,22 @@ def chapter_detail_view(request, book_id, chapter_id):
     
     # save current path
     continue_reading(request)
+    
+    next_chapter = Chapter.objects.filter(book=book_id).order_by('number')
+
+    # output to terminal
+    print 'CURRENT CHAPTER: ', chapter
+    print 'CURRENT CHAPTER NUMBER: ', chapter.number
+    for c in next_chapter:
+        print c
 
     # assert False
     return render(request, 'bible/chapter_detail.html', {
         'book': book,
         'chapter': chapter,
         'favorite': favorite,
-        'favorite_verses': favorite_verses
+        'favorite_verses': favorite_verses,
+        'next_chapter': next_chapter,
     })
 
 

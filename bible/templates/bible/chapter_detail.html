@@ -44,15 +44,7 @@
             <!-- BUTTON -->
             {% if user.is_authenticated %}
 
-                <!--======================== FAVORITE ==================-->
-                <div class="content">
-                    <i class="star outline icon" 
-                        id="favChapter{{ chapter.id }}"
-                        onclick="favoriteBook()"
-                        
-                    ></i>
-                </div>
-        
+                
                 {# TAGS #}
                 {% if chapter.tags.all %}
                 <div class="extra content">
@@ -76,60 +68,9 @@
                         <li>favorite user: {{ favorite.user_id }}</li>
                     </ul>
                 </div>
-            {% endif %}
+                {% endif %}
+                
             
-            <script>
-
-                const favstar = document.getElementById("favChapter{{ chapter.id }}") 
-
-                function favoriteBook() {
-                    console.log('favorite button clicked')
-                    // note the trailing slash favorite/
-                    const url = "/chapter/{{ chapter.id }}/favorite/";
-                    
-                    // what to pass to db
-                    let json_data = {
-                        'user_id': {{user.id}},
-                        'obj_id': {{chapter.id}}
-                    }
-
-                    let fetch_data = {
-                        method: "put",
-                        credentials: "same-origin",
-                        headers: {
-                            "X-CSRFToken": window.csrftoken,
-                            "Accept": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(json_data)
-                    }
-
-                    fetch(url, fetch_data)
-                    .then(response =>   response.json())
-                    .catch(error => {
-                        console.log("favorite does not exist, create a new one", error);
-                    });
-                    
-                    // toggle outside fetch because
-                    // put creates error if db row does not exist
-                    // so paint is not executed
-                    // if placed in next then(), as we should...
-                    favstar.classList.toggle("outline")
-                }
-                
-                function toggleFavorite(){
-                    favstar.classList.toggle("outline")
-                }
-                
-                // update the favorite
-                document.addEventListener("DOMContentLoaded", function (event) {
-                    if ("{{ favorite.id }}") {
-                    toggleFavorite()
-                    }
-                });
-
-            </script>            
-            <!--======================== FAVORITE END ===============-->
             
                 {% if perms.bible.add_verse %}
                     <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
@@ -141,6 +82,83 @@
                 {% endif %}
             {% endif %}
         </div>
+
+        <div class="ui styled accordion">
+            {% for chapterX in book.chapter_set.all %}
+                <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
+                    <i class="dropdown icon"></i>
+                    ΚΕΦΑΛΑΙΟ {{chapterX.number}}
+                </div>
+                <div class="content {% if chapterX.number == chapter.number %} active {% endif %} ">
+                    <a href="{% url 'bible:chapter-detail' book.id chapterX.id %}">
+                        {{ chapterX.title }}
+                        {# <a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a> #}
+                    </a>
+                    {% if chapterX.number == chapter.number %}
+                        <p style="text-align: right;">
+                            <i class="ui star outline icon floated right" 
+                                    id="favChapter{{ chapter.id }}"
+                                    onclick="favoriteChapter()"
+                            ></i>
+                        </p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+            
+        <!--======================== FAVORITE ==================-->
+        <script>
+
+            const favstar = document.getElementById("favChapter{{ chapter.id }}") 
+
+            function favoriteChapter() {
+                console.log('favorite button clicked')
+                // note the trailing slash favorite/
+                const url = "/chapter/{{ chapter.id }}/favorite/";
+                
+                // what to pass to db
+                let json_data = {
+                    'user_id': {{user.id}},
+                    'obj_id': {{chapter.id}}
+                }
+
+                let fetch_data = {
+                    method: "put",
+                    credentials: "same-origin",
+                    headers: {
+                        "X-CSRFToken": window.csrftoken,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(json_data)
+                }
+
+                fetch(url, fetch_data)
+                .then(response =>   response.json())
+                .catch(error => {
+                    console.log("favorite does not exist, create a new one", error);
+                });
+                
+                // toggle outside fetch because
+                // put creates error if db row does not exist
+                // so paint is not executed
+                // if placed in next then(), as we should...
+                favstar.classList.toggle("outline")
+            }
+            
+            function toggleFavorite(){
+                favstar.classList.toggle("outline")
+            }
+            
+            // update the favorite
+            document.addEventListener("DOMContentLoaded", function (event) {
+                if ("{{ favorite.id }}") {
+                toggleFavorite()
+                }
+            });
+
+        </script>            
+        <!--======================== FAVORITE END ===============-->
     </aside>
 
 
@@ -149,7 +167,6 @@
 
 
 {% block body %}
-<a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a>
 
 {# MAIN BODY #}
     <main class="ui text container">
@@ -158,21 +175,21 @@
             <a class="step" href="{{ book.get_absolute_url }}">
                 <i class="book icon"></i>
                 <div class="content">
-                    <div class="title">Βιβλίο</div>
-                    <div class="description">{{ book.title }}</div>
+                    <div class="title">{{ book.title }}</div>
+                    <div class="description">Βιβλίο</div>
                 </div>
             </a>
             <div class="active step">
                 <i class="file alternate outline icon"></i>
                 <div class="content">
-                    <div class="title">Κεφάλαιο</div>
-                    <div class="description">{{ chapter.number }}</div>
+                    <div class="title">{{ chapter.number }}</div>
+                    <div class="description">Κεφάλαιο</div>
                 </div>
             </div>
             <div class="disabled step">
                 <i class="list ol icon"></i>
                 <div class="content">
-                    <div class="title">Στίχος</div>
+                    <div class="description">Στίχος</div>
                 </div>
             </div>
         </div>

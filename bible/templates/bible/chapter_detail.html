@@ -33,79 +33,76 @@
 {% endblock leftBarBreadcrumb %}
 
 {% block leftColumn %}
-    <aside class="ui one cards">
-        <div class="card">
+    <aside>
+        {% if user.is_authenticated %}
+            {# ADD VERSE CHAPTER BUTTON#}
+            {% if perms.bible.add_verse %}
+                <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
+                    <div class="ui primary button">
+                        <i class="add icon"></i>
+                        Προσθήκη στίχου
+                    </div>
+                </a>
+                <p></p>
+            {% endif %}
+        {% endif %}
+
+        <div class="ui styled accordion">
+
+            <div class="title">
+                <i class="dropdown icon"></i>
+                ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
+            </div>
+
+
             <div class="content">
-                <div class="header">ΚΕΦΑΛΑΙΟ {{chapter.number}}</div>
+                <h3>ΚΕΦΑΛΑΙΟ {{chapter.number}}</h3>
                 <div class="meta">
                     <div>{{ chapter.title }}</div>
                 </div>
-            </div>
-            <!-- BUTTON -->
-            {% if user.is_authenticated %}
 
-                
-                {# TAGS #}
-                {% if chapter.tags.all %}
-                <div class="extra content">
-                    {% for tag in chapter.tags.all %}
-                    <div class="ui label mini right floated">
-                        {{ tag.name }}
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                
-                {# DEBUG #}
-                {% if user.is_superuser %}
-                <div class="content">
-                    <h2>DEBUG</h2>
-                    <ul>
-                        <li>username: {{ user.username }}</li>
-                        <li>user id: {{ user.id }}</li>
-                        <li>chapter id: {{ chapter.id }}</li>
-                        <li>favorite chapter: {{ favorite.obj_id }}</li>
-                        <li>favorite user: {{ favorite.user_id }}</li>
-                    </ul>
-                </div>
-                {% endif %}
-                
-            
-            
-                {% if perms.bible.add_verse %}
-                    <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
-                        <div class="ui bottom attached button">
-                            <i class="add icon"></i>
-                            Προσθήκη στίχου
-                        </div>
-                    </a>
-                {% endif %}
-            {% endif %}
-        </div>
 
-        <div class="ui styled accordion">
-            {% for chapterX in book.chapter_set.all %}
-                <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
-                    <i class="dropdown icon"></i>
-                    ΚΕΦΑΛΑΙΟ {{chapterX.number}}
-                </div>
-                <div class="content {% if chapterX.number == chapter.number %} active {% endif %} ">
-                    <a href="{% url 'bible:chapter-detail' book.id chapterX.id %}">
-                        {{ chapterX.title }}
-                        {# <a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a> #}
-                    </a>
-                    {% if chapterX.number == chapter.number %}
+                {% if user.is_authenticated %}
+                    {# FAVORITE #}
+                    <div class="content">
                         <p style="text-align: right;">
                             <i class="ui star outline icon floated right" 
                                     id="favChapter{{ chapter.id }}"
                                     onclick="favoriteChapter()"
                             ></i>
                         </p>
+                    </div>
+                    
+                    {# TAGS #}
+                    {% if chapter.tags.all %}
+                        <div class="content">
+                            {% for tag in chapter.tags.all %}
+                            <div class="ui label mini right floated">
+                                {{ tag.name }}
+                            </div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
-                </div>
-            {% endfor %}
+                    
+                    {# DEBUG #}
+                    {% if user.is_superuser %}
+                        <div class="content">
+                            <h3>DEBUG</h3>
+                            <ul>
+                                <li>username: {{ user.username }}</li>
+                                <li>user id: {{ user.id }}</li>
+                                <li>chapter id: {{ chapter.id }}</li>
+                                <li>favorite chapter: {{ favorite.obj_id }}</li>
+                                <li>favorite user: {{ favorite.user_id }}</li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                {% endif %}
+            </div>
         </div>
-            
+
+        
         <!--======================== FAVORITE ==================-->
         <script>
 
@@ -159,6 +156,36 @@
 
         </script>            
         <!--======================== FAVORITE END ===============-->
+
+        <br />
+
+        <div class="ui styled accordion">
+            {% for chapterX in book.chapter_set.all %}
+                <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
+                    <i class="dropdown icon"></i>
+                    ΚΕΦΑΛΑΙΟ {{chapterX.number}}
+                </div>
+                <div class="content {% if chapterX.number == chapter.number %} active {% endif %} ">
+                    <a href="{% url 'bible:chapter-detail' book.id chapterX.id %}">
+                        {{ chapterX.title }}
+                        {# <a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a> #}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+            
+        <p></p>
+        <div class="ui styled accordion">
+            {% for verseX in chapter.verse_set.all %}
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    ΣΤΙΧΟΣ {{verseX.number}}
+                </div>
+                <div class="content ">
+                    {{ verseX.original_text }}
+                </div>
+            {% endfor %}
+        </div>
     </aside>
 
 

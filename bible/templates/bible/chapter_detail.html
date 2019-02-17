@@ -4,180 +4,7 @@
 {% endblock title %}
 
 
-{# this breadcrumb is used for the left sidebar#}
-{% block leftBarBreadcrumb %}
-    {# BREADCRUMB #}
-    <div class="ui container vertical steps">
-        <a class="step" href="{{ book.get_absolute_url }}">
-            <i class="book icon"></i>
-            <div class="content">
-                <div class="title">Βιβλίο</div>
-                <div class="description">{{ book.title }}</div>
-            </div>
-        </a>
-        <div class="active step">
-            <i class="file alternate outline icon"></i>
-            <div class="content">
-                <div class="title">Κεφάλαιο</div>
-                <div class="description">{{ chapter.number }}</div>
-            </div>
-        </div>
-        <div class="disabled step">
-            <i class="list ol icon"></i>
-            <div class="content">
-                <div class="title">Στίχος</div>
-            </div>
-        </div>
-    </div>
-
-{% endblock leftBarBreadcrumb %}
-
 {% block leftColumn %}
-    <aside class="ui sticky top tablet or lower hidden" >
-        <div  style="margin-top:60px;">
-            {% if user.is_authenticated %}
-                {# ADD VERSE CHAPTER BUTTON#}
-                {% if perms.bible.add_verse %}
-                    <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
-                        <div class="ui primary button">
-                            <i class="add icon"></i>
-                            Προσθήκη στίχου
-                        </div>
-                    </a>
-                    <p></p>
-                {% endif %}
-            {% endif %}
-
-            <div class="ui styled accordion">
-
-                <div class="title">
-                    <i class="dropdown icon"></i>
-                    ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
-                </div>
-
-
-                <div class="content">
-                    <h3>ΚΕΦΑΛΑΙΟ {{chapter.number}}</h3>
-                    <div class="meta">
-                        <div>{{ chapter.title }}</div>
-                    </div>
-
-
-                    {% if user.is_authenticated %}
-                        {# FAVORITE #}
-                        <div class="content">
-                            <p style="text-align: right;">
-                                <i class="ui star outline icon floated right" 
-                                        id="favChapter{{ chapter.id }}"
-                                        onclick="favoriteChapter()"
-                                ></i>
-                            </p>
-                        </div>
-                        
-                        {# TAGS #}
-                        {% if chapter.tags.all %}
-                            <div class="content">
-                                {% for tag in chapter.tags.all %}
-                                <div class="ui label mini right floated">
-                                    {{ tag.name }}
-                                </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        
-                        {# DEBUG #}
-                        {% if user.is_superuser %}
-                            <div class="content">
-                                <h3>DEBUG</h3>
-                                <ul>
-                                    <li>username: {{ user.username }}</li>
-                                    <li>user id: {{ user.id }}</li>
-                                    <li>chapter id: {{ chapter.id }}</li>
-                                    <li>favorite chapter: {{ favorite.obj_id }}</li>
-                                    <li>favorite user: {{ favorite.user_id }}</li>
-                                </ul>
-                            </div>
-                        {% endif %}
-                        
-                    {% endif %}
-                </div>
-            </div>
-
-            
-            <!--======================== FAVORITE ==================-->
-            <script>
-
-                const favstar = document.getElementById("favChapter{{ chapter.id }}") 
-
-                function favoriteChapter() {
-                    console.log('favorite button clicked')
-                    // note the trailing slash favorite/
-                    const url = "/chapter/{{ chapter.id }}/favorite/";
-                    
-                    // what to pass to db
-                    let json_data = {
-                        'user_id': {{user.id}},
-                        'obj_id': {{chapter.id}}
-                    }
-
-                    let fetch_data = {
-                        method: "put",
-                        credentials: "same-origin",
-                        headers: {
-                            "X-CSRFToken": window.csrftoken,
-                            "Accept": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(json_data)
-                    }
-
-                    fetch(url, fetch_data)
-                    .then(response =>   response.json())
-                    .catch(error => {
-                        console.log("favorite does not exist, create a new one", error);
-                    });
-                    
-                    // toggle outside fetch because
-                    // put creates error if db row does not exist
-                    // so paint is not executed
-                    // if placed in next then(), as we should...
-                    favstar.classList.toggle("outline")
-                }
-                
-                function toggleFavorite(){
-                    favstar.classList.toggle("outline")
-                }
-                
-                // update the favorite
-                document.addEventListener("DOMContentLoaded", function (event) {
-                    if ("{{ favorite.id }}") {
-                    toggleFavorite()
-                    }
-                });
-
-            </script>            
-            <!--======================== FAVORITE END ===============-->
-
-            <br />
-
-            <div class="ui styled accordion">
-                {% for chapterX in book.chapter_set.all %}
-                    <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
-                        <i class="dropdown icon"></i>
-                        ΚΕΦΑΛΑΙΟ {{chapterX.number}}
-                    </div>
-                    <div class="content {% if chapterX.number == chapter.number %} active {% endif %} ">
-                        <a href="{% url 'bible:chapter-detail' book.id chapterX.id %}">
-                            {{ chapterX.title }}
-                            {# <a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a> #}
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-                
-            <p></p>
-        </div>
-    </aside>
 
 
 {% endblock leftColumn %}
@@ -187,11 +14,178 @@
 {% block body %}
 
 {# MAIN BODY #}
-    <main class="ui text container">
+<main class="ui text container">
+    
+    <aside class="ui dividing left rail tablet or lower hidden" >
+        <div class="ui sticky top">
+
+        
+            {# BOOK #}
+            <div class="ui styled accordion" style="margin-top:60px;">
+                <div class="title active">
+                    <i class="dropdown icon  "></i>
+                    ΒΙΒΛΙΟ
+                </div>
+
+                <div class="content active ui card">
+                    <div class="image">
+                        <img src="{{ book.image.url }}">
+                    </div>
+                    <div class="header">{{ book.title }}</div>
+                    <div class="meta">
+                        <div>
+                            {{ book.writer }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <br />
+            {# CHAPTER DETAILS  #}
+            <div>
+                <div class="ui styled accordion">
+                    <div class="title">
+                        <i class="dropdown icon"></i>
+                        ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
+                    </div>
+        
+                    <div class="content">
+                        <h3>ΚΕΦΑΛΑΙΟ {{chapter.number}}</h3>
+                        <div class="meta">
+                            <div>{{ chapter.title }}</div>
+                        </div>
+        
+                        {% if user.is_authenticated %}
+                            {# FAVORITE #}
+                            <div class="content">
+                                <p style="text-align: right;">
+                                    <i class="ui star outline icon floated right" 
+                                            id="favChapter{{ chapter.id }}"
+                                            onclick="favoriteChapter()"
+                                    ></i>
+                                </p>
+                            </div>
+                            
+                            {# TAGS #}
+                            {% if chapter.tags.all %}
+                                <div class="content">
+                                    {% for tag in chapter.tags.all %}
+                                    <div class="ui label mini right floated">
+                                        {{ tag.name }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+        
+                
+                <!--======================== FAVORITE ==================-->
+                <script>
+        
+                    const favstar = document.getElementById("favChapter{{ chapter.id }}") 
+        
+                    function favoriteChapter() {
+                        console.log('favorite button clicked')
+                        // note the trailing slash favorite/
+                        const url = "/chapter/{{ chapter.id }}/favorite/";
+                        
+                        // what to pass to db
+                        let json_data = {
+                            'user_id': {{user.id}},
+                            'obj_id': {{chapter.id}}
+                        }
+        
+                        let fetch_data = {
+                            method: "put",
+                            credentials: "same-origin",
+                            headers: {
+                                "X-CSRFToken": window.csrftoken,
+                                "Accept": "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(json_data)
+                        }
+        
+                        fetch(url, fetch_data)
+                        .then(response =>   response.json())
+                        .catch(error => {
+                            console.log("favorite does not exist, create a new one", error);
+                        });
+                        
+                        // toggle outside fetch because
+                        // put creates error if db row does not exist
+                        // so paint is not executed
+                        // if placed in next then(), as we should...
+                        favstar.classList.toggle("outline")
+                    }
+                    
+                    function toggleFavorite(){
+                        favstar.classList.toggle("outline")
+                    }
+                    
+                    // update the favorite
+                    document.addEventListener("DOMContentLoaded", function (event) {
+                        if ("{{ favorite.id }}") {
+                        toggleFavorite()
+                        }
+                    });
+        
+                </script>            
+                <!--======================== FAVORITE END ===============-->
+                <br />
+        
+                {# CHAPTERS NAVIGATION #}
+                <div class="ui styled accordion">
+                    {% for chapterX in book.chapter_set.all %}
+                        <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
+                            <i class="dropdown icon"></i>
+                            ΚΕΦΑΛΑΙΟ {{chapterX.number}}
+                        </div>
+                        <div class="content {% if chapterX.number == chapter.number %} active {% endif %} ">
+                            <a href="{% url 'bible:chapter-detail' book.id chapterX.id %}">
+                                {{ chapterX.title }}
+                                {# <a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a> #}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                    
+                <p></p>
+            </div>
+        </div>
+    </aside>
+
+        {# RIGHT RAIL #}
         <div class="ui dividing right rail tablet or lower hidden" >
             <div class="ui sticky top" >
 
-                <div class="ui vertical following fluid accordion text menu" style="margin-top:60px">
+                {% if user.is_authenticated %}
+                    
+                    {# BUTTON ADD CHAPTER #}
+                    {% if perms.bible.add_chapter %}
+                        <a class="item" href="{% url 'bible:chapter-create' book.id %}">
+                            <div class="ui primary button" style="margin:60px 0 1rem">
+                                <i class="add icon"></i>
+                                Προσθήκη Κεφαλαίου
+                            </div>
+                        </a>
+                    {% endif %}
+                    
+                    {# ADD VERSE BUTTON#}
+                    {% if perms.bible.add_verse %}
+                        <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
+                            <div class="ui primary button">
+                                <i class="add icon"></i>
+                                Προσθήκη στίχου
+                            </div>
+                        </a>
+                        <p></p>
+                    {% endif %}
+                {% endif %}                
+
+                <div class="ui vertical following fluid accordion text menu" >
                     {% for verseX in chapter.verse_set.all %}
                         <div class="title">
                             <i class="dropdown icon"></i>
@@ -206,27 +200,12 @@
             </div>
         </div>
         {# BREADCRUMB #}
-        <div class="ui container steps">
-            <a class="step" href="{{ book.get_absolute_url }}">
-                <i class="book icon"></i>
-                <div class="content">
-                    <div class="title">{{ book.title }}</div>
-                    <div class="description">Βιβλίο</div>
-                </div>
-            </a>
-            <div class="active step">
-                <i class="file alternate outline icon"></i>
-                <div class="content">
-                    <div class="title">{{ chapter.number }}</div>
-                    <div class="description">Κεφάλαιο</div>
-                </div>
-            </div>
-            <div class="disabled step">
-                <i class="list ol icon"></i>
-                <div class="content">
-                    <div class="description">Στίχος</div>
-                </div>
-            </div>
+        <div class="ui breadcrumb message ">
+            <a class="section" href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+            <i class="right angle icon divider"></i>
+
+            <div class="section active">ΚΕΦΑΛΑΙΟ {{ chapter.number }}</div>
+
         </div>
 
         

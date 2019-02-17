@@ -95,16 +95,16 @@
         
         {# DEBUG #}
         {% if user.is_superuser %}
-        <div class="content">
-            <h2>DEBUG</h2>
-            <ul>
-                <li>username: {{ user.username }}</li>
-                <li>user id: {{ user.id }}</li>
-                <li>book id: {{ book.id }}</li>
-                <li>favorite book: {{ favorite.obj_id }}</li>
-                <li>favorite user: {{ favorite.user_id }}</li>
-            </ul>
-        </div>
+            <div class="content">
+                <h2>DEBUG</h2>
+                <ul>
+                    <li>username: {{ user.username }}</li>
+                    <li>user id: {{ user.id }}</li>
+                    <li>book id: {{ book.id }}</li>
+                    <li>favorite book: {{ favorite.obj_id }}</li>
+                    <li>favorite user: {{ favorite.user_id }}</li>
+                </ul>
+            </div>
         {% endif %}
         
         {# ------------------------------------------------------------------ #}

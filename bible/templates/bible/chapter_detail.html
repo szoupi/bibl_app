@@ -33,158 +33,149 @@
 {% endblock leftBarBreadcrumb %}
 
 {% block leftColumn %}
-    <aside>
-        {% if user.is_authenticated %}
-            {# ADD VERSE CHAPTER BUTTON#}
-            {% if perms.bible.add_verse %}
-                <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
-                    <div class="ui primary button">
-                        <i class="add icon"></i>
-                        Προσθήκη στίχου
-                    </div>
-                </a>
-                <p></p>
-            {% endif %}
-        {% endif %}
-
-        <div class="ui styled accordion">
-
-            <div class="title">
-                <i class="dropdown icon"></i>
-                ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
-            </div>
-
-
-            <div class="content">
-                <h3>ΚΕΦΑΛΑΙΟ {{chapter.number}}</h3>
-                <div class="meta">
-                    <div>{{ chapter.title }}</div>
-                </div>
-
-
-                {% if user.is_authenticated %}
-                    {# FAVORITE #}
-                    <div class="content">
-                        <p style="text-align: right;">
-                            <i class="ui star outline icon floated right" 
-                                    id="favChapter{{ chapter.id }}"
-                                    onclick="favoriteChapter()"
-                            ></i>
-                        </p>
-                    </div>
-                    
-                    {# TAGS #}
-                    {% if chapter.tags.all %}
-                        <div class="content">
-                            {% for tag in chapter.tags.all %}
-                            <div class="ui label mini right floated">
-                                {{ tag.name }}
-                            </div>
-                            {% endfor %}
+    <aside class="ui sticky top tablet or lower hidden" >
+        <div  style="margin-top:60px;">
+            {% if user.is_authenticated %}
+                {# ADD VERSE CHAPTER BUTTON#}
+                {% if perms.bible.add_verse %}
+                    <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
+                        <div class="ui primary button">
+                            <i class="add icon"></i>
+                            Προσθήκη στίχου
                         </div>
-                    {% endif %}
-                    
-                    {# DEBUG #}
-                    {% if user.is_superuser %}
-                        <div class="content">
-                            <h3>DEBUG</h3>
-                            <ul>
-                                <li>username: {{ user.username }}</li>
-                                <li>user id: {{ user.id }}</li>
-                                <li>chapter id: {{ chapter.id }}</li>
-                                <li>favorite chapter: {{ favorite.obj_id }}</li>
-                                <li>favorite user: {{ favorite.user_id }}</li>
-                            </ul>
-                        </div>
-                    {% endif %}
-                    
-                {% endif %}
-            </div>
-        </div>
-
-        
-        <!--======================== FAVORITE ==================-->
-        <script>
-
-            const favstar = document.getElementById("favChapter{{ chapter.id }}") 
-
-            function favoriteChapter() {
-                console.log('favorite button clicked')
-                // note the trailing slash favorite/
-                const url = "/chapter/{{ chapter.id }}/favorite/";
-                
-                // what to pass to db
-                let json_data = {
-                    'user_id': {{user.id}},
-                    'obj_id': {{chapter.id}}
-                }
-
-                let fetch_data = {
-                    method: "put",
-                    credentials: "same-origin",
-                    headers: {
-                        "X-CSRFToken": window.csrftoken,
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(json_data)
-                }
-
-                fetch(url, fetch_data)
-                .then(response =>   response.json())
-                .catch(error => {
-                    console.log("favorite does not exist, create a new one", error);
-                });
-                
-                // toggle outside fetch because
-                // put creates error if db row does not exist
-                // so paint is not executed
-                // if placed in next then(), as we should...
-                favstar.classList.toggle("outline")
-            }
-            
-            function toggleFavorite(){
-                favstar.classList.toggle("outline")
-            }
-            
-            // update the favorite
-            document.addEventListener("DOMContentLoaded", function (event) {
-                if ("{{ favorite.id }}") {
-                toggleFavorite()
-                }
-            });
-
-        </script>            
-        <!--======================== FAVORITE END ===============-->
-
-        <br />
-
-        <div class="ui styled accordion">
-            {% for chapterX in book.chapter_set.all %}
-                <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
-                    <i class="dropdown icon"></i>
-                    ΚΕΦΑΛΑΙΟ {{chapterX.number}}
-                </div>
-                <div class="content {% if chapterX.number == chapter.number %} active {% endif %} ">
-                    <a href="{% url 'bible:chapter-detail' book.id chapterX.id %}">
-                        {{ chapterX.title }}
-                        {# <a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a> #}
                     </a>
-                </div>
-            {% endfor %}
-        </div>
-            
-        <p></p>
-        <div class="ui styled accordion">
-            {% for verseX in chapter.verse_set.all %}
+                    <p></p>
+                {% endif %}
+            {% endif %}
+
+            <div class="ui styled accordion">
+
                 <div class="title">
                     <i class="dropdown icon"></i>
-                    ΣΤΙΧΟΣ {{verseX.number}}
+                    ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
                 </div>
-                <div class="content ">
-                    {{ verseX.original_text }}
+
+
+                <div class="content">
+                    <h3>ΚΕΦΑΛΑΙΟ {{chapter.number}}</h3>
+                    <div class="meta">
+                        <div>{{ chapter.title }}</div>
+                    </div>
+
+
+                    {% if user.is_authenticated %}
+                        {# FAVORITE #}
+                        <div class="content">
+                            <p style="text-align: right;">
+                                <i class="ui star outline icon floated right" 
+                                        id="favChapter{{ chapter.id }}"
+                                        onclick="favoriteChapter()"
+                                ></i>
+                            </p>
+                        </div>
+                        
+                        {# TAGS #}
+                        {% if chapter.tags.all %}
+                            <div class="content">
+                                {% for tag in chapter.tags.all %}
+                                <div class="ui label mini right floated">
+                                    {{ tag.name }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        {# DEBUG #}
+                        {% if user.is_superuser %}
+                            <div class="content">
+                                <h3>DEBUG</h3>
+                                <ul>
+                                    <li>username: {{ user.username }}</li>
+                                    <li>user id: {{ user.id }}</li>
+                                    <li>chapter id: {{ chapter.id }}</li>
+                                    <li>favorite chapter: {{ favorite.obj_id }}</li>
+                                    <li>favorite user: {{ favorite.user_id }}</li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                    {% endif %}
                 </div>
-            {% endfor %}
+            </div>
+
+            
+            <!--======================== FAVORITE ==================-->
+            <script>
+
+                const favstar = document.getElementById("favChapter{{ chapter.id }}") 
+
+                function favoriteChapter() {
+                    console.log('favorite button clicked')
+                    // note the trailing slash favorite/
+                    const url = "/chapter/{{ chapter.id }}/favorite/";
+                    
+                    // what to pass to db
+                    let json_data = {
+                        'user_id': {{user.id}},
+                        'obj_id': {{chapter.id}}
+                    }
+
+                    let fetch_data = {
+                        method: "put",
+                        credentials: "same-origin",
+                        headers: {
+                            "X-CSRFToken": window.csrftoken,
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(json_data)
+                    }
+
+                    fetch(url, fetch_data)
+                    .then(response =>   response.json())
+                    .catch(error => {
+                        console.log("favorite does not exist, create a new one", error);
+                    });
+                    
+                    // toggle outside fetch because
+                    // put creates error if db row does not exist
+                    // so paint is not executed
+                    // if placed in next then(), as we should...
+                    favstar.classList.toggle("outline")
+                }
+                
+                function toggleFavorite(){
+                    favstar.classList.toggle("outline")
+                }
+                
+                // update the favorite
+                document.addEventListener("DOMContentLoaded", function (event) {
+                    if ("{{ favorite.id }}") {
+                    toggleFavorite()
+                    }
+                });
+
+            </script>            
+            <!--======================== FAVORITE END ===============-->
+
+            <br />
+
+            <div class="ui styled accordion">
+                {% for chapterX in book.chapter_set.all %}
+                    <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
+                        <i class="dropdown icon"></i>
+                        ΚΕΦΑΛΑΙΟ {{chapterX.number}}
+                    </div>
+                    <div class="content {% if chapterX.number == chapter.number %} active {% endif %} ">
+                        <a href="{% url 'bible:chapter-detail' book.id chapterX.id %}">
+                            {{ chapterX.title }}
+                            {# <a href="{{ book.get_absolute_url }}/chapter/{{ next_chapter }}">next chapter</a> #}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+                
+            <p></p>
         </div>
     </aside>
 
@@ -197,6 +188,23 @@
 
 {# MAIN BODY #}
     <main class="ui text container">
+        <div class="ui dividing right rail tablet or lower hidden" >
+            <div class="ui sticky top" >
+
+                <div class="ui vertical following fluid accordion text menu" style="margin-top:60px">
+                    {% for verseX in chapter.verse_set.all %}
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            ΣΤΙΧΟΣ {{verseX.number}}
+                        </div>
+                        <div class="content menu ">
+                            <a class="item" href="#verse{{ verseX.number }}"> {{ verseX.original_text }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
         {# BREADCRUMB #}
         <div class="ui container steps">
             <a class="step" href="{{ book.get_absolute_url }}">
@@ -221,11 +229,12 @@
             </div>
         </div>
 
+        
         {# <H1>VERSES</H1> #}
         {% if chapter.verse_set.all %}
-            <div class="ui one cards">
+            <div id="chapter-list" class="ui one cards">
                 {% for verse in chapter.verse_set.all %}
-                    <div class="card">
+                    <div class="card" id="verse{{ verse.number }}">
                         <div class="content stackable ui grid">
                             <div class="ui bottom right attached label">
                                 Στίχος {{ verse.number }}

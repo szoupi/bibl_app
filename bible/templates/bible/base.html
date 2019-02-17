@@ -80,25 +80,27 @@
     
     <!-- PUSHER MAIN CONTENT /////////////////////////////////////////////////////////////////////////////// -->
     <div class="pusher">
+        <div class="full height">
         <!-- Site content !-->
 
-        {# NAVIGATION MENU #}
-        {% include 'bible/base_nav.html' %}
+            {# NAVIGATION MENU #}
+            {% include 'bible/base_nav.html' %}
 
-        {# MAIN CONTENT #}
-        <main class="ui grid stackable container" style="margin-top:2rem">
+            {# MAIN CONTENT #}
+            <main class="ui grid stackable container" style="margin-top:2rem">
 
-            <div class="four wide column">
-                {% block leftColumn %}
-                {% endblock leftColumn %}
-            </div>
-            
-            <div class="ten wide column">
-                {% block body %}
-                {% endblock body %}
-            </div>
-        </main>
+                <div class="four wide column">
+                    {% block leftColumn %}
+                    {% endblock leftColumn %}
+                </div>
+                
+                <div class="ten wide column">
+                    {% block body %}
+                    {% endblock body %}
+                </div>
+            </main>
 
+        </div>
     </div> <!--  PUSHER END -->
 
 
@@ -123,8 +125,15 @@
 
         $('.ui.accordion')
             .accordion()
-            ;        
+        ;        
+
+        $('.ui.sticky')
+            .sticky({
+                context: '#chapter-list'
+            })
+        ;        
     </script>
+    
     
 
     

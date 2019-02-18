@@ -59,7 +59,7 @@
 
 </head>
 
-<body>
+<body class="Grid pushable">
     <!-- SIDEBAR RIGHT -->
     <div id="right-sidebar" class="ui wide right sidebar vertical menu" style="padding:1.5rem;padding-top:4rem">
         <a class="item toggle-right-sidebar">
@@ -88,16 +88,17 @@
 
             {# MAIN CONTENT #}
             <main class="ui grid stackable container" style="margin-top:2rem">
-
-                <div class="four wide column">
-                    {% block leftColumn %}
-                    {% endblock leftColumn %}
-                </div>
-                
-                <div class="ten wide column">
-                    {% block body %}
-                    {% endblock body %}
-                </div>
+                <div class="row">
+                    <div class="four wide column mobile hidden tablet hidden ">
+                        {% block leftColumn %}
+                        {% endblock leftColumn %}
+                    </div>
+                    
+                    <div class="twelve wide column">
+                        {% block body %}
+                        {% endblock body %}
+                    </div>
+                                    </div>
             </main>
 
         </div>
@@ -109,6 +110,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
     {% load static %}
     <script src="{% static 'bible.js' %}"></script>
+    <script src="{% static 'headroom.js' %}"></script>
+
+    <script>
+        // grab an element
+        var myElement = document.querySelector("#navigation-menu");
+        // construct an instance of Headroom, passing the element
+        var headroom = new Headroom(myElement);
+        // initialise
+        headroom.init();         
+    </script>
+
      
     <!-- SIDEBAR https://semantic-ui.com/modules/sidebar.html#/settings -->
     <script>
@@ -131,7 +143,8 @@
             .sticky({
                 context: '#chapter-list'
             })
-        ;        
+        ;
+            
     </script>
     
     

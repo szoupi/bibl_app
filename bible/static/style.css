@@ -112,3 +112,25 @@ label {
   line-height: 1.2;
   color: #666;
 }
+
+/* //////////////////// CSS GRID LAYOUT */
+/* .grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+
+}
+
+.grid-aside {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.grid-main {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.grid-right-side {
+  grid-column-start: 3;
+  grid-column-end: 4;
+} */

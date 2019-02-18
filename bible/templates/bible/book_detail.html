@@ -139,12 +139,9 @@
     {% endif %}
     
     {% if book.chapter_set.all %}
-        <div class="ui one cards">
+        <div class="ui divided items">
             {% for chapter in book.chapter_set.all %}
-                <div class="card">
-                    <div class="ui bottom right attached label">
-                        Κεφάλαιο {{ chapter.number }}
-                    </div>
+                <div class="item">
                     <div class="content">
                         <div class="header">
                             <div>

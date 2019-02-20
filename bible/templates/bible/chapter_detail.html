@@ -7,7 +7,30 @@
 {% block leftColumn %}
     <aside class="ui dividing">
         <div class="ui sticky top">
-    
+            {% if user.is_authenticated %}
+                
+                {# BUTTON ADD CHAPTER #}
+                {% if perms.bible.add_chapter %}
+                    <a class="item" href="{% url 'bible:chapter-create' book.id %}">
+                        <div class="ui primary button" style="margin:60px 0 1rem">
+                            <i class="add icon"></i>
+                            Προσθήκη Κεφαλαίου
+                        </div>
+                    </a>
+                {% endif %}
+                
+                {# ADD VERSE BUTTON#}
+                {% if perms.bible.add_verse %}
+                    <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
+                        <div class="ui primary button">
+                            <i class="add icon"></i>
+                            Προσθήκη στίχου
+                        </div>
+                    </a>
+                    <p></p>
+                {% endif %}
+            {% endif %}                
+
     
             {# BOOK #}
             <div class="ui styled accordion" style="margin-top:60px;">
@@ -155,32 +178,7 @@
     
     {# RIGHT RAIL #}
     <div class="ui dividing right rail mobile hidden tablet hidden" >
-        <div class="ui sticky top" >
-    
-            {% if user.is_authenticated %}
-                
-                {# BUTTON ADD CHAPTER #}
-                {% if perms.bible.add_chapter %}
-                    <a class="item" href="{% url 'bible:chapter-create' book.id %}">
-                        <div class="ui primary button" style="margin:60px 0 1rem">
-                            <i class="add icon"></i>
-                            Προσθήκη Κεφαλαίου
-                        </div>
-                    </a>
-                {% endif %}
-                
-                {# ADD VERSE BUTTON#}
-                {% if perms.bible.add_verse %}
-                    <a class="item" href="{% url 'bible:verse-create' book.id chapter.id %}">
-                        <div class="ui primary button">
-                            <i class="add icon"></i>
-                            Προσθήκη στίχου
-                        </div>
-                    </a>
-                    <p></p>
-                {% endif %}
-            {% endif %}                
-    
+        <div class="ui sticky top" >    
             <div class="ui vertical following fluid accordion text menu" >
                 {% for verseX in chapter.verse_set.all %}
                     <div class="title">
@@ -220,7 +218,7 @@
                             </div>
 
                             {# ORIGINAL TEXT COLUMN #}
-                            <div class="seven wide column">
+                            <div class="six wide column">
                                 <a class="original-text column" href="{% url 'bible:verse-detail' book.id chapter.id verse.id %}">
                                     <p>{{ verse.original_text }}</p>
                                 </a>
@@ -233,11 +231,13 @@
                                 </a>
                             </div>
                             
+                            {# BUTTONS COLUMN #}
                             <div class="one wide column">
                                 {% if user.is_authenticated %}
 
                                     <!-- ==================FAVORITE CHAPTER STAR=================== -->
-                                    <i class="star outline large icon ui compact right floated" style="margin: 0.5rem" 
+                                    <i class="star outline large icon ui compact right floated" 
+                                        style="margin: 0.5rem" 
                                         id="favVerseStar{{ verse.id }}"
                                     ></i>
                                     
@@ -300,22 +300,20 @@
 
                             </div>
 
-
-
+                            {# TAGS COLUMN #}
+                            {% if verse.tags.all %}
+                                <div class="one wide column">
+                                    {% for tag in verse.tags.all %}
+                                        <div class="ui label mini">
+                                            {{ tag.name }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
 
                     </div>
 
-                    {# TAGS #}
-                    {% if verse.tags.all %}
-                        <div class="extra content">
-                            {% for tag in verse.tags.all %}
-                                <div class="ui label mini">
-                                    {{ tag.name }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                     
                 </div>
             {% endfor %}

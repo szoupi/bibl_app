@@ -112,13 +112,15 @@
     <script src="{% static 'bible.js' %}"></script>
     <script src="{% static 'headroom.js' %}"></script>
 
+    <!-- TODO: fix headroom, it does not work -->
     <script>
         // grab an element
         var myElement = document.querySelector("#navigation-menu");
         // construct an instance of Headroom, passing the element
         var headroom = new Headroom(myElement);
         // initialise
-        headroom.init();         
+        headroom.init();       
+        
     </script>
 
      
@@ -144,7 +146,6 @@
                 context: '#chapter-list'
             })
         ;
-            
     </script>
     
     

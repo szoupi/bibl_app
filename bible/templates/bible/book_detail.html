@@ -35,89 +35,90 @@
         {# ------------------------------------------------------------------------ #}
         <!-- FAVORITE -->
         {% if user.is_authenticated %}
-        <div class="content">
-            <i class="star outline icon" 
-            id="favoriteStar{{ book.id }}"
-            onclick="favoriteBook()"
-            ></i>
-        </div>
-        
-        <script>
-            const favstar = document.getElementById("favoriteStar{{ book.id }}") 
+            <div class="content">
+                <i class="star outline icon" 
+                id="favoriteStar{{ book.id }}"
+                onclick="favoriteBook()"
+                ></i>
+            </div>
             
-            function favoriteBook() {
-                console.log('favorite button clicked')
-                // note the trailing slash favorite/
-                const url = "/book/{{ book.id }}/favorite/";
+            <script>
+                const favstar = document.getElementById("favoriteStar{{ book.id }}") 
                 
-                // what to pass to db
-                let json_data = {
-                    'user_id': {{user.id}},
-                    'obj_id': {{book.id}}
+                function favoriteBook() {
+                    console.log('favorite button clicked')
+                    // note the trailing slash favorite/
+                    const url = "/book/{{ book.id }}/favorite/";
+                    
+                    // what to pass to db
+                    let json_data = {
+                        'user_id': {{user.id}},
+                        'obj_id': {{book.id}}
+                    }
+                    
+                    let fetch_data = {
+                        method: "put",
+                        credentials: "same-origin",
+                        headers: {
+                            "X-CSRFToken": window.csrftoken,
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(json_data)
+                    }
+                    
+                    fetch(url, fetch_data)
+                    .then(response =>   response.json())
+                    .catch(error => {
+                        console.log("favorite does not exist, create a new one", error);
+                    });
+                    
+                    // toggle outside fetch because
+                    // put creates error if db row does not exist
+                    // so paint is not executed
+                    // if placed in next then(), as we should...
+                    favstar.classList.toggle("outline")
                 }
                 
-                let fetch_data = {
-                    method: "put",
-                    credentials: "same-origin",
-                    headers: {
-                        "X-CSRFToken": window.csrftoken,
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(json_data)
+                function toggleFavorite(){
+                    favstar.classList.toggle("outline")
                 }
                 
-                fetch(url, fetch_data)
-                .then(response =>   response.json())
-                .catch(error => {
-                    console.log("favorite does not exist, create a new one", error);
+                // update the favorite
+                document.addEventListener("DOMContentLoaded", function (event) {
+                    if ("{{ favorite.id}}") {
+                        toggleFavorite()
+                    }
                 });
                 
-                // toggle outside fetch because
-                // put creates error if db row does not exist
-                // so paint is not executed
-                // if placed in next then(), as we should...
-                favstar.classList.toggle("outline")
-            }
+            </script>
             
-            function toggleFavorite(){
-                favstar.classList.toggle("outline")
-            }
+            {# DEBUG #}
+            {% if user.is_superuser %}
+                <div class="content">
+                    <h2>DEBUG</h2>
+                    <ul>
+                        <li>username: {{ user.username }}</li>
+                        <li>user id: {{ user.id }}</li>
+                        <li>book id: {{ book.id }}</li>
+                        <li>favorite book: {{ favorite.obj_id }}</li>
+                        <li>favorite user: {{ favorite.user_id }}</li>
+                    </ul>
+                </div>
+            {% endif %}
             
-            // update the favorite
-            document.addEventListener("DOMContentLoaded", function (event) {
-                if ("{{ favorite.id}}") {
-                    toggleFavorite()
-                }
-            });
-            
-        </script>
-        
-        {# DEBUG #}
-        {% if user.is_superuser %}
-            <div class="content">
-                <h2>DEBUG</h2>
-                <ul>
-                    <li>username: {{ user.username }}</li>
-                    <li>user id: {{ user.id }}</li>
-                    <li>book id: {{ book.id }}</li>
-                    <li>favorite book: {{ favorite.obj_id }}</li>
-                    <li>favorite user: {{ favorite.user_id }}</li>
-                </ul>
-            </div>
-        {% endif %}
-        
-        {# ------------------------------------------------------------------ #}
-        {# BUTTON ADD CHAPTER #}
-        {% if perms.bible.add_chapter %}
-        <a class="item" href="{% url 'bible:chapter-create' book.id %}">
-            <div class="ui bottom attached button">
-                <i class="add icon"></i>
-                Προσθήκη Κεφαλαίου
-            </div>
-        </a>
-        {% endif %}
-        {% endif %}
+            {# ------------------------------------------------------------------ #}
+            {# BUTTON ADD CHAPTER #}
+            {% if perms.bible.add_chapter %}
+                <a class="item" href="{% url 'bible:chapter-create' book.id %}">
+                    <div class="ui bottom attached button">
+                        <i class="add icon"></i>
+                        Προσθήκη Κεφαλαίου
+                    </div>
+                </a>
+            {% endif %}
+
+        {% endif %} {# END AUTHENTICATED USER#}
     </div>
 </aside>
 {% endblock leftColumn %}
@@ -142,14 +143,31 @@
         <div class="ui divided items">
             {% for chapter in book.chapter_set.all %}
                 <div class="item">
-                    <div class="content">
-                        <div class="header">
-                            <div>
+                    <div class="content stackable ui grid">
+                        <div class=" stackable ui grid ">
+
+                            {# NUMBER COLUMN #}
+                            <div class="one wide column large-number">
+                                {{ chapter.number }}
+                            </div>
+
+                            {# TITLE COLUMN #}
+                            <div class="thirteen wide column">
+                                <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">
+                                    <div class="description">
+                                        {{ chapter.title }}
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            {# BUTTONS COLUMN #}
+                            <div class="one wide column">
                                 {% if user.is_authenticated %}
                                 
                                     <!-- ==================FAVORITE CHAPTER STAR=================== -->
-                                    <i class="star outline icon ui compact  right floated " 
-                                    id="favChapterStar{{ chapter.id }}"
+                                    <i class="star outline large icon ui compact right floated "
+                                        style="margin: 0.5rem"
+                                        id="favChapterStar{{ chapter.id }}"
                                     ></i>
                                     
                                     <!-- FAVORITE CHECK -->
@@ -199,39 +217,34 @@
                                     <!--...and if the user has edit rights -->
                                     {% if perms.bible.change_chapter %}
                                         <a href="{% url 'bible:chapter-update' book.id chapter.id %}"
-                                            class="ui compact icon right floated button">
-                                            <i class="edit icon"></i>
+                                            class="ui compact icon right floated" style="margin: 0.5rem 0">
+                                            <i class="edit icon bordered inverted blue"></i>
                                         </a>
                                         <a href="{% url 'bible:chapter-delete' book.id chapter.id %}"
-                                                class="ui compact icon right floated button">
-                                            <i class="trash icon"></i>
+                                                class="ui compact icon right floated" style="margin: 0.5rem 0">
+                                            <i class="trash icon bordered inverted red"></i>
                                         </a> 
                                     {% endif %}
                                 {% endif %}
                             </div>
-                            {{ chapter.number }}
-                        </div>
-                        <a href="{% url 'bible:chapter-detail' book.id chapter.id %}">
-                            <div class="description">
-                                {{ chapter.title }}
-                            </div>
-                        </a>
-                    </div>
-                    
-                    {# TAGS #}
-                    {% if chapter.tags.all %}
-                        <div class="extra content">
-                            {% for tag in chapter.tags.all %}
-                            <div class="ui label mini">
-                                {{ tag.name }}
-                            </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
 
-                 </div> {# end card #}
+                            {# TAGS COLUMN #}
+                            {% if chapter.tags.all %}
+                                <div class="one wide column">
+                                    {% for tag in chapter.tags.all %}
+                                        <div class="ui label mini">
+                                            {{ tag.name }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </div>
+
     {% else %}
         <h2>Δεν υπάρχουν κεφάλαια για το βιβλίο αυτό.</h2>
         {% if perms.bible.add_chapter %}

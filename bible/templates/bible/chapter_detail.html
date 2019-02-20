@@ -40,11 +40,18 @@
                 </div>
     
                 <div class="content active ui card">
-                    <div class="image">
-                        <img src="{{ book.image.url }}">
+                    
+                    {# <a href="{% url 'bible:index' %}" class='image'> #}
+
+                        <div class="image">
+                            
+                            <img src="{{ book.image.url }}">
+                        </div>
+                    {# </a> #}
+                    <div style="font-weight: 800;padding: 8px;">
+                        {{ book.title }}
                     </div>
-                    <div class="header">{{ book.title }}</div>
-                    <div class="meta">
+                    <div style="padding:0 8px">
                         <div>
                             {{ book.writer }}
                         </div>
@@ -91,23 +98,19 @@
                 </div>
     
     
-                <!--======================== FAVORITE ==================-->
-                <script>
-
-                    const favstar = document.getElementById("favChapter{{ chapter.id }}")
-
-                    function favoriteChapter() {
-                        console.log('favorite button clicked')
-                        // note the trailing slash favorite/
-                        const url = "/chapter/{{ chapter.id }}/favorite/";
-
-                        // what to pass to db
-                        let json_data = {
-                            'user_id': {{ user.id }
-                    },
-                    'obj_id': { { chapter.id } }
-                            }
-
+<!--======================== FAVORITE ==================-->
+            <script>
+                const favstar = document.getElementById("favChapter{{ chapter.id }}") 
+                function favoriteChapter() {
+                    console.log('favorite button clicked')
+                    // note the trailing slash favorite/
+                    const url = "/chapter/{{ chapter.id }}/favorite/";
+                    
+                    // what to pass to db
+                    let json_data = {
+                        'user_id': {{user.id}},
+                        'obj_id': {{chapter.id}}
+                    }
                     let fetch_data = {
                         method: "put",
                         credentials: "same-origin",
@@ -118,33 +121,32 @@
                         },
                         body: JSON.stringify(json_data)
                     }
-
                     fetch(url, fetch_data)
-                        .then(response => response.json())
-                        .catch(error => {
-                            console.log("favorite does not exist, create a new one", error);
-                        });
-
+                    .then(response =>   response.json())
+                    .catch(error => {
+                        console.log("favorite does not exist, create a new one", error);
+                    });
+                    
                     // toggle outside fetch because
                     // put creates error if db row does not exist
                     // so paint is not executed
                     // if placed in next then(), as we should...
                     favstar.classList.toggle("outline")
-                        }
-
-                    function toggleFavorite() {
-                        favstar.classList.toggle("outline")
+                }
+                
+                function toggleFavorite(){
+                    favstar.classList.toggle("outline")
+                }
+                
+                // update the favorite
+                document.addEventListener("DOMContentLoaded", function (event) {
+                    if ("{{ favorite.id }}") {
+                    toggleFavorite()
                     }
+                });
+            </script>            
+            <!--======================== FAVORITE END ===============-->
 
-                    // update the favorite
-                    document.addEventListener("DOMContentLoaded", function (event) {
-                        if ("{{ favorite.id }}") {
-                            toggleFavorite()
-                        }
-                    });
-
-                </script>
-                <!--======================== FAVORITE END ===============-->
                 <br />
     
                 {# CHAPTERS NAVIGATION #}
@@ -351,8 +353,21 @@
         </div>
     </div>
 
-
-
 </main>
 
+
 {% endblock body %}
+
+{% block current_footer %}
+    <script>
+        $('.ui.sticky')
+            .sticky({
+                context: '#chapter-list'
+            })
+        ;
+        
+        $('.ui.accordion')
+            .accordion()
+        ;
+    </script>
+{% endblock current_footer %}

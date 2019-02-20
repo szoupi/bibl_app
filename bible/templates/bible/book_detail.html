@@ -7,41 +7,70 @@
 
 {% block leftColumn %}
 
-<aside class="ui one cards">
-    <div class="card">
-        <a href="{% url 'bible:index' %}" class="image">
-            <img src="{{ book.image.url }}">
-        </a>
-        <div class="content">
-            <div class="header">{{ book.title }}</div>
-            <div class="meta">
-                <div>
-                    {{ book.writer }}
-                </div>
-            </div>
-        </div>
-        
-        {# TAGS #}
-        {% if book.tags.all %}
-            <div class=" content">
-                {% for tag in book.tags.all %}
-                <div class="ui label mini">
-                    {{ tag.name }}
-                </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {# {{book.tags.all|join:", "}} #}
-        {# ------------------------------------------------------------------------ #}
-        <!-- FAVORITE -->
+<aside class="ui dividing">
+    <div class="ui sticky top">
         {% if user.is_authenticated %}
-            <div class="content">
-                <i class="star outline icon" 
-                id="favoriteStar{{ book.id }}"
-                onclick="favoriteBook()"
-                ></i>
+            {# BUTTON ADD CHAPTER #}
+            {% if perms.bible.add_chapter %}
+                <a class="item" href="{% url 'bible:chapter-create' book.id %}">
+                    <div class="ui bottom primary button">
+                        <i class="add icon"></i>
+                        Προσθήκη Κεφαλαίου
+                    </div>
+                </a>
+            {% endif %}
+        {% endif %}
+
+        {# BOOK #}
+        <div class="ui styled accordion" style="margin-top:60px;">
+            <div class="title active">
+                <i class="dropdown icon"></i>
+                ΒΙΒΛΙΟ
             </div>
-            
+
+            <div class="content active ui card">
+                <div class="image">
+                    <img src="{{ book.image.url }}">
+                </div>
+                <div style="font-weight: 800;padding: 8px;">{{ book.title }}</div>
+                <div style="padding:0 8px 8px 8px">
+                    <div>
+                        {{ book.writer }}
+                    </div>
+                </div>
+
+
+                {# {{book.tags.all|join:", "}} #}
+                {# ------------------------------------------------------------------------ #}
+                <!-- FAVORITE -->
+                {% if user.is_authenticated %}
+                    <div class="content">
+                        <i class="star outline icon" 
+                        id="favoriteStar{{ book.id }}"
+                        onclick="favoriteBook()"
+                        ></i>
+                    </div>
+                    
+                    
+                    {# DEBUG #}
+                    {% if user.is_superuser %}
+                        <div class="content">
+                            <h2>DEBUG</h2>
+                            <ul>
+                                <li>username: {{ user.username }}</li>
+                                <li>user id: {{ user.id }}</li>
+                                <li>book id: {{ book.id }}</li>
+                                <li>favorite book: {{ favorite.obj_id }}</li>
+                                <li>favorite user: {{ favorite.user_id }}</li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    {# ------------------------------------------------------------------ #}
+                    
+                {% endif %} {# END AUTHENTICATED USER#}
+            </div>
+                    
             <script>
                 const favstar = document.getElementById("favoriteStar{{ book.id }}") 
                 
@@ -92,33 +121,7 @@
                 });
                 
             </script>
-            
-            {# DEBUG #}
-            {% if user.is_superuser %}
-                <div class="content">
-                    <h2>DEBUG</h2>
-                    <ul>
-                        <li>username: {{ user.username }}</li>
-                        <li>user id: {{ user.id }}</li>
-                        <li>book id: {{ book.id }}</li>
-                        <li>favorite book: {{ favorite.obj_id }}</li>
-                        <li>favorite user: {{ favorite.user_id }}</li>
-                    </ul>
-                </div>
-            {% endif %}
-            
-            {# ------------------------------------------------------------------ #}
-            {# BUTTON ADD CHAPTER #}
-            {% if perms.bible.add_chapter %}
-                <a class="item" href="{% url 'bible:chapter-create' book.id %}">
-                    <div class="ui bottom attached button">
-                        <i class="add icon"></i>
-                        Προσθήκη Κεφαλαίου
-                    </div>
-                </a>
-            {% endif %}
-
-        {% endif %} {# END AUTHENTICATED USER#}
+        </div>
     </div>
 </aside>
 {% endblock leftColumn %}
@@ -126,6 +129,26 @@
 {% block body %}
 {# CHAPTERS LIST #}
 <main class="ui text container">
+
+    {# RIGHT RAIL #}
+    <div class="ui dividing right rail mobile hidden tablet hidden">
+        <div class="ui sticky top">
+            <div class="ui vertical following fluid accordion text menu">
+                {% for chapterX in book.chapter_set.all %}
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                        ΚΕΦΑΛΑΙΟ {{chapterX.number}}
+                </div>
+                <div class="content menu ">
+                    <a class="item" href="#chapter{{ chapterX.number }}"> {{ chapterX.title }}</a>
+                </div>
+                {% endfor %}
+            </div>
+    
+        </div>
+    </div>
+
+
     {% if book.abstract_trempelas %}
     <div class="ui one cards">
         <div class="card">
@@ -142,7 +165,7 @@
     {% if book.chapter_set.all %}
         <div class="ui divided items">
             {% for chapter in book.chapter_set.all %}
-                <div class="item">
+                <div class="item" id="chapter{{ chapter.number }}">
                     <div class="content stackable ui grid">
                         <div class=" stackable ui grid ">
 
@@ -255,4 +278,16 @@
     {% endif %}
 </main>
 
-{% endblock body %}}
+{% endblock body %}
+
+{% block current_footer %}
+    <script>
+        $('.ui.accordion')
+            .accordion()
+        ;   
+    </script>
+{% endblock current_footer %}
+
+
+
+

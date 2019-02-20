@@ -87,7 +87,7 @@
             {% include 'bible/base_nav.html' %}
 
             {# MAIN CONTENT #}
-            <main class="ui grid stackable container" style="margin-top:2rem">
+            <div class="ui grid stackable container" style="margin-top:2rem">
                 <div class="row">
                     <div class="four wide column mobile hidden tablet hidden ">
                         {% block leftColumn %}
@@ -98,8 +98,8 @@
                         {% block body %}
                         {% endblock body %}
                     </div>
-                                    </div>
-            </main>
+                </div>
+            </div>
 
         </div>
     </div> <!--  PUSHER END -->
@@ -141,14 +141,10 @@
             .accordion()
         ;        
 
-        $('.ui.sticky')
-            .sticky({
-                context: '#chapter-list'
-            })
-        ;
     </script>
     
-    
+    {% block current_footer %}
+    {% endblock %}
 
     
     {# DEBUG #}

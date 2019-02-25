@@ -163,7 +163,7 @@
     {% endif %}
     
     {% if book.chapter_set.all %}
-        <div class="ui divided items">
+        <div id="chapters-list" class="ui divided items">
             {% for chapter in book.chapter_set.all %}
                 <div class="item" id="chapter{{ chapter.number }}">
                     <div class="content stackable ui grid">
@@ -282,12 +282,17 @@
 
 {% block current_footer %}
     <script>
+        $('.ui.sticky')
+            .sticky({
+                context: '#chapters-list'
+            })
+        ;
+        
         $('.ui.accordion')
             .accordion()
-        ;   
+        ;
     </script>
 {% endblock current_footer %}
-
 
 
 

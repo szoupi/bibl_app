@@ -59,7 +59,7 @@
 
 </head>
 
-<body class="Grid pushable">
+<body>
     <!-- SIDEBAR RIGHT -->
     <div id="right-sidebar" class="ui wide right sidebar vertical menu" style="padding:1.5rem;padding-top:4rem">
         <a class="item toggle-right-sidebar">
@@ -112,7 +112,27 @@
     <script src="{% static 'bible.js' %}"></script>
     <script src="{% static 'headroom.js' %}"></script>
 
-    <!-- TODO: fix headroom, it does not work -->
+    
+    
+    <!-- SIDEBAR https://semantic-ui.com/modules/sidebar.html#/settings -->
+    <script>
+        $('#left-sidebar').first()
+        .sidebar('attach events', '.toggle-left-sidebar')
+        .sidebar('setting', 'dimPage', false)
+        .sidebar('setting', 'closable', false)
+        ;
+        $('#right-sidebar').first()
+        .sidebar('attach events', '.toggle-right-sidebar')
+        .sidebar('setting', 'dimPage', false)
+        .sidebar('setting', 'closable', false)
+        ;
+        
+        $('.ui.accordion')
+        .accordion()
+        ;        
+        
+    </script>
+    
     <script>
         // grab an element
         var myElement = document.querySelector("#navigation-menu");
@@ -121,26 +141,6 @@
         // initialise
         headroom.init();       
         
-    </script>
-
-     
-    <!-- SIDEBAR https://semantic-ui.com/modules/sidebar.html#/settings -->
-    <script>
-        $('#left-sidebar').first()
-            .sidebar('attach events', '.toggle-left-sidebar')
-            .sidebar('setting', 'dimPage', false)
-            .sidebar('setting', 'closable', false)
-        ;
-        $('#right-sidebar').first()
-            .sidebar('attach events', '.toggle-right-sidebar')
-            .sidebar('setting', 'dimPage', false)
-            .sidebar('setting', 'closable', false)
-        ;
-
-        $('.ui.accordion')
-            .accordion()
-        ;        
-
     </script>
     
     {% block current_footer %}

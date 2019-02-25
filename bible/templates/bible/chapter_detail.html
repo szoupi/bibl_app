@@ -209,7 +209,7 @@
     
     {# <H1>VERSES</H1> #}
     {% if chapter.verse_set.all %}
-        <div id="chapter-list" class="ui divided items">
+        <div id="verses-list" class="ui divided items">
             {% for verse in chapter.verse_set.all %}
                 <div class="item" id="verse{{ verse.number }}">
                     <div class="content stackable ui grid">
@@ -362,7 +362,7 @@
     <script>
         $('.ui.sticky')
             .sticky({
-                context: '#chapter-list'
+                context: '#verses-list'
             })
         ;
         
@@ -370,4 +370,7 @@
             .accordion()
         ;
     </script>
+
+    {% load static %}
+    <script src="{% static 'timeline.js' %}"></script>
 {% endblock current_footer %}

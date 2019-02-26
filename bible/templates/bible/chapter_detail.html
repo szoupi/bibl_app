@@ -187,8 +187,11 @@
                         <i class="dropdown icon"></i>
                         ΣΤΙΧΟΣ {{verseX.number}}
                     </div>
-                    <div class="content menu ">
-                        <a class="item" href="#verse{{ verseX.number }}"> {{ verseX.original_text }}</a>
+                    <div class="content menu" id="railVerseWrapper{{ verseX.number }}">
+                        <a class="item" 
+                            id="railVerseItem{{ verseX.number }}"
+                            href="#verse{{ verseX.number }}"> {{ verseX.original_text }}
+                        </a>
                     </div>
                 {% endfor %}
             </div>
@@ -356,6 +359,33 @@
 </main>
 
 
+<script>
+window.onscroll = function changeClass() {
+    
+    // TODO: USE  IntersectionObserver
+
+    var scrollPosY = window.pageYOffset
+    {% for verseX in chapter.verse_set.all %}
+        var vrsWrapper = document.getElementById('railVerseWrapper{{ verseX.number }}')
+        
+        var vXwrapperTop = vrsWrapper.scrollTop
+        var windowHeight = window.innerHeight
+        
+        console.log(vrsWrapper, vXwrapperTop, windowHeight);
+        if (vXwrapperTop < (windowHeight / 5)) {
+            vrsWrapper.classList.add('active');
+        } else {
+            vrsWrapper.classList.remove('active');
+
+        }
+        
+    {% endfor %}
+
+		
+}
+
+</script>
+
 {% endblock body %}
 
 {% block current_footer %}
@@ -371,6 +401,4 @@
         ;
     </script>
 
-    {% load static %}
-    <script src="{% static 'timeline.js' %}"></script>
 {% endblock current_footer %}

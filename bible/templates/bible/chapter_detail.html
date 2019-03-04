@@ -360,29 +360,34 @@
 
 
 <script>
-window.onscroll = function changeClass() {
+    window.onscroll = function changeClass() {
+        
+        var scrollPosY = window.pageYOffset
+        
+        var windowHeight = window.innerHeight,
+            gridTop = windowHeight * .3,
+            gridBottom = windowHeight * .6;
+        
+        {% for verseX in chapter.verse_set.all %}
+            var item_in_rail = document.getElementById('railVerseWrapper{{ verseX.number }}')
+            var item_in_body = document.getElementById('verse{{ verseX.number }}')
+            var item_in_body_top = item_in_rail. //TODO: FIX IT
+            
+            console.log(item_in_rail, item_in_body_top);
+
+            if (item_in_body_top >= gridTop) {
+                item_in_rail.classList.add('active');
+            } else {
+                item_in_rail.classList.remove('active');
+                
+            }
+        
+        {% endfor %}
     
-    // TODO: USE  IntersectionObserver
 
-    var scrollPosY = window.pageYOffset
-    {% for verseX in chapter.verse_set.all %}
-        var vrsWrapper = document.getElementById('railVerseWrapper{{ verseX.number }}')
+        console.log(windowHeight, gridTop, gridBottom)
         
-        var vXwrapperTop = vrsWrapper.scrollTop
-        var windowHeight = window.innerHeight
-        
-        console.log(vrsWrapper, vXwrapperTop, windowHeight);
-        if (vXwrapperTop < (windowHeight / 5)) {
-            vrsWrapper.classList.add('active');
-        } else {
-            vrsWrapper.classList.remove('active');
-
-        }
-        
-    {% endfor %}
-
-		
-}
+    }
 
 </script>
 

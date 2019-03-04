@@ -75,24 +75,24 @@
                         </div>
     
                         {% if user.is_authenticated %}
-                        {# FAVORITE #}
-                        <div class="content">
-                            <p style="text-align: right;">
-                                <i class="ui star outline icon floated right" id="favChapter{{ chapter.id }}"
-                                    onclick="favoriteChapter()"></i>
-                            </p>
-                        </div>
-    
+                            {# FAVORITE #}
+                            <div class="content">
+                                <p style="text-align: right;">
+                                    <i class="ui star outline icon floated right" id="favChapter{{ chapter.id }}"
+                                        onclick="favoriteChapter()"></i>
+                                </p>
+                            </div>
+                        {% endif %}
+        
                         {# TAGS #}
                         {% if chapter.tags.all %}
-                        <div class="content">
-                            {% for tag in chapter.tags.all %}
-                            <div class="ui label mini right floated">
-                                {{ tag.name }}
+                            <div class="content">
+                                {% for tag in chapter.tags.all %}
+                                <div class="ui label mini right floated">
+                                    {{ tag.name }}
+                                </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -397,7 +397,7 @@
     <script>
         $('.ui.sticky')
             .sticky({
-                context: '#verses-list'
+                context: '#annotation-list'
             })
         ;
         

@@ -17,18 +17,6 @@
             {{verse.greek_translation}}
         </div>
         
-        {% if verse.annotation_set.all %}
-            <div class="ui card">
-                <div class="content">
-                    <div class="header">Λίστα Υπομνηματισμών</div>
-                    <div class="ui list">
-                        {% for annotation in verse.annotation_set.all %}
-                        <a href="#annotation{{ annotation.number }}" class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
     </div>
 
 {% endblock rightSidebar %}
@@ -63,169 +51,219 @@
 {% endblock leftBarBreadcrumb %}
 
 {% block leftColumn %}
-    <aside class="ui card">
-        <div class="content">
-            <div class="header">Στίχος {{verse.number}}</div>
-            <div class="description">
-                <p>{{ verse.original_text }}</p>
-            </div>
-        </div>
-        <div class="extra content">
-            <i class="info icon"></i>
-            {{verse.greek_translation}}
-        </div>
+    <aside class="ui dividing">
+        <div class="ui sticky top">
 
-        {% if user.is_authenticated %}
-
-            <!--======================== FAVORITE ==================-->
-            <div class="content">
-                <i class="star outline icon" 
-                    id="favVerse{{ verse.id }}"
-                    onclick="favoriteBook()"
-                    
-                ></i>
-            </div>
-    
-            {# TAGS #}
-            {% if verse.tags.all %}
-            <div class="extra content">
-                {% for tag in verse.tags.all %}
-                <div class="ui label mini">
-                    {{ tag.name }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            {# DEBUG #}
-            {% if user.is_superuser %}
-            <div class="content">
-                <h2>DEBUG</h2>
-                <ul>
-                    <li>username: {{ user.username }}</li>
-                    <li>user id: {{ user.id }}</li>
-                    <li>verse id: {{ verse.id }}</li>
-                    <li>favorite verse: {{ favorite.obj_id }}</li>
-                    <li>favorite user: {{ favorite.user_id }}</li>
-                </ul>
-            </div>
-            {% endif %}
-        
-        <script>
-
-            const favstar = document.getElementById("favVerse{{ verse.id }}") 
-
-            function favoriteBook() {
-                console.log('favorite button clicked')
-                // note the trailing slash favorite/
-                const url = "/verse/{{ verse.id }}/favorite/";
-                
-                // what to pass to db
-                let json_data = {
-                    'user_id': {{user.id}},
-                    'obj_id': {{verse.id}}
-                }
-
-                let fetch_data = {
-                    method: "put",
-                    credentials: "same-origin",
-                    headers: {
-                        "X-CSRFToken": window.csrftoken,
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(json_data)
-                }
-
-                fetch(url, fetch_data)
-                .then(response =>   response.json())
-                .catch(error => {
-                    console.log("favorite does not exist, create a new one", error);
-                });
-                
-                // toggle outside fetch because
-                // put creates error if db row does not exist
-                // so paint is not executed
-                // if placed in next then(), as we should...
-                favstar.classList.toggle("outline")
-            }
-            
-            function toggleFavorite(){
-                favstar.classList.toggle("outline")
-            }
-            
-            // update the favorite
-            document.addEventListener("DOMContentLoaded", function (event) {
-                if ("{{ favorite.id }}") {
-                toggleFavorite()
-                }
-            });
-
-        </script>            
-        <!--======================== FAVORITE END ===============-->   
-
+            <!-- BUTTON ADD ANNOTATION -->
             {% if perms.bible.add_annotation %} 
-                <!-- BUTTON -->
                 <a class="item" href="{% url 'bible:annotation-create' book.id chapter.id verse.id %}">
-                    <div class="ui bottom attached button">
+                    <div class="ui primary button" style="margin:60px 0 1rem">
                         <i class="add icon"></i>
                         Προσθήκη Υπομνηματισμού
                     </div>
                 </a>
             {% endif %}    
-        {% endif %}        
+
+
+            {# BOOK #}
+            <div class="ui styled accordion" style="margin-top:60px;">
+                <div class="title active">
+                    <i class="dropdown icon  "></i>
+                    ΒΙΒΛΙΟ
+                </div>
+            
+                <div class="content active ui card">
+            
+                    {# <a href="{% url 'bible:index' %}" class='image'> #}
+            
+                    <div class="image">
+            
+                        <img src="{{ book.image.url }}">
+                    </div>
+                    {# </a> #}
+                    <div style="font-weight: 800;padding: 8px;">
+                        {{ book.title }}
+                    </div>
+                    <div style="padding:0 8px">
+                        <div>
+                            {{ book.writer }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            {# CHAPTER DETAILS  #}
+            <div>
+                <div class="ui styled accordion">
+                    <div class="title">
+                        <i class="dropdown icon"></i>
+                        ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
+                    </div>
+    
+                    <div class="content">
+                        <h3>ΚΕΦΑΛΑΙΟ {{chapter.number}}</h3>
+                        <div class="meta">
+                            <div>{{ chapter.title }}</div>
+                        </div>
+                                
+                        {# TAGS #}
+                        {% if chapter.tags.all %}
+                            <div class="content">
+                                {% for tag in chapter.tags.all %}
+                                <div class="ui label mini right floated">
+                                    {{ tag.name }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            {# VERSE DETAILS  #}
+            <div>
+                <div class="ui styled accordion">
+                    <div class="title">
+                        <i class="dropdown icon"></i>
+                        ΛΕΠΤΟΜΕΡΕΙΕΣ ΣΤΙΧΟΥ
+                    </div>
+    
+                    <div class="content">
+                        <h3>ΣΤΙΧΟΣ {{verse.number}}</h3>
+                        <div class="meta">
+                            <div>{{ verse.original_text }}</div>
+                        </div>
+                        <div class="meta">
+                            <i class="info icon"></i>
+                            <div>{{verse.greek_translation}}}</div>
+                        </div>
+
+                        {# TAGS #}
+                        {% if verse.tags.all %}
+                            <div class="content">
+                                {% for tag in verse.tags.all %}
+                                <div class="ui label mini right floated">
+                                    {{ tag.name }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- FAVORITE -->
+                        {% if user.is_authenticated %}
+                            <div class="content">
+                                <i class="star outline icon" 
+                                    id="favVerse{{ verse.id }}"
+                                    onclick="favoriteBook()"
+                                    
+                                ></i>
+                            </div>
+                    
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+            <!--======================== FAVORITE ===============-->
+            {% if user.is_authenticated %}
+                
+                <script>
+
+                    const favstar = document.getElementById("favVerse{{ verse.id }}") 
+
+                    function favoriteBook() {
+                        console.log('favorite button clicked')
+                        // note the trailing slash favorite/
+                        const url = "/verse/{{ verse.id }}/favorite/";
+                        
+                        // what to pass to db
+                        let json_data = {
+                            'user_id': {{user.id}},
+                            'obj_id': {{verse.id}}
+                        }
+
+                        let fetch_data = {
+                            method: "put",
+                            credentials: "same-origin",
+                            headers: {
+                                "X-CSRFToken": window.csrftoken,
+                                "Accept": "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(json_data)
+                        }
+
+                        fetch(url, fetch_data)
+                        .then(response =>   response.json())
+                        .catch(error => {
+                            console.log("favorite does not exist, create a new one", error);
+                        });
+                        
+                        // toggle outside fetch because
+                        // put creates error if db row does not exist
+                        // so paint is not executed
+                        // if placed in next then(), as we should...
+                        favstar.classList.toggle("outline")
+                    }
+                    
+                    function toggleFavorite(){
+                        favstar.classList.toggle("outline")
+                    }
+                    
+                    // update the favorite
+                    document.addEventListener("DOMContentLoaded", function (event) {
+                        if ("{{ favorite.id }}") {
+                        toggleFavorite()
+                        }
+                    });
+
+                </script>            
+            {% endif %}
+            <!--======================== FAVORITE END ===============-->   
+
+
     </aside>
 
-    {% if verse.annotation_set.all %}
-        <div class="ui card">
-            <div class="content">
-                <div class="header">Λίστα Υπομνηματισμών</div>
-                <div class="ui list">
+{% endblock leftColumn %}
+
+{% block body %}
+    <main class="ui text container">
+
+        {# RIGHT RAIL #}
+        <div class="ui dividing right rail mobile hidden tablet hidden">
+            <div class="ui sticky top">
+                <div class="ui vertical following fluid accordion text menu">
                     {% for annotation in verse.annotation_set.all %}
-                    <a href="#annotation{{ annotation.number }}" class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
+                    <a href="#annotation{{ annotation.number }}" 
+                        id="railAnnotationItem{{ annotation.number }}"
+                        class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
                     {% endfor %}
                 </div>
             </div>
         </div>
-    {% endif %}
-{% endblock leftColumn %}
 
-{% block body %}
-
-
-    <main class="ui text container">
         {# BREADCRUMB #}
-        <div class="ui container steps">
-            <a class="step" href="{{ book.get_absolute_url }}">
-                <i class="book icon"></i>
-                <div class="content">
-                    <div class="title">Βιβλίο</div>
-                    <div class="description">{{ book.title }}</div>
-                </div>
+        <div class="ui breadcrumb message ">
+            <a class="section" href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+            <i class="right angle icon divider"></i>
+        
+            <a class="section" 
+                href="{% url 'bible:chapter-detail' book.id chapter.id %}">ΚΕΦΑΛΑΙΟ {{ chapter.number }}
             </a>
-            <a class="step" href="{% url 'bible:chapter-detail' book.id chapter.id %}">
-                <i class="file alternate outline icon"></i>
-                <div class="content">
-                    <div class="title">Κεφάλαιο</div>
-                    <div class="description">{{ chapter.number }}</div>
-                </div>
-            </a>
-            <div class="active step">
-                <i class="list ol icon"></i>
-                <div class="content">
-                    <div class="title">Στίχος</div>
-                    <div class="description">{{ verse.number }}</div>
-                </div>
-            </div>
+            <i class="right angle icon divider"></i>
+
+            <div class="section active">ΣΤΙΧΟΣ {{ verse.number }}</div>
         </div>
 
         {% if verse.annotation_set.all %}
             {# <h2>ANNOTATIONS</h2> #}
-            <div class="ui one cards">
+            <div class="ui divided items">
                 {% for annotation in verse.annotation_set.all %}
-                    <div class="card">
-                        <div class="content">
-                            <div class="ui bottom right attached label">Υπομνηματισμός</div>
+                    <div class="item">TODO: EMEINA EDO
+                        <div class="content stackable ui grid">
                             <div id="annotation{{ annotation.number }}" class="header">
                                 {% if user.is_authenticated %}
 
@@ -349,3 +387,18 @@
         </div>
     </div>
 {% endblock body %}
+
+{% block current_footer %}
+    <script>
+        $('.ui.sticky')
+            .sticky({
+                context: '#verses-list'
+            })
+        ;
+        
+        $('.ui.accordion')
+            .accordion()
+        ;
+    </script>
+
+{% endblock current_footer %}

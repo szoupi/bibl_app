@@ -3,34 +3,6 @@
     Στίχος {{verse.number}}
 {% endblock title %}
 
-
-{# this breadcrumb is used for the left sidebar#}
-{% block leftBarBreadcrumb %}
-    <div class="ui container vertical steps">
-        <a class="step" href="{{ book.get_absolute_url }}">
-            <i class="book icon"></i>
-            <div class="content">
-                <div class="title">Βιβλίο</div>
-                <div class="description">{{ book.title }}</div>
-            </div>
-        </a>
-        <a class="step" href="{% url 'bible:chapter-detail' book.id chapter.id %}">
-            <i class="file alternate outline icon"></i>
-            <div class="content">
-                <div class="title">Κεφάλαιο</div>
-                <div class="description">{{ chapter.number }}</div>
-            </div>
-        </a>
-        <div class="active step">
-            <i class="list ol icon"></i>
-            <div class="content">
-                <div class="title">Στίχος</div>
-                <div class="description">{{ verse.number }}</div>
-            </div>
-        </div>
-    </div>
-{% endblock leftBarBreadcrumb %}
-
 {% block leftColumn %}
     <aside class="ui dividing">
         <div class="ui sticky top">
@@ -38,7 +10,7 @@
             <!-- BUTTON ADD ANNOTATION -->
             {% if perms.bible.add_annotation %} 
                 <a class="item" href="{% url 'bible:annotation-create' book.id chapter.id verse.id %}">
-                    <div class="ui primary button" style="margin:60px 0 1rem">
+                    <div class="ui primary button" style="margin:20px 0 1rem">
                         <i class="add icon"></i>
                         Προσθήκη Υπομνηματισμού
                     </div>
@@ -106,12 +78,12 @@
             {# VERSE DETAILS  #}
             <div>
                 <div class="ui styled fluid accordion">
-                    <div class="title">
+                    <div class="title active">
                         <i class="dropdown icon"></i>
                         ΛΕΠΤΟΜΕΡΕΙΕΣ ΣΤΙΧΟΥ
                     </div>
     
-                    <div class="content">
+                    <div class="content active">
                         <h3>ΣΤΙΧΟΣ {{verse.number}}</h3>
                         <div>
                             <i class="info icon"></i>

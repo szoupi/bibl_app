@@ -3,25 +3,6 @@
     Στίχος {{verse.number}}
 {% endblock title %}
 
-{% block rightSidebar %}
-
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Στίχος {{verse.number}}</div>
-            <div class="description">
-                <p>{{ verse.original_text }}</p>
-            </div>
-        </div>
-        <div class="extra content">
-            <i class="info icon"></i>
-            {{verse.greek_translation}}
-        </div>
-        
-    </div>
-
-{% endblock rightSidebar %}
-
-
 
 {# this breadcrumb is used for the left sidebar#}
 {% block leftBarBreadcrumb %}
@@ -67,12 +48,12 @@
 
             {# BOOK #}
             <div class="ui styled accordion" style="margin-top:60px;">
-                <div class="title active">
+                <div class="title">
                     <i class="dropdown icon  "></i>
                     ΒΙΒΛΙΟ
                 </div>
             
-                <div class="content active ui card">
+                <div class="content ui card">
             
                     {# <a href="{% url 'bible:index' %}" class='image'> #}
             
@@ -98,7 +79,7 @@
                 <div class="ui styled accordion">
                     <div class="title">
                         <i class="dropdown icon"></i>
-                        ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
+                        ΚΕΦΑΛΑΙΟ
                     </div>
     
                     <div class="content">
@@ -111,9 +92,9 @@
                         {% if chapter.tags.all %}
                             <div class="content">
                                 {% for tag in chapter.tags.all %}
-                                <div class="ui label mini right floated">
-                                    {{ tag.name }}
-                                </div>
+                                    <div class="ui label mini right floated">
+                                        {{ tag.name }}
+                                    </div>
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -125,19 +106,20 @@
             {# VERSE DETAILS  #}
             <div>
                 <div class="ui styled accordion">
-                    <div class="title">
+                    <div class="title active">
                         <i class="dropdown icon"></i>
                         ΛΕΠΤΟΜΕΡΕΙΕΣ ΣΤΙΧΟΥ
                     </div>
     
-                    <div class="content">
+                    <div class="content active">
                         <h3>ΣΤΙΧΟΣ {{verse.number}}</h3>
-                        <div class="meta">
-                            <div>{{ verse.original_text }}</div>
-                        </div>
-                        <div class="meta">
+                        <div>
                             <i class="info icon"></i>
-                            <div>{{verse.greek_translation}}}</div>
+                            {{ verse.original_text }}
+                        </div>
+                        <div>
+                            <i class="info icon"></i>
+                            {{verse.greek_translation}}
                         </div>
 
                         {# TAGS #}
@@ -153,7 +135,7 @@
 
                         <!-- FAVORITE -->
                         {% if user.is_authenticated %}
-                            <div class="content">
+                            <div>
                                 <i class="star outline icon" 
                                     id="favVerse{{ verse.id }}"
                                     onclick="favoriteBook()"
@@ -260,15 +242,30 @@
 
         {% if verse.annotation_set.all %}
             {# <h2>ANNOTATIONS</h2> #}
-            <div class="ui divided items">
+            <div id="annotations-list" class="ui divided items">
                 {% for annotation in verse.annotation_set.all %}
-                    <div class="item">TODO: EMEINA EDO
+                    <div class="item">
                         <div class="content stackable ui grid">
-                            <div id="annotation{{ annotation.number }}" class="header">
+                            
+                            <div class="thirteen wide column">
+                                <div id="annotation{{ annotation.number }}">
+                                    <div style="font-size: 1.5rem;font-weight: 800;" class="title">
+                                        {{ annotation.number }} - {{ annotation.phrase}}
+                                    </div>
+
+                                    <div class="description">
+                                        {{ annotation.annotation }}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="one wide column">
                                 {% if user.is_authenticated %}
 
                                     <!-- ==================FAVORITE CHAPTER STAR=================== -->
-                                    <i class="star outline icon ui compact  right floated " 
+                                    <i class="star outline large icon ui compact right floated" 
+                                        style="margin: 0.5rem" 
                                         id="favAnnotationStar{{ annotation.id }}"
                                     ></i>
                                     
@@ -318,35 +315,35 @@
                                     
                                     <!--...and if the user has edit rights -->
 
-
+                                    {# BUTTONS COLUMN #}
                                     {% if perms.bible.change_annotation %} 
                                         <a href="{% url 'bible:annotation-update' book.id chapter.id verse.id annotation.id  %}" 
-                                            class="ui compact icon right floated button">
-                                            <i class="edit icon"></i>
+                                           class="ui compact icon right floated" style="margin: 0.5rem 0">
+                                            <i class="edit icon bordered inverted blue"></i>
                                         </a>
                                         <a href="{% url 'bible:annotation-delete' book.id chapter.id verse.id annotation.id  %}" 
-                                            class="ui compact icon right floated button">
-                                            <i class="trash icon"></i>
+                                            class="ui compact icon right floated" style="margin: 0.5rem 0">
+                                            <i class="trash icon bordered inverted red"></i>
                                         </a>
                                     {% endif %} 
                                 {% endif %}
-                                {{ annotation.number }} - {{ annotation.phrase}}
                             </div>
-                            <div class="description">{{ annotation.annotation }}</div>
+                            
+                            {# TAGS #}
+                            {% if annotation.tags.all %}
+                                <div class="one wide column">
+                                    {% for tag in annotation.tags.all %}
+                                        <div class="ui label mini">
+                                            {{ tag.name }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
                         </div>
                         
-                        {# TAGS #}
-                        {% if annotation.tags.all %}
-                            <div class="extra content">
-                                {% for tag in annotation.tags.all %}
-                                <div class="ui label mini">
-                                    {{ tag.name }}
-                                </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
 
-                    </div> {# end card#}
+                    </div> {# end item#}
                 {% endfor %}
             </div>
             
@@ -392,7 +389,7 @@
     <script>
         $('.ui.sticky')
             .sticky({
-                context: '#verses-list'
+                context: '#annotations-list'
             })
         ;
         

@@ -11,7 +11,8 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    {# <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"> #}
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed" rel="stylesheet">
     {# load the path to static files and then the files to be loaded #}
     {# custom style always after the cdn/css framework, so as not be overiden #}
     {% load staticfiles %} 
@@ -60,19 +61,6 @@
 </head>
 
 <body>
-    <!-- SIDEBAR RIGHT -->
-    <div id="right-sidebar" class="ui wide right sidebar vertical menu" style="padding:1.5rem;padding-top:4rem">
-        <a class="item toggle-right-sidebar">
-            <i class="close icon link icon"></i>
-            Απόκρυψη
-        </a>
-        {% block rightSidebar %}
-        <div>
-            Για την ώρα η στήλη αυτή έχει περιεχόμενο όταν είστε στην προβoλή των στίχων
-        </div>
-        {% endblock rightSidebar %}
-    </div>
-
     <!-- SIDEBAR LEFT -->
     {% include 'bible/base_sidebar_left.html' %}
     
@@ -104,6 +92,8 @@
         </div>
     </div> <!--  PUSHER END -->
 
+
+    
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

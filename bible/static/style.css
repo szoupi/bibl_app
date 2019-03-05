@@ -148,3 +148,7 @@ label {
 .red {
   background-color: red !important;
 }
+
+.footer.segment {
+    padding: 5em 0em;
+}

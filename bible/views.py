@@ -250,8 +250,12 @@ def verse_detail_view(request, book_id, chapter_id, verse_id):
     user = request.user.id
     favorite = FavoriteVerse.objects.filter(obj_id=verse_id, user=user).first()
     favorite_annotations = FavoriteAnnotation.objects.all()
-
-    # save current path 
+    # get next and previous verse 
+    next_verse = Verse.objects.filter(
+        chapter=chapter_id, number__gt=verse.number).order_by('number').first()
+    prev_verse = Verse.objects.filter(
+        chapter=chapter_id, number__lt=verse.number).order_by('-number').first()
+    # save current path
     continue_reading(request)
 
     return render(request, 'bible/verse_detail.html', {
@@ -259,7 +263,9 @@ def verse_detail_view(request, book_id, chapter_id, verse_id):
         'chapter': chapter,
         'verse': verse,
         'favorite': favorite,
-        'favorite_annotations': favorite_annotations
+        'favorite_annotations': favorite_annotations,
+        'next_verse': next_verse,
+        'prev_verse': prev_verse
     })
 
 

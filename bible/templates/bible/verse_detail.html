@@ -47,7 +47,7 @@
 
 
             {# BOOK #}
-            <div class="ui styled accordion" style="margin-top:60px;">
+            <div class="ui styled fluid fluid accordion" style="margin-top:60px;">
                 <div class="title">
                     <i class="dropdown icon  "></i>
                     ΒΙΒΛΙΟ
@@ -76,7 +76,7 @@
             <br />
             {# CHAPTER DETAILS  #}
             <div>
-                <div class="ui styled accordion">
+                <div class="ui styled fluid accordion">
                     <div class="title">
                         <i class="dropdown icon"></i>
                         ΚΕΦΑΛΑΙΟ
@@ -105,13 +105,13 @@
             <br />
             {# VERSE DETAILS  #}
             <div>
-                <div class="ui styled accordion">
-                    <div class="title active">
+                <div class="ui styled fluid accordion">
+                    <div class="title">
                         <i class="dropdown icon"></i>
                         ΛΕΠΤΟΜΕΡΕΙΕΣ ΣΤΙΧΟΥ
                     </div>
     
-                    <div class="content active">
+                    <div class="content">
                         <h3>ΣΤΙΧΟΣ {{verse.number}}</h3>
                         <div>
                             <i class="info icon"></i>
@@ -144,7 +144,6 @@
                             </div>
                     
                         {% endif %}
-
                     </div>
                 </div>
             </div>
@@ -205,6 +204,32 @@
                 </script>            
             {% endif %}
             <!--======================== FAVORITE END ===============-->   
+
+                <br />
+    
+                {# VERSES NAVIGATION #}
+                <div class="ui styled fluid accordion">
+                    {% for verseX in chapter.verse_set.all %}
+                        <div class="title {% if verseX.number == verse.number %} active {% endif %} ">
+                            <i class="dropdown icon"></i>
+                            ΣΤΙΧΟΣ {{verseX.number}}
+                        </div>
+                        <div class="content {% if verseX.number == verse.number %} active {% endif %} ">
+                            <a href="{% url 'bible:verse-detail' book.id chapter.id verseX.id %}">
+                                <div>
+                                    <i class="info icon"></i>
+                                    {{ verseX.original_text }}
+                                </div>
+                                <div>
+                                    <i class="info icon"></i>
+                                    {{verseX.greek_translation}}
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+
 
 
     </aside>
@@ -357,33 +382,38 @@
             {% endif %}    
 
         {% endif %}
-    </main>
-    
-    {# FOOTER BREADCRUMPS #}
-    <div class="ui container steps">
-        <a class="step" href="{{ book.get_absolute_url }}">
-            <i class="book icon"></i>
-            <div class="content">
-                <div class="title">Βιβλίο</div>
-                <div class="description">{{ book.title }}</div>
-            </div>
-        </a>
-        <a class="step" href="{% url 'bible:chapter-detail' book.id chapter.id %}">
-            <i class="file alternate outline icon"></i>
-            <div class="content">
-                <div class="title">Κεφάλαιο</div>
-                <div class="description">{{ chapter.number }}</div>
-            </div>
-        </a>
-        <div class="active step">
-            <i class="list ol icon"></i>
-            <div class="content">
-                <div class="title">Στίχος</div>
-                <div class="description">{{ verse.number }}</div>
+
+
+        {# CHAPTERS NAVIGATION #}
+        <div>
+            <div class="ui pagination menu">
+                {% if prev_verse %}
+                    <a class="item" 
+                        href="{% url 'bible:verse-detail' book.id chapter.id prev_verse.id %}">
+                        <i class=" icon chevron left"></i> ΠΡΟΗΓΟΥΜΕΝΟΣ ΣΤΙΧΟΣ {{prev_verse.number}}
+                    </a>
+                {% endif %}
+                    <div class="item active">
+                        {{verse.number}}
+                    </div>
+                {% if next_verse %}
+                    <a class="item"
+                        href="{% url 'bible:verse-detail' book.id chapter.id next_verse.id %}">
+                        ΕΠΟΜΕΝΟΣ ΣΤΙΧΟΣ {{next_verse.number}} <i class=" icon chevron right"></i>
+                    </a>
+                {% endif %}
             </div>
         </div>
-    </div>
-{% endblock body %}
+
+
+
+
+
+    </main>
+    
+
+
+    {% endblock body %}
 
 {% block current_footer %}
     <script>

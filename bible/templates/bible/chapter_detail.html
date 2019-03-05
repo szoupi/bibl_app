@@ -33,7 +33,7 @@
 
     
             {# BOOK #}
-            <div class="ui styled accordion" style="margin-top:60px;">
+            <div class="ui styled fluid accordion" style="margin-top:60px;">
                 <div class="title active">
                     <i class="dropdown icon  "></i>
                     ΒΙΒΛΙΟ
@@ -62,7 +62,7 @@
             <br />
             {# CHAPTER DETAILS  #}
             <div>
-                <div class="ui styled accordion">
+                <div class="ui styled fluid accordion">
                     <div class="title">
                         <i class="dropdown icon"></i>
                         ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
@@ -98,7 +98,7 @@
                 </div>
     
     
-<!--======================== FAVORITE ==================-->
+            <!--======================== FAVORITE ==================-->
             <script>
                 const favstar = document.getElementById("favChapter{{ chapter.id }}") 
                 function favoriteChapter() {
@@ -150,7 +150,7 @@
                 <br />
     
                 {# CHAPTERS NAVIGATION #}
-                <div class="ui styled accordion">
+                <div class="ui styled fluid accordion">
                     {% for chapterX in book.chapter_set.all %}
                     <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
                         <i class="dropdown icon"></i>

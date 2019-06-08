@@ -5,7 +5,7 @@
 
 
 {% block leftColumn %}
-    <aside class="ui dividing">
+    <aside class="container" style="margin-left:1rem;">
         <div class="ui sticky top">
             {% if user.is_authenticated %}
                 
@@ -33,17 +33,17 @@
 
     
             {# BOOK #}
-            <div class="ui styled fluid accordion" style="margin-top:60px;">
+            <div class="ui accordion" style="margin-top:60px;">
                 <div class="title active">
                     <i class="dropdown icon  "></i>
                     ΒΙΒΛΙΟ
                 </div>
     
-                <div class="content active ui card">
+                <div class="content active ui card" style="width:max-content;padding:1rem;">
                     
                     {# <a href="{% url 'bible:index' %}" class='image'> #}
 
-                        <div class="image">
+                        <div class="ui small image">
                             
                             <img src="{{ book.image.url }}">
                         </div>
@@ -178,26 +178,7 @@
 {# MAIN BODY #}
 <main class="ui text container">
     
-    {# RIGHT RAIL #}
-    <div class="ui dividing right rail mobile hidden tablet hidden" >
-        <div class="ui sticky top" >    
-            <div class="ui vertical following fluid accordion text menu" >
-                {% for verseX in chapter.verse_set.all %}
-                    <div class="title">
-                        <i class="dropdown icon"></i>
-                        ΣΤΙΧΟΣ {{verseX.number}}
-                    </div>
-                    <div class="content menu" id="railVerseWrapper{{ verseX.number }}">
-                        <a class="item" 
-                            id="railVerseItem{{ verseX.number }}"
-                            href="#verse{{ verseX.number }}"> {{ verseX.original_text }}
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-    
-        </div>
-    </div>
+
 
 
     {# BREADCRUMB #}
@@ -392,6 +373,27 @@
 </script>
 
 {% endblock body %}
+
+{% block rightColumn %}
+    {# CHAPTERS CONSISE LIST #}
+    <div class="ui sticky top">
+        <div class="ui vertical following fluid accordion text menu">
+            {% for verseX in chapter.verse_set.all %}
+            <div class="title">
+                <i class="dropdown icon"></i>
+                ΣΤΙΧΟΣ {{verseX.number}}
+            </div>
+            <div class="content menu" id="railVerseWrapper{{ verseX.number }}">
+                <a class="item" id="railVerseItem{{ verseX.number }}" href="#verse{{ verseX.number }}">
+                    {{ verseX.original_text }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock rightColumn %}
+
 
 {% block current_footer %}
     <script>

@@ -7,7 +7,7 @@
 
 {% block leftColumn %}
 
-<aside class="ui dividing">
+<aside class="container" style="margin-left:1rem;">
     <div class="ui sticky top">
         {% if user.is_authenticated %}
             {# BUTTON ADD CHAPTER #}
@@ -22,14 +22,14 @@
         {% endif %}
 
         {# BOOK #}
-        <div class="ui styled fluid accordion" style="margin-top:60px;">
+        <div class="ui accordion" style="margin-top:60px;">
             <div class="title active">
                 <i class="dropdown icon"></i>
                 ΒΙΒΛΙΟ
             </div>
 
             <div class="content active ui card">
-                <div class="image">
+                <div class="ui medium image">
                     <img src="{{ book.image.url }}">
                 </div>
                 <div style="font-weight: 800;padding: 8px;">{{ book.title }}</div>
@@ -130,23 +130,7 @@
 {# CHAPTERS LIST #}
 <main class="ui text container">
 
-    {# RIGHT RAIL #}
-    <div class="ui dividing right rail mobile hidden tablet hidden">
-        <div class="ui sticky top">
-            <div class="ui vertical following fluid accordion text menu">
-                {% for chapterX in book.chapter_set.all %}
-                <div class="title">
-                    <i class="dropdown icon"></i>
-                        ΚΕΦΑΛΑΙΟ {{chapterX.number}}
-                </div>
-                <div class="content menu ">
-                    <a class="item" href="#chapter{{ chapterX.number }}"> {{ chapterX.title }}</a>
-                </div>
-                {% endfor %}
-            </div>
-    
-        </div>
-    </div>
+
 
 
     {% if book.abstract_trempelas %}
@@ -279,6 +263,26 @@
 </main>
 
 {% endblock body %}
+
+{% block rightColumn %}
+
+    {# CHAPTERS CONSISE LIST #}
+    <div class="ui sticky top">
+        <div class="ui vertical following fluid accordion text menu">
+            {% for chapterX in book.chapter_set.all %}
+            <div class="title">
+                <i class="dropdown icon"></i>
+                ΚΕΦΑΛΑΙΟ {{chapterX.number}}
+            </div>
+            <div class="content menu ">
+                <a class="item" href="#chapter{{ chapterX.number }}"> {{ chapterX.title }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock rightColumn %}
+
 
 {% block current_footer %}
     <script>

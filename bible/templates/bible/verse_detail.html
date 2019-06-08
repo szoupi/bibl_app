@@ -362,16 +362,16 @@
                 {% if prev_verse %}
                     <a class="item" 
                         href="{% url 'bible:verse-detail' book.id chapter.id prev_verse.id %}">
-                        <i class=" icon chevron left"></i> ΠΡΟΗΓΟΥΜΕΝΟΣ ΣΤΙΧΟΣ {{prev_verse.number}}
+                        <i class=" icon chevron left"></i> {{prev_verse.number}}
                     </a>
                 {% endif %}
                     <div class="item active">
-                        {{verse.number}}
+                        ΣΤΙΧΟΣ {{verse.number}}
                     </div>
                 {% if next_verse %}
                     <a class="item"
                         href="{% url 'bible:verse-detail' book.id chapter.id next_verse.id %}">
-                        ΕΠΟΜΕΝΟΣ ΣΤΙΧΟΣ {{next_verse.number}} <i class=" icon chevron right"></i>
+                        {{next_verse.number}} <i class=" icon chevron right"></i>
                     </a>
                 {% endif %}
             </div>

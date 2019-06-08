@@ -14,6 +14,29 @@ h1, h2, h3, h4, h5, h6,
 }
 
 
+/* //////////////// GRID ///////////////////// */
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-column-gap: 2rem;
+}
+
+.left-grid-column {
+  grid-column: 1 / 2;
+}
+
+.central-grid-column {
+  grid-column: 2 / 3;
+
+}
+
+.right-grid-column {
+  grid-column: 3 / 4;
+}
+
+/* ////////////// END GRID /////////////////// */
+
+
 .header {
   margin-bottom: 0.5rem;
 }
@@ -155,3 +178,4 @@ label {
 .footer.segment {
     padding: 5em 0em;
 }
+

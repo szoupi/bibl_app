@@ -4,7 +4,7 @@
 {% endblock title %}
 
 {% block leftColumn %}
-    <aside class="ui dividing">
+    <aside class="container" style="margin-left:1rem;">
         <div class="ui sticky top">
 
             <!-- BUTTON ADD ANNOTATION -->
@@ -19,17 +19,17 @@
 
 
             {# BOOK #}
-            <div class="ui styled fluid fluid accordion" style="margin-top:60px;">
+            <div class="ui accordion" style="margin-top:60px;">
                 <div class="title">
                     <i class="dropdown icon  "></i>
                     ΒΙΒΛΙΟ
                 </div>
             
-                <div class="content ui card">
+                <div class="content ui card" style="max-width:250px;padding:1rem;">
             
                     {# <a href="{% url 'bible:index' %}" class='image'> #}
             
-                    <div class="image">
+                    <div class="ui small image">
             
                         <img src="{{ book.image.url }}">
                     </div>
@@ -48,7 +48,7 @@
             <br />
             {# CHAPTER DETAILS  #}
             <div>
-                <div class="ui styled fluid accordion">
+                <div class="ui styled accordion" style="max-width:250px;">
                     <div class="title">
                         <i class="dropdown icon"></i>
                         ΚΕΦΑΛΑΙΟ
@@ -77,7 +77,7 @@
             <br />
             {# VERSE DETAILS  #}
             <div>
-                <div class="ui styled fluid accordion">
+                <div class="ui styled accordion" style="max-width:250px;">
                     <div class="title active">
                         <i class="dropdown icon"></i>
                         ΛΕΠΤΟΜΕΡΕΙΕΣ ΣΤΙΧΟΥ
@@ -180,7 +180,7 @@
                 <br />
     
                 {# VERSES NAVIGATION #}
-                <div class="ui styled fluid accordion">
+                <div class="ui styled accordion" style="max-width:250px;">
                     {% for verseX in chapter.verse_set.all %}
                         <div class="title {% if verseX.number == verse.number %} active {% endif %} ">
                             <i class="dropdown icon"></i>
@@ -210,19 +210,6 @@
 
 {% block body %}
     <main class="ui text container">
-
-        {# RIGHT RAIL #}
-        <div class="ui dividing right rail mobile hidden tablet hidden">
-            <div class="ui sticky top">
-                <div class="ui vertical following fluid accordion text menu">
-                    {% for annotation in verse.annotation_set.all %}
-                    <a href="#annotation{{ annotation.number }}" 
-                        id="railAnnotationItem{{ annotation.number }}"
-                        class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
 
         {# BREADCRUMB #}
         <div class="ui breadcrumb message ">
@@ -383,9 +370,21 @@
 
     </main>
     
+{% endblock body %}
 
 
-    {% endblock body %}
+{% block rightColumn %}
+    {# CHAPTERS CONSISE LIST #}
+    <div class="ui sticky top">
+        <div class="ui vertical following fluid accordion text menu">
+            {% for annotation in verse.annotation_set.all %}
+            <a href="#annotation{{ annotation.number }}" id="railAnnotationItem{{ annotation.number }}"
+                class="item">{{ annotation.number }} - {{ annotation.phrase}}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock rightColumn %}
+
 
 {% block current_footer %}
     <script>

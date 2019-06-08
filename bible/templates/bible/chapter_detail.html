@@ -39,7 +39,7 @@
                     ΒΙΒΛΙΟ
                 </div>
     
-                <div class="content active ui card" style="width:max-content;padding:1rem;">
+                <div class="content active ui card" style="max-width:250px;padding:1rem;">
                     
                     {# <a href="{% url 'bible:index' %}" class='image'> #}
 
@@ -62,7 +62,7 @@
             <br />
             {# CHAPTER DETAILS  #}
             <div>
-                <div class="ui styled fluid accordion">
+                <div class="ui styled accordion" style="max-width:250px;">
                     <div class="title">
                         <i class="dropdown icon"></i>
                         ΛΕΠΤΟΜΕΡΕΙΕΣ ΚΕΦΑΛΑΙΟΥ
@@ -150,7 +150,7 @@
                 <br />
     
                 {# CHAPTERS NAVIGATION #}
-                <div class="ui styled fluid accordion">
+                <div class="ui styled accordion" style="max-width:250px;">
                     {% for chapterX in book.chapter_set.all %}
                     <div class="title {% if chapterX.number == chapter.number %} active {% endif %} ">
                         <i class="dropdown icon"></i>
@@ -178,9 +178,6 @@
 {# MAIN BODY #}
 <main class="ui text container">
     
-
-
-
     {# BREADCRUMB #}
     <div class="ui breadcrumb message ">
         <a class="section" href="{{ book.get_absolute_url }}">{{ book.title }}</a>

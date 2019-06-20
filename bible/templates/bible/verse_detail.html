@@ -75,15 +75,58 @@
             </div>
 
             <br />
+            
+            <br />
+            
+            {# VERSES NAVIGATION #}
+            <div class="ui styled accordion" style="max-width:250px;">
+                {% for verseX in chapter.verse_set.all %}
+                        <div class="title {% if verseX.number == verse.number %} active {% endif %} ">
+                            <i class="dropdown icon"></i>
+                            ΣΤΙΧΟΣ {{verseX.number}}
+                        </div>
+                        <div class="content {% if verseX.number == verse.number %} active {% endif %} ">
+                            <a href="{% url 'bible:verse-detail' book.id chapter.id verseX.id %}">
+                                <div>
+                                    <i class="info icon"></i>
+                                    {{ verseX.original_text }}
+                                </div>
+                                <div>
+                                    <i class="info icon"></i>
+                                    {{verseX.greek_translation}}
+                                </div>
+                            </a>
+                        </div>
+                {% endfor %}
+            </div>
+        </div>        
+                
+                
+                
+    </aside>
+            
+{% endblock leftColumn %}
+            
+        {% block body %}
+            <main class="ui text container">
+                
+                {# BREADCRUMB #}
+                <div class="ui breadcrumb message ">
+                    <a class="section" href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                    <i class="right angle icon divider"></i>
+                    
+                    <a class="section" 
+                        href="{% url 'bible:chapter-detail' book.id chapter.id %}">ΚΕΦΑΛΑΙΟ {{ chapter.number }}
+                    </a>
+                    <i class="right angle icon divider"></i>
+                    
+                    <div class="section active">ΣΤΙΧΟΣ {{ verse.number }}</div>
+                </div>
+            
             {# VERSE DETAILS  #}
-            <div>
-                <div class="ui styled accordion" style="max-width:250px;">
-                    <div class="title active">
-                        <i class="dropdown icon"></i>
-                        ΛΕΠΤΟΜΕΡΕΙΕΣ ΣΤΙΧΟΥ
-                    </div>
-    
-                    <div class="content active">
+            <div class="ui text container">
+                <div class="ui message">
+                    <div class="content">
                         <h3>ΣΤΙΧΟΣ {{verse.number}}</h3>
                         <div>
                             <i class="info icon"></i>
@@ -177,54 +220,7 @@
             {% endif %}
             <!--======================== FAVORITE END ===============-->   
 
-                <br />
-    
-                {# VERSES NAVIGATION #}
-                <div class="ui styled accordion" style="max-width:250px;">
-                    {% for verseX in chapter.verse_set.all %}
-                        <div class="title {% if verseX.number == verse.number %} active {% endif %} ">
-                            <i class="dropdown icon"></i>
-                            ΣΤΙΧΟΣ {{verseX.number}}
-                        </div>
-                        <div class="content {% if verseX.number == verse.number %} active {% endif %} ">
-                            <a href="{% url 'bible:verse-detail' book.id chapter.id verseX.id %}">
-                                <div>
-                                    <i class="info icon"></i>
-                                    {{ verseX.original_text }}
-                                </div>
-                                <div>
-                                    <i class="info icon"></i>
-                                    {{verseX.greek_translation}}
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-
-
-
-
-    </aside>
-
-{% endblock leftColumn %}
-
-{% block body %}
-    <main class="ui text container">
-
-        {# BREADCRUMB #}
-        <div class="ui breadcrumb message ">
-            <a class="section" href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-            <i class="right angle icon divider"></i>
-        
-            <a class="section" 
-                href="{% url 'bible:chapter-detail' book.id chapter.id %}">ΚΕΦΑΛΑΙΟ {{ chapter.number }}
-            </a>
-            <i class="right angle icon divider"></i>
-
-            <div class="section active">ΣΤΙΧΟΣ {{ verse.number }}</div>
-        </div>
-
-        {% if verse.annotation_set.all %}
+            {% if verse.annotation_set.all %}
             {# <h2>ANNOTATIONS</h2> #}
             <div id="annotations-list" class="ui divided items">
                 {% for annotation in verse.annotation_set.all %}

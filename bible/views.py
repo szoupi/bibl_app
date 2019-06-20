@@ -227,8 +227,8 @@ def chapter_detail_view(request, book_id, chapter_id):
     # chapter_list = Chapter.objects.filter(book=book_id).order_by('number')
 
     # output to terminal
-    print 'CURRENT CHAPTER: ', chapter
-    print 'CURRENT CHAPTER NUMBER: ', chapter.number
+    # print 'CURRENT CHAPTER: ', chapter
+    # print 'CURRENT CHAPTER NUMBER: ', chapter.number
     # for c in chapter_list:
     #     print c
 
